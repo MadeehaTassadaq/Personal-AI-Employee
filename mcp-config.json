@@ -1,0 +1,42 @@
+{
+  "mcpServers": {
+    "gmail": {
+      "command": "python",
+      "args": ["-m", "mcp.gmail-mcp.server"],
+      "env": {
+        "GMAIL_CREDENTIALS_PATH": "./credentials/client_secrets.json",
+        "GMAIL_TOKEN_PATH": "./credentials/gmail_token.json",
+        "VAULT_PATH": "./vault",
+        "DRY_RUN": "true"
+      }
+    },
+    "whatsapp": {
+      "command": "python",
+      "args": ["-m", "mcp.whatsapp-mcp.server"],
+      "env": {
+        "WHATSAPP_SESSION_PATH": "./credentials/whatsapp_session",
+        "WHATSAPP_HEADLESS": "false",
+        "VAULT_PATH": "./vault",
+        "DRY_RUN": "true"
+      }
+    },
+    "linkedin": {
+      "command": "python",
+      "args": ["-m", "mcp.linkedin-mcp.server"],
+      "env": {
+        "LINKEDIN_ACCESS_TOKEN": "${LINKEDIN_ACCESS_TOKEN}",
+        "VAULT_PATH": "./vault",
+        "DRY_RUN": "true"
+      }
+    },
+    "browser": {
+      "command": "python",
+      "args": ["-m", "mcp.browser-mcp.server"],
+      "env": {
+        "BROWSER_HEADLESS": "true",
+        "VAULT_PATH": "./vault",
+        "DRY_RUN": "true"
+      }
+    }
+  }
+}
