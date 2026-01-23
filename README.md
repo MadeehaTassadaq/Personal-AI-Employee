@@ -101,6 +101,90 @@ Copy the MCP config:
 cp mcp-config.json .mcp-config.json
 ```
 
+## Connecting to Your Obsidian Vault
+
+By default, the system uses a local `./vault` folder. To connect to your existing Obsidian vault:
+
+### Option 1: Update VAULT_PATH (Recommended)
+
+Edit your `.env` file to point to your Obsidian vault:
+
+```bash
+# Change from:
+VAULT_PATH=./vault
+
+# To your Obsidian vault path:
+VAULT_PATH=/home/username/Documents/MyObsidianVault
+```
+
+Then create the required folder structure inside your Obsidian vault:
+
+```bash
+# Navigate to your Obsidian vault
+cd /path/to/your/obsidian/vault
+
+# Create required folders
+mkdir -p Inbox Needs_Action Pending_Approval Approved Done Logs Plans
+
+# Create required files (if they don't exist)
+touch Dashboard.md Company_Handbook.md
+```
+
+Your vault should have this structure:
+```
+your-obsidian-vault/
+├── Inbox/              # New incoming tasks
+├── Needs_Action/       # Tasks being processed
+├── Pending_Approval/   # Actions awaiting approval
+├── Approved/           # Approved actions ready to execute
+├── Done/               # Completed tasks
+├── Logs/               # Activity logs
+├── Plans/              # Generated briefings
+├── Dashboard.md        # Status overview
+└── Company_Handbook.md # Rules and guidelines
+```
+
+### Option 2: Symlink Approach
+
+Create a symbolic link from the project's vault folder to your Obsidian vault:
+
+```bash
+# Remove the default vault folder
+rm -rf vault
+
+# Create symlink to your Obsidian vault
+ln -s /path/to/your/obsidian/vault ./vault
+```
+
+### Option 3: Use Obsidian Vault Subfolder
+
+If you don't want to modify your entire Obsidian vault, create a dedicated subfolder:
+
+```bash
+# In your Obsidian vault, create a Digital-FTE folder
+mkdir -p /path/to/obsidian/vault/Digital-FTE
+
+# Set VAULT_PATH to this subfolder
+VAULT_PATH=/path/to/obsidian/vault/Digital-FTE
+```
+
+## Google Cloud Console Setup (Gmail API)
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project or select existing one
+3. Enable the Gmail API:
+   - Go to "APIs & Services" > "Library"
+   - Search for "Gmail API" and enable it
+4. Create OAuth credentials:
+   - Go to "APIs & Services" > "Credentials"
+   - Click "Create Credentials" > "OAuth 2.0 Client ID"
+   - Application type: "Desktop App" (recommended) or "Web application"
+5. Configure redirect URIs:
+   - For Desktop App: `http://localhost:8080`
+   - For Web App: `http://localhost:8000/oauth/callback`
+6. Download the credentials JSON
+7. Copy Client ID and Client Secret to your `.env` file
+
 ## Usage
 
 ### Quick Start
@@ -133,6 +217,7 @@ Start dashboard only:
 - `VAULT_PATH`: Path to Obsidian vault (default: `./vault`)
 - `API_PORT`: Backend API port (default: 8000)
 - `DRY_RUN`: Set to `false` to enable real actions (default: `true`)
+- `GMAIL_REDIRECT_URI`: OAuth redirect URI (default: `http://localhost:8080`)
 - Service-specific credentials (see `.env.example`)
 
 ### MCP Services
@@ -156,24 +241,28 @@ The system uses MCP (Model Context Protocol) servers for external actions:
 
 | Action Type        | Auto-Approve | Requires Approval |
 |--------------------|--------------|-------------------|
-| Read vault files   | ✅           |                   |
-| Move files         | ✅           |                   |
-| Update Dashboard   | ✅           |                   |
-| Create drafts      | ✅           |                   |
-| Send email         |              | ✅                |
-| Send WhatsApp msg  |              | ✅                |
-| Post on LinkedIn   |              | ✅                |
+| Read vault files   | Yes          |                   |
+| Move files         | Yes          |                   |
+| Update Dashboard   | Yes          |                   |
+| Create drafts      | Yes          |                   |
+| Send email         |              | Yes               |
+| Send WhatsApp msg  |              | Yes               |
+| Post on LinkedIn   |              | Yes               |
 
 ## Agent Skills
 
-Available skills in `.claude/skills/`:
-- `read_vault.md` - Read vault files
-- `write_task.md` - Create task files
-- `move_task.md` - Move files between folders
-- `weekly_briefing.md` - Generate executive summaries
-- `send_email.md` - Send emails via Gmail
-- `send_whatsapp.md` - Send WhatsApp messages
-- `post_linkedin.md` - Post on LinkedIn
+Available skills in `.claude/skills/` (Anthropic format):
+
+| Skill | Description |
+|-------|-------------|
+| `vault-reader/` | Read and summarize vault files |
+| `task-writer/` | Create new task files |
+| `task-mover/` | Move tasks between lifecycle folders |
+| `weekly-briefing/` | Generate executive CEO briefings |
+| `email-sender/` | Send emails via Gmail MCP |
+| `whatsapp-sender/` | Send WhatsApp messages via MCP |
+| `linkedin-poster/` | Post to LinkedIn via MCP |
+| `skill-creator/` | Create new skills (meta-skill) |
 
 ## Security
 
@@ -203,6 +292,7 @@ Available skills in `.claude/skills/`:
 - Verify MCP server connections
 - Ensure all environment variables are set
 - Confirm Claude Code is accessible
+- For OAuth issues, verify redirect URIs match in `.env` and Google Cloud Console
 
 ## License
 

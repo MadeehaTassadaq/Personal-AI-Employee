@@ -38,6 +38,7 @@ credentials/
 *.token.json
 *.credentials.json
 *.session
+mcp-config.json
 
 # Vault logs (keep structure, ignore content)
 vault/Logs/*.json
@@ -85,3 +86,4 @@ yarn-error.log*
 # Claude Code
 .claude/cache/
 .claude/temp/
+gmail_token.json

@@ -3,16 +3,20 @@
 
 echo "Starting Digital FTE services..."
 
+# Change to project directory
+cd "$(dirname "$0")/.."
+
+# Activate virtual environment
+source .venv/bin/activate
+
 # Set environment variables
 export VAULT_PATH="./vault"
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 
 # Start backend API in background
 echo "Starting backend API..."
-cd backend
-uvicorn api:app --host 0.0.0.0 --port 8000 &
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 &
 BACKEND_PID=$!
-cd ..
 
 # Start file watcher in background
 echo "Starting file watcher..."
