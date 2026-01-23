@@ -4,14 +4,15 @@ import os
 from pathlib import Path
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
-from .api import status, watchers, vault, approvals
-
-# Load environment variables
+# Load environment variables BEFORE importing modules that use them
 load_dotenv()
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from backend.api import status, watchers, vault, approvals
 
 VAULT_PATH = Path(os.getenv("VAULT_PATH", "./vault"))
 
