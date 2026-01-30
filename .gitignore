@@ -39,6 +39,7 @@ credentials/
 *.credentials.json
 *.session
 mcp-config.json
+.mcp.json
 
 # Vault logs (keep structure, ignore content)
 vault/Logs/*.json
