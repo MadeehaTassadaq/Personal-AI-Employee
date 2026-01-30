@@ -14,5 +14,5 @@ export VAULT_PATH="./vault"
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 
 # Start backend API
-echo "Starting backend API on port 8000..."
-uvicorn backend.main:app --host 0.0.0.0 --port 8000
+echo "Starting backend API on port 8001..."
+uvicorn backend.main:app --host 0.0.0.0 --port 8001

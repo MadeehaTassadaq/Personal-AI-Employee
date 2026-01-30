@@ -27,7 +27,11 @@ app = Server("gmail-mcp")
 DRY_RUN = os.getenv("DRY_RUN", "true").lower() == "true"
 CREDENTIALS_PATH = os.getenv("GMAIL_CREDENTIALS_PATH", "./credentials/client_secrets.json")
 TOKEN_PATH = os.getenv("GMAIL_TOKEN_PATH", "./credentials/gmail_token.json")
-SCOPES = ['https://www.googleapis.com/auth/gmail.send', 'https://www.googleapis.com/auth/gmail.compose']
+SCOPES = [
+    'https://www.googleapis.com/auth/gmail.send',
+    'https://www.googleapis.com/auth/gmail.compose',
+    'https://www.googleapis.com/auth/gmail.readonly'
+]
 
 # Gmail service (initialized on first use)
 _gmail_service = None

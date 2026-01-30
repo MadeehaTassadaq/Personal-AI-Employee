@@ -1,7 +1,7 @@
 [project]
 name = "personal-ai-employee"
 version = "0.1.0"
-description = "Digital FTE - Personal AI Employee (Silver Tier)"
+description = "Digital FTE - Personal AI Employee (Gold Tier)"
 requires-python = ">=3.12"
 dependencies = [
     # Core
@@ -25,6 +25,12 @@ dependencies = [
 
     # LinkedIn (API)
     "httpx>=0.27.0",
+
+    # YAML parsing for vault files
+    "pyyaml>=6.0.0",
+
+    # WebSocket support
+    "websockets>=12.0",
 ]
 
 [project.optional-dependencies]

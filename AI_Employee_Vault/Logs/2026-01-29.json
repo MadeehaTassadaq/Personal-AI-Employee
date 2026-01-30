@@ -1,0 +1,23 @@
+[
+  {
+    "timestamp": "2026-01-29T18:12:37.550744",
+    "watcher": "FileWatcher",
+    "event": "file_created",
+    "file": "test-task.md",
+    "path": "AI_Employee_Vault/Inbox/test-task.md"
+  },
+  {
+    "timestamp": "2026-01-29T18:59:07.020502",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "test-new-task.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  },
+  {
+    "timestamp": "2026-01-29T18:59:08.022334",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "prepare-report.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  }
+]
