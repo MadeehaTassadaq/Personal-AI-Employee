@@ -8,7 +8,7 @@
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Vault | Active | AI_Employee_Vault |
+| Vault | Active | Obsidian |
 | File Watcher | Stopped | Check with `./scripts/run_watchers.sh` |
 | Backend API | Stopped | Start with `./scripts/run_backend.sh` |
 | Gmail MCP | Not Configured | OAuth token required |
@@ -23,10 +23,9 @@
 
 ### Inbox (New)
 <!-- Tasks in Inbox/ folder appear here -->
-_Found 2 new tasks_
+_No new tasks_
 
-- Prepare Report
-- test task from cli
+
 
 ### Needs Action (In Progress)
 <!-- Tasks in Needs_Action/ folder appear here -->
@@ -50,13 +49,9 @@ _No items awaiting approval_
 ## Recently Completed
 
 <!-- Tasks in Done/ folder appear here -->
-_Found 5 recently completed tasks_
+_No completed tasks yet_
 
-- [2026-01-31 12:00:00+00:00] facebook ai healthcare 2026 01 31
-- [2026-01-31 11:00:00+00:00] instagram ai healthcare 2026 01 31
-- [2026-01-30] facebook ai healthcare 2026 01 30
-- [2026-01-30] email meeting notification 2026 01 30
-- [2026-01-30] whatsapp test 2026 01 30
+
 
 ---
 
@@ -73,7 +68,7 @@ _Found 5 recently completed tasks_
 
 | Metric | Value |
 |--------|-------|
-| Tasks Completed Today | 2 |
+| Tasks Completed Today | 0 |
 | Tasks Pending | 0 |
 | Actions Awaiting Approval | 0 |
 | Emails Sent | 0 |

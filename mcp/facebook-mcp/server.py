@@ -52,17 +52,8 @@ def get_headers():
     }
 
 
-@app.tool()
-async def post_to_page(content: str, link: Optional[str] = None) -> str:
-    """Create a post on the Facebook Page.
-
-    Args:
-        content: Post content (text)
-        link: Optional URL to include with the post
-
-    Returns:
-        Result message with post ID or error
-    """
+async def _post_to_page(content: str, link: Optional[str] = None) -> str:
+    """Create a post on the Facebook Page."""
     log_action("facebook_post_requested", {
         "content_length": len(content),
         "has_link": link is not None,
@@ -117,24 +108,8 @@ async def post_to_page(content: str, link: Optional[str] = None) -> str:
         return f"Error creating post: {str(e)}"
 
 
-@app.tool()
-async def get_page_insights(
-    metric: str = "page_impressions",
-    period: str = "day"
-) -> str:
-    """Get Facebook Page insights and analytics.
-
-    Args:
-        metric: Metric to retrieve. Options:
-            - page_impressions: Total page views
-            - page_engaged_users: Users who engaged
-            - page_post_engagements: Post interactions
-            - page_fans: Total page likes
-        period: Time period - "day", "week", "days_28"
-
-    Returns:
-        Insights data or error message
-    """
+async def _get_page_insights(metric: str = "page_impressions", period: str = "day") -> str:
+    """Get Facebook Page insights and analytics."""
     log_action("facebook_insights_requested", {
         "metric": metric,
         "period": period,
@@ -173,7 +148,7 @@ async def get_page_insights(
                 result = f"Facebook Page Insights - {metric} ({period}):\n"
                 for insight in insights:
                     values = insight.get("values", [])
-                    for v in values[-3:]:  # Last 3 data points
+                    for v in values[-3:]:
                         result += f"- {v.get('end_time', 'N/A')}: {v.get('value', 0)}\n"
 
                 return result
@@ -187,13 +162,8 @@ async def get_page_insights(
         return f"Error getting insights: {str(e)}"
 
 
-@app.tool()
-async def get_page_notifications() -> str:
-    """Get recent notifications for the Facebook Page.
-
-    Returns:
-        List of recent notifications or error message
-    """
+async def _get_page_notifications() -> str:
+    """Get recent notifications for the Facebook Page."""
     log_action("facebook_notifications_requested", {"dry_run": DRY_RUN})
 
     if DRY_RUN:
@@ -212,7 +182,6 @@ async def get_page_notifications() -> str:
         }
 
         async with httpx.AsyncClient() as client:
-            # Get page feed with comments and reactions
             response = await client.get(
                 f"{API_BASE}/{PAGE_ID}/feed",
                 params={
@@ -251,13 +220,8 @@ async def get_page_notifications() -> str:
         return f"Error getting notifications: {str(e)}"
 
 
-@app.tool()
-async def get_page_info() -> str:
-    """Get basic information about the Facebook Page.
-
-    Returns:
-        Page information or error message
-    """
+async def _get_page_info() -> str:
+    """Get basic information about the Facebook Page."""
     if DRY_RUN:
         return "[DRY RUN] Would fetch Facebook Page info"
 
@@ -299,13 +263,8 @@ async def get_page_info() -> str:
         return f"Error getting page info: {str(e)}"
 
 
-@app.tool()
-async def check_connection() -> str:
-    """Check if Facebook API connection is working.
-
-    Returns:
-        Connection status
-    """
+async def _check_connection() -> str:
+    """Check if Facebook API connection is working."""
     if not PAGE_ACCESS_TOKEN:
         return "Error: Facebook Page access token not configured"
 
@@ -337,5 +296,99 @@ async def check_connection() -> str:
         return f"Connection check failed: {str(e)}"
 
 
+@app.list_tools()
+async def handle_list_tools():
+    """List available Facebook tools."""
+    return [
+        Tool(
+            name="post_to_page",
+            description="Create a post on the Facebook Page",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "content": {"type": "string", "description": "Post content (text)"},
+                    "link": {"type": "string", "description": "Optional URL to include with the post"}
+                },
+                "required": ["content"]
+            }
+        ),
+        Tool(
+            name="get_page_insights",
+            description="Get Facebook Page insights and analytics",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "metric": {
+                        "type": "string",
+                        "description": "Metric to retrieve: page_impressions, page_engaged_users, page_post_engagements, page_fans",
+                        "default": "page_impressions"
+                    },
+                    "period": {
+                        "type": "string",
+                        "description": "Time period: day, week, days_28",
+                        "default": "day"
+                    }
+                }
+            }
+        ),
+        Tool(
+            name="get_page_notifications",
+            description="Get recent notifications for the Facebook Page",
+            inputSchema={
+                "type": "object",
+                "properties": {}
+            }
+        ),
+        Tool(
+            name="get_page_info",
+            description="Get basic information about the Facebook Page",
+            inputSchema={
+                "type": "object",
+                "properties": {}
+            }
+        ),
+        Tool(
+            name="check_connection",
+            description="Check if Facebook API connection is working",
+            inputSchema={
+                "type": "object",
+                "properties": {}
+            }
+        )
+    ]
+
+
+@app.call_tool()
+async def handle_call_tool(name: str, arguments: dict):
+    """Handle tool calls."""
+    if name == "post_to_page":
+        result = await _post_to_page(
+            content=arguments["content"],
+            link=arguments.get("link")
+        )
+    elif name == "get_page_insights":
+        result = await _get_page_insights(
+            metric=arguments.get("metric", "page_impressions"),
+            period=arguments.get("period", "day")
+        )
+    elif name == "get_page_notifications":
+        result = await _get_page_notifications()
+    elif name == "get_page_info":
+        result = await _get_page_info()
+    elif name == "check_connection":
+        result = await _check_connection()
+    else:
+        result = f"Unknown tool: {name}"
+
+    return [TextContent(type="text", text=result)]
+
+
+async def main():
+    from mcp.server.stdio import stdio_server
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(read_stream, write_stream, app.create_initialization_options())
+
+
 if __name__ == "__main__":
-    app.run()
+    import asyncio
+    asyncio.run(main())

@@ -95,20 +95,8 @@ def log_action(action: str, details: dict) -> None:
     log_file.write_text(json.dumps(logs, indent=2))
 
 
-@app.tool()
-async def send_email(to: str, subject: str, body: str, cc: str = "", bcc: str = "") -> str:
-    """Send an email via Gmail.
-
-    Args:
-        to: Recipient email address
-        subject: Email subject line
-        body: Email body (plain text)
-        cc: CC recipients (comma-separated)
-        bcc: BCC recipients (comma-separated)
-
-    Returns:
-        Result message
-    """
+async def _send_email(to: str, subject: str, body: str, cc: str = "", bcc: str = "") -> str:
+    """Send an email via Gmail."""
     log_action("send_email_requested", {
         "to": to,
         "subject": subject,
@@ -121,7 +109,6 @@ async def send_email(to: str, subject: str, body: str, cc: str = "", bcc: str = 
     try:
         service = get_gmail_service()
 
-        # Create message
         message = MIMEMultipart()
         message['to'] = to
         message['subject'] = subject
@@ -132,7 +119,6 @@ async def send_email(to: str, subject: str, body: str, cc: str = "", bcc: str = 
 
         message.attach(MIMEText(body, 'plain'))
 
-        # Encode and send
         raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
         result = service.users().messages().send(
             userId='me',
@@ -155,18 +141,8 @@ async def send_email(to: str, subject: str, body: str, cc: str = "", bcc: str = 
         return f"Failed to send email: {str(e)}"
 
 
-@app.tool()
-async def draft_email(to: str, subject: str, body: str) -> str:
-    """Create a draft email (doesn't send).
-
-    Args:
-        to: Recipient email address
-        subject: Email subject line
-        body: Email body
-
-    Returns:
-        Result message
-    """
+async def _draft_email(to: str, subject: str, body: str) -> str:
+    """Create a draft email (doesn't send)."""
     log_action("draft_email_requested", {
         "to": to,
         "subject": subject,
@@ -179,15 +155,12 @@ async def draft_email(to: str, subject: str, body: str) -> str:
     try:
         service = get_gmail_service()
 
-        # Create message
         message = MIMEText(body)
         message['to'] = to
         message['subject'] = subject
 
-        # Encode
         raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
 
-        # Create draft
         draft = service.users().drafts().create(
             userId='me',
             body={'message': {'raw': raw}}
@@ -209,17 +182,8 @@ async def draft_email(to: str, subject: str, body: str) -> str:
         return f"Failed to create draft: {str(e)}"
 
 
-@app.tool()
-async def search_emails(query: str, max_results: int = 10) -> str:
-    """Search emails in Gmail.
-
-    Args:
-        query: Gmail search query (e.g., "from:user@example.com subject:hello")
-        max_results: Maximum number of results to return
-
-    Returns:
-        Search results
-    """
+async def _search_emails(query: str, max_results: int = 10) -> str:
+    """Search emails in Gmail."""
     if DRY_RUN:
         return f"[DRY RUN] Would search for: {query}"
 
@@ -237,7 +201,6 @@ async def search_emails(query: str, max_results: int = 10) -> str:
         if not messages:
             return "No emails found matching the query."
 
-        # Get details for each message
         email_summaries = []
         for msg in messages[:max_results]:
             full_msg = service.users().messages().get(
@@ -260,5 +223,87 @@ async def search_emails(query: str, max_results: int = 10) -> str:
         return f"Search failed: {str(e)}"
 
 
+@app.list_tools()
+async def handle_list_tools():
+    """List available Gmail tools."""
+    return [
+        Tool(
+            name="send_email",
+            description="Send an email via Gmail",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "to": {"type": "string", "description": "Recipient email address"},
+                    "subject": {"type": "string", "description": "Email subject line"},
+                    "body": {"type": "string", "description": "Email body (plain text)"},
+                    "cc": {"type": "string", "description": "CC recipients (comma-separated)", "default": ""},
+                    "bcc": {"type": "string", "description": "BCC recipients (comma-separated)", "default": ""}
+                },
+                "required": ["to", "subject", "body"]
+            }
+        ),
+        Tool(
+            name="draft_email",
+            description="Create a draft email (doesn't send)",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "to": {"type": "string", "description": "Recipient email address"},
+                    "subject": {"type": "string", "description": "Email subject line"},
+                    "body": {"type": "string", "description": "Email body"}
+                },
+                "required": ["to", "subject", "body"]
+            }
+        ),
+        Tool(
+            name="search_emails",
+            description="Search emails in Gmail",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "Gmail search query (e.g., 'from:user@example.com subject:hello')"},
+                    "max_results": {"type": "integer", "description": "Maximum number of results", "default": 10}
+                },
+                "required": ["query"]
+            }
+        )
+    ]
+
+
+@app.call_tool()
+async def handle_call_tool(name: str, arguments: dict):
+    """Handle tool calls."""
+    if name == "send_email":
+        result = await _send_email(
+            to=arguments["to"],
+            subject=arguments["subject"],
+            body=arguments["body"],
+            cc=arguments.get("cc", ""),
+            bcc=arguments.get("bcc", "")
+        )
+    elif name == "draft_email":
+        result = await _draft_email(
+            to=arguments["to"],
+            subject=arguments["subject"],
+            body=arguments["body"]
+        )
+    elif name == "search_emails":
+        result = await _search_emails(
+            query=arguments["query"],
+            max_results=arguments.get("max_results", 10)
+        )
+    else:
+        result = f"Unknown tool: {name}"
+
+    return [TextContent(type="text", text=result)]
+
+
+async def main():
+    from mcp.server.stdio import stdio_server
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(read_stream, write_stream, app.create_initialization_options())
+
+
 if __name__ == "__main__":
-    app.run()
+    import asyncio
+    asyncio.run(main())

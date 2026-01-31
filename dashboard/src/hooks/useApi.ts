@@ -407,6 +407,40 @@ export function useApi() {
     }
   };
 
+  // Calendar API methods
+  const fetchCalendarStatus = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/calendar/status`);
+      if (!response.ok) throw new Error('Failed to fetch calendar status');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return { status: 'error', configured: false };
+    }
+  };
+
+  const fetchTodayEvents = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/calendar/today`);
+      if (!response.ok) throw new Error('Failed to fetch today\'s events');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return { date: new Date().toISOString().split('T')[0], events: [], count: 0 };
+    }
+  };
+
+  const fetchCalendarEvents = async (days: number = 7) => {
+    try {
+      const response = await fetch(`${API_BASE}/calendar/events?days=${days}`);
+      if (!response.ok) throw new Error('Failed to fetch calendar events');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return { days, events: [], count: 0 };
+    }
+  };
+
   // Task stats for business audit
   const fetchTaskStats = async () => {
     try {
@@ -469,6 +503,10 @@ export function useApi() {
     fetchFinancialSummary,
     fetchOdooInvoices,
     // Gold tier - Business Audit
-    fetchTaskStats
+    fetchTaskStats,
+    // Calendar
+    fetchCalendarStatus,
+    fetchTodayEvents,
+    fetchCalendarEvents
   };
 }

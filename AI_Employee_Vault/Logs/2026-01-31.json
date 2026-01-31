@@ -1,0 +1,187 @@
+[
+  {
+    "timestamp": "2026-01-31T10:09:53.434755",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 36,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T10:11:52.576879",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.wait_for_selector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"[data-testid=\\\"conversation-compose-box-input\\\"]\") to be visible\n"
+  },
+  {
+    "timestamp": "2026-01-31T10:23:38.921185",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 36,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T10:24:10.638242",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.wait_for_selector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"[data-testid=\\\"conversation-compose-box-input\\\"]\") to be visible\n"
+  },
+  {
+    "timestamp": "2026-01-31T10:31:20.052331",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 36,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T10:31:52.777097",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.wait_for_selector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"[data-testid=\\\"conversation-compose-box-input\\\"]\") to be visible\n"
+  },
+  {
+    "timestamp": "2026-01-31T10:59:38.006886",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 36,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T10:59:39.412741",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "BrowserType.launch_persistent_context: Failed to create a ProcessSingleton for your profile directory. This usually means that the profile is already in use by another instance of Chromium.\nCall log:\n  - <launching> /home/madeeha/.cache/ms-playwright/chromium-1200/chrome-linux64/chrome --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --no-sandbox --user-data-dir=/home/madeeha/Documents/Personal-AI-Employee/credentials/whatsapp_session --remote-debugging-pipe about:blank\n  - <launched> pid=5570\n  - [pid=5570][err] [5570:5570:0131/105939.351192:ERROR:chrome/browser/process_singleton_posix.cc:340] Failed to create /home/madeeha/Documents/Personal-AI-Employee/credentials/whatsapp_session/SingletonLock: File exists (17)\n  - [pid=5570][err] [5570:5570:0131/105939.353270:ERROR:chrome/app/chrome_main_delegate.cc:514] Failed to create a ProcessSingleton for your profile directory. This means that running multiple instances would start multiple browser processes rather than opening a new window in the existing process. Aborting now to avoid profile corruption.\n  - [pid=5570] <gracefully close start>\n  - [pid=5570] <kill>\n  - [pid=5570] <will force kill>\n  - [pid=5570] <process did exit: exitCode=21, signal=null>\n  - [pid=5570] starting temporary directories cleanup\n  - [pid=5570] finished temporary directories cleanup\n  - [pid=5570] <gracefully close end>\n"
+  },
+  {
+    "timestamp": "2026-01-31T11:00:47.285765",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 36,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T11:02:28.247453",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.wait_for_selector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"[data-testid=\\\"conversation-compose-box-input\\\"]\") to be visible\n"
+  },
+  {
+    "timestamp": "2026-01-31T13:42:22.816626",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 704,
+    "has_link": false,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T13:42:27.901281",
+    "watcher": "FacebookMCP",
+    "event": "facebook_posted",
+    "post_id": "958427130693191_122105826105231352",
+    "content_length": 704
+  },
+  {
+    "timestamp": "2026-01-31T13:48:59.059650",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://images.unsplash.com/photo-1576091160399-11...",
+    "caption_length": 835,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T13:48:59.829534",
+    "watcher": "InstagramMCP",
+    "event": "instagram_container_failed",
+    "error": "Unsupported post request. Object with ID '25572785585740159' does not exist, cannot be loaded due to missing permissions, or does not support this operation. Please read the Graph API documentation at https://developers.facebook.com/docs/graph-api"
+  },
+  {
+    "timestamp": "2026-01-31T13:49:59.658723",
+    "watcher": "InstagramMCP",
+    "event": "instagram_insights_requested",
+    "metric": "impressions",
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T14:06:08.110219",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://images.unsplash.com/photo-1576091160399-11...",
+    "caption_length": 835,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T14:06:09.803147",
+    "watcher": "InstagramMCP",
+    "event": "instagram_container_failed",
+    "error": "(#10) Requires instagram_content_publish permission to manage the object"
+  },
+  {
+    "timestamp": "2026-01-31T14:08:29.758481",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://images.unsplash.com/photo-1576091160399-11...",
+    "caption_length": 835,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T14:08:40.412180",
+    "watcher": "InstagramMCP",
+    "event": "instagram_posted",
+    "post_id": "18092502676816681",
+    "caption_length": 835
+  },
+  {
+    "timestamp": "2026-01-31T17:20:25.028046",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 152,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T17:20:59.660828",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://web.whatsapp.com/\", waiting until \"load\"\n"
+  },
+  {
+    "timestamp": "2026-01-31T17:41:23.632088",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 152,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T17:41:23.639179",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.goto: Target page, context or browser has been closed"
+  },
+  {
+    "timestamp": "2026-01-31T17:46:06.676167",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 152,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-31T17:47:50.011071",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.wait_for_selector: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"[data-testid=\\\"conversation-compose-box-input\\\"]\") to be visible\n"
+  }
+]

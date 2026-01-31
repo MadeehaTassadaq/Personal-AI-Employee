@@ -1,0 +1,91 @@
+[
+  {
+    "timestamp": "2026-01-30T19:13:58.985352",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 869,
+    "has_link": false,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-30T19:14:00.766268",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_failed",
+    "status": 400,
+    "error": "Error validating access token: Session has expired on Friday, 30-Jan-26 04:00:00 PST. The current time is Friday, 30-Jan-26 06:11:47 PST."
+  },
+  {
+    "timestamp": "2026-01-30T19:30:32.896317",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 869,
+    "has_link": false,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-30T19:30:34.878105",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_failed",
+    "status": 400,
+    "error": "Error validating access token: Session has expired on Friday, 30-Jan-26 04:00:00 PST. The current time is Friday, 30-Jan-26 06:28:22 PST."
+  },
+  {
+    "timestamp": "2026-01-30T19:31:41.735269",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 869,
+    "has_link": false,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-30T19:31:46.775640",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_error",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-01-30T19:37:35.554614",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 869,
+    "has_link": false,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-30T19:37:39.539039",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_failed",
+    "status": 403,
+    "error": "(#200) If posting to a group, requires app being installed in the group, and \\\n          either publish_to_groups permission with user token, or both pages_read_engagement \\\n          and pages_manage_posts permission with page token; If posting to a page, \\\n          requires both pages_read_engagement and pages_manage_posts as an admin with \\\n          sufficient administrative permission"
+  },
+  {
+    "timestamp": "2026-01-30T19:43:19.761918",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 869,
+    "has_link": false,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-30T19:43:22.770849",
+    "watcher": "FacebookMCP",
+    "event": "facebook_posted",
+    "post_id": "958427130693191_122105413173231352",
+    "content_length": 869
+  },
+  {
+    "timestamp": "2026-01-30T21:30:23.933599",
+    "watcher": "LinkedInMCP",
+    "event": "linkedin_post_requested",
+    "content_length": 1006,
+    "visibility": "PUBLIC",
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-01-30T21:30:28.388540",
+    "watcher": "LinkedInMCP",
+    "event": "linkedin_posted",
+    "post_id": "urn:li:share:7423039353700032512",
+    "content_length": 1006
+  }
+]

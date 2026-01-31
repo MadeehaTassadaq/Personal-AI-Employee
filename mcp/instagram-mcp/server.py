@@ -51,20 +51,8 @@ def log_action(action: str, details: dict) -> None:
     log_file.write_text(json.dumps(logs, indent=2))
 
 
-@app.tool()
-async def post_image(image_url: str, caption: str) -> str:
-    """Post an image to Instagram.
-
-    Note: The image must be hosted at a publicly accessible URL.
-    Instagram will fetch the image from this URL.
-
-    Args:
-        image_url: Public URL of the image to post (must be accessible by Instagram)
-        caption: Caption for the post (max 2,200 characters, 30 hashtags)
-
-    Returns:
-        Result message with post ID or error
-    """
+async def _post_image(image_url: str, caption: str) -> str:
+    """Post an image to Instagram."""
     log_action("instagram_post_requested", {
         "image_url": image_url[:50] + "...",
         "caption_length": len(caption),
@@ -132,17 +120,8 @@ async def post_image(image_url: str, caption: str) -> str:
         return f"Error creating post: {str(e)}"
 
 
-@app.tool()
-async def post_carousel(image_urls: str, caption: str) -> str:
-    """Post a carousel (multiple images) to Instagram.
-
-    Args:
-        image_urls: Comma-separated list of public image URLs (2-10 images)
-        caption: Caption for the carousel post
-
-    Returns:
-        Result message with post ID or error
-    """
+async def _post_carousel(image_urls: str, caption: str) -> str:
+    """Post a carousel (multiple images) to Instagram."""
     urls = [url.strip() for url in image_urls.split(",")]
 
     if len(urls) < 2 or len(urls) > 10:
@@ -232,20 +211,8 @@ async def post_carousel(image_urls: str, caption: str) -> str:
         return f"Error creating carousel: {str(e)}"
 
 
-@app.tool()
-async def get_insights(metric: str = "impressions") -> str:
-    """Get Instagram account insights.
-
-    Args:
-        metric: Metric to retrieve. Options:
-            - impressions: Total content impressions
-            - reach: Unique accounts reached
-            - profile_views: Profile view count
-            - follower_count: Current follower count
-
-    Returns:
-        Insights data or error message
-    """
+async def _get_insights(metric: str = "impressions") -> str:
+    """Get Instagram account insights."""
     log_action("instagram_insights_requested", {
         "metric": metric,
         "dry_run": DRY_RUN
@@ -297,16 +264,8 @@ async def get_insights(metric: str = "impressions") -> str:
         return f"Error getting insights: {str(e)}"
 
 
-@app.tool()
-async def get_media(limit: int = 10) -> str:
-    """Get recent Instagram posts/media.
-
-    Args:
-        limit: Number of posts to retrieve (max 50)
-
-    Returns:
-        List of recent posts or error message
-    """
+async def _get_media(limit: int = 10) -> str:
+    """Get recent Instagram posts/media."""
     if DRY_RUN:
         return f"[DRY RUN] Would fetch last {limit} Instagram posts"
 
@@ -356,13 +315,8 @@ async def get_media(limit: int = 10) -> str:
         return f"Error getting media: {str(e)}"
 
 
-@app.tool()
-async def get_account_info() -> str:
-    """Get Instagram business account information.
-
-    Returns:
-        Account information or error message
-    """
+async def _get_account_info() -> str:
+    """Get Instagram business account information."""
     if DRY_RUN:
         return "[DRY RUN] Would fetch Instagram account info"
 
@@ -405,13 +359,8 @@ async def get_account_info() -> str:
         return f"Error getting account info: {str(e)}"
 
 
-@app.tool()
-async def check_connection() -> str:
-    """Check if Instagram API connection is working.
-
-    Returns:
-        Connection status
-    """
+async def _check_connection() -> str:
+    """Check if Instagram API connection is working."""
     if not PAGE_ACCESS_TOKEN:
         return "Error: Facebook Page access token not configured"
 
@@ -443,5 +392,130 @@ async def check_connection() -> str:
         return f"Connection check failed: {str(e)}"
 
 
+@app.list_tools()
+async def handle_list_tools():
+    """List available Instagram tools."""
+    return [
+        Tool(
+            name="post_image",
+            description="Post an image to Instagram. The image must be at a publicly accessible URL.",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "image_url": {
+                        "type": "string",
+                        "description": "Public URL of the image to post (must be accessible by Instagram)"
+                    },
+                    "caption": {
+                        "type": "string",
+                        "description": "Caption for the post (max 2,200 characters, 30 hashtags)"
+                    }
+                },
+                "required": ["image_url", "caption"]
+            }
+        ),
+        Tool(
+            name="post_carousel",
+            description="Post a carousel (multiple images) to Instagram",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "image_urls": {
+                        "type": "string",
+                        "description": "Comma-separated list of public image URLs (2-10 images)"
+                    },
+                    "caption": {
+                        "type": "string",
+                        "description": "Caption for the carousel post"
+                    }
+                },
+                "required": ["image_urls", "caption"]
+            }
+        ),
+        Tool(
+            name="get_insights",
+            description="Get Instagram account insights",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "metric": {
+                        "type": "string",
+                        "description": "Metric to retrieve: impressions, reach, profile_views, follower_count",
+                        "default": "impressions"
+                    }
+                }
+            }
+        ),
+        Tool(
+            name="get_media",
+            description="Get recent Instagram posts/media",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "limit": {
+                        "type": "integer",
+                        "description": "Number of posts to retrieve (max 50)",
+                        "default": 10
+                    }
+                }
+            }
+        ),
+        Tool(
+            name="get_account_info",
+            description="Get Instagram business account information",
+            inputSchema={
+                "type": "object",
+                "properties": {}
+            }
+        ),
+        Tool(
+            name="check_connection",
+            description="Check if Instagram API connection is working",
+            inputSchema={
+                "type": "object",
+                "properties": {}
+            }
+        )
+    ]
+
+
+@app.call_tool()
+async def handle_call_tool(name: str, arguments: dict):
+    """Handle tool calls."""
+    if name == "post_image":
+        result = await _post_image(
+            image_url=arguments["image_url"],
+            caption=arguments["caption"]
+        )
+    elif name == "post_carousel":
+        result = await _post_carousel(
+            image_urls=arguments["image_urls"],
+            caption=arguments["caption"]
+        )
+    elif name == "get_insights":
+        result = await _get_insights(
+            metric=arguments.get("metric", "impressions")
+        )
+    elif name == "get_media":
+        result = await _get_media(
+            limit=arguments.get("limit", 10)
+        )
+    elif name == "get_account_info":
+        result = await _get_account_info()
+    elif name == "check_connection":
+        result = await _check_connection()
+    else:
+        result = f"Unknown tool: {name}"
+
+    return [TextContent(type="text", text=result)]
+
+
+async def main():
+    from mcp.server.stdio import stdio_server
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(read_stream, write_stream, app.create_initialization_options())
+
+
 if __name__ == "__main__":
-    app.run()
+    import asyncio
+    asyncio.run(main())

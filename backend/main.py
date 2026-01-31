@@ -17,9 +17,10 @@ load_dotenv()
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api import status, watchers, vault, approvals, audit, ralph, ceo_briefing, odoo, social
+from backend.api import status, watchers, vault, approvals, audit, ralph, ceo_briefing, odoo, social, calendar
 from backend.services.audit_logger import get_audit_logger, AuditAction
 from backend.services.ralph_wiggum import get_ralph
+from backend.services.scheduler import init_scheduler, shutdown_scheduler
 
 VAULT_PATH = Path(os.getenv("VAULT_PATH", "./vault"))
 
@@ -78,6 +79,10 @@ async def lifespan(app: FastAPI):
     for folder in ["Inbox", "Needs_Action", "Pending_Approval", "Approved", "Done", "Logs", "Plans", "Reports", "Audit"]:
         (VAULT_PATH / folder).mkdir(parents=True, exist_ok=True)
 
+    # Initialize scheduler for periodic tasks
+    init_scheduler()
+    print("[BACKEND] Scheduler initialized")
+
     # Initialize audit logger
     audit_logger = get_audit_logger()
     audit_logger.log(
@@ -97,6 +102,8 @@ async def lifespan(app: FastAPI):
 
     # Shutdown
     print("[BACKEND] Shutting down...")
+    shutdown_scheduler()
+    print("[BACKEND] Scheduler stopped")
     audit_logger.log(
         AuditAction.SYSTEM_STOP,
         platform="system",
@@ -130,6 +137,7 @@ app.include_router(ralph.router, prefix="/api/ralph", tags=["Ralph Wiggum"])
 app.include_router(ceo_briefing.router, prefix="/api/ceo-briefing", tags=["CEO Briefing"])
 app.include_router(odoo.router, prefix="/api/odoo", tags=["Odoo Accounting"])
 app.include_router(social.router, prefix="/api/social", tags=["Social Media"])
+app.include_router(calendar.router, prefix="/api/calendar", tags=["Calendar"])
 
 
 @app.get("/")

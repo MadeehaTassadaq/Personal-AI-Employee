@@ -51,7 +51,7 @@ def log_action(action: str, details: dict) -> None:
     log_file.write_text(json.dumps(logs, indent=2))
 
 
-async def get_user_id() -> str:
+async def _get_user_id() -> str:
     """Get the current user's LinkedIn ID."""
     async with httpx.AsyncClient() as client:
         response = await client.get(
@@ -63,17 +63,8 @@ async def get_user_id() -> str:
     return ""
 
 
-@app.tool()
-async def create_post(content: str, visibility: str = "PUBLIC") -> str:
-    """Create a LinkedIn post.
-
-    Args:
-        content: Post content (text)
-        visibility: Post visibility - "PUBLIC" or "CONNECTIONS"
-
-    Returns:
-        Result message
-    """
+async def _create_post(content: str, visibility: str = "PUBLIC") -> str:
+    """Create a LinkedIn post."""
     log_action("linkedin_post_requested", {
         "content_length": len(content),
         "visibility": visibility,
@@ -87,7 +78,7 @@ async def create_post(content: str, visibility: str = "PUBLIC") -> str:
         return "Error: LinkedIn access token not configured"
 
     try:
-        user_id = await get_user_id()
+        user_id = await _get_user_id()
         if not user_id:
             return "Error: Could not get LinkedIn user ID"
 
@@ -133,13 +124,8 @@ async def create_post(content: str, visibility: str = "PUBLIC") -> str:
         return f"Error creating post: {str(e)}"
 
 
-@app.tool()
-async def get_profile() -> str:
-    """Get the current user's LinkedIn profile info.
-
-    Returns:
-        Profile information
-    """
+async def _get_profile() -> str:
+    """Get the current user's LinkedIn profile info."""
     if DRY_RUN:
         return "[DRY RUN] Would fetch LinkedIn profile"
 
@@ -168,13 +154,8 @@ async def get_profile() -> str:
         return f"Error getting profile: {str(e)}"
 
 
-@app.tool()
-async def check_connection() -> str:
-    """Check if LinkedIn API connection is working.
-
-    Returns:
-        Connection status
-    """
+async def _check_connection() -> str:
+    """Check if LinkedIn API connection is working."""
     if not ACCESS_TOKEN:
         return "Error: LinkedIn access token not configured"
 
@@ -196,5 +177,69 @@ async def check_connection() -> str:
         return f"Connection check failed: {str(e)}"
 
 
+@app.list_tools()
+async def handle_list_tools():
+    """List available LinkedIn tools."""
+    return [
+        Tool(
+            name="create_post",
+            description="Create a LinkedIn post",
+            inputSchema={
+                "type": "object",
+                "properties": {
+                    "content": {"type": "string", "description": "Post content (text)"},
+                    "visibility": {
+                        "type": "string",
+                        "description": "Post visibility: PUBLIC or CONNECTIONS",
+                        "default": "PUBLIC"
+                    }
+                },
+                "required": ["content"]
+            }
+        ),
+        Tool(
+            name="get_profile",
+            description="Get the current user's LinkedIn profile info",
+            inputSchema={
+                "type": "object",
+                "properties": {}
+            }
+        ),
+        Tool(
+            name="check_connection",
+            description="Check if LinkedIn API connection is working",
+            inputSchema={
+                "type": "object",
+                "properties": {}
+            }
+        )
+    ]
+
+
+@app.call_tool()
+async def handle_call_tool(name: str, arguments: dict):
+    """Handle tool calls."""
+    if name == "create_post":
+        result = await _create_post(
+            content=arguments["content"],
+            visibility=arguments.get("visibility", "PUBLIC")
+        )
+    elif name == "get_profile":
+        result = await _get_profile()
+    elif name == "check_connection":
+        result = await _check_connection()
+    else:
+        result = f"Unknown tool: {name}"
+
+    return [TextContent(type="text", text=result)]
+
+
+async def main():
+    from mcp.server.stdio import stdio_server
+    async with stdio_server() as (read_stream, write_stream):
+        await app.run(read_stream, write_stream, app.create_initialization_options())
+
+
 if __name__ == "__main__":
-    app.run()
+    import asyncio
+    asyncio.run(main())

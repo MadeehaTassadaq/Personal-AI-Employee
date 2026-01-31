@@ -1,0 +1,73 @@
+[
+  {
+    "timestamp": "2026-01-31T19:48:05.897354",
+    "correlation_id": "966ca84d",
+    "action": "system_start",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {
+      "vault_path": "home/madeeha/Applications/Obsidian"
+    }
+  },
+  {
+    "timestamp": "2026-01-31T19:48:34.903189",
+    "correlation_id": "966ca84d",
+    "action": "system_stop",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-01-31T19:55:07.408566",
+    "correlation_id": "6a20f155",
+    "action": "system_start",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {
+      "vault_path": "home/madeeha/Applications/Obsidian"
+    }
+  },
+  {
+    "timestamp": "2026-01-31T19:55:16.411711",
+    "correlation_id": "6a20f155",
+    "action": "system_stop",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-01-31T19:59:05.165345",
+    "correlation_id": "dbbfd885",
+    "action": "system_start",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {
+      "vault_path": "home/madeeha/Applications/Obsidian"
+    }
+  },
+  {
+    "timestamp": "2026-01-31T19:59:13.170332",
+    "correlation_id": "dbbfd885",
+    "action": "system_stop",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-01-31T20:00:57.022112",
+    "correlation_id": "f0270839",
+    "action": "system_start",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {
+      "vault_path": "home/madeeha/Applications/Obsidian"
+    }
+  }
+]

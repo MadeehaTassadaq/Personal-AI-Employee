@@ -11,6 +11,7 @@ import { RalphController } from './components/RalphController';
 import { SocialMediaDashboard } from './components/SocialMediaDashboard';
 import { OdooIntegration } from './components/OdooIntegration';
 import { BusinessAudit } from './components/BusinessAudit';
+import { CalendarView } from './components/CalendarView';
 
 type TabView = 'overview' | 'social' | 'finance' | 'audit';
 
@@ -34,7 +35,10 @@ function App() {
     startRalph,
     stopRalph,
     pauseRalph,
-    resumeRalph
+    resumeRalph,
+    fetchCalendarStatus,
+    fetchTodayEvents,
+    fetchCalendarEvents
   } = useApi();
 
   const [activeTab, setActiveTab] = useState<TabView>('overview');
@@ -65,6 +69,13 @@ function App() {
       icon: '[in]',
       status: status.watchers.linkedin === 'running' ? 'healthy' : 'unknown',
       connected: status.watchers.linkedin === 'running',
+      eventsToday: 0
+    },
+    {
+      name: 'Calendar',
+      icon: '[CAL]',
+      status: 'unknown',
+      connected: false,
       eventsToday: 0
     }
   ] as const;
@@ -157,6 +168,12 @@ function App() {
                   onStop={stopWatcher}
                   onStartAll={startAllWatchers}
                   onStopAll={stopAllWatchers}
+                />
+
+                <CalendarView
+                  fetchTodayEvents={fetchTodayEvents}
+                  fetchEvents={fetchCalendarEvents}
+                  fetchCalendarStatus={fetchCalendarStatus}
                 />
 
                 <RalphController
