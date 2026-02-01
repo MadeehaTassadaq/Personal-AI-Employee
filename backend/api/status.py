@@ -68,13 +68,8 @@ async def get_status():
     if any(s == WatcherStatus.ERROR for s in watchers.values()):
         system_status = SystemStatus.ERROR
 
-    # Import and update dashboard periodically
-    try:
-        from ..services.dashboard_updater import update_dashboard_now
-        update_dashboard_now()
-    except ImportError:
-        # Dashboard updater may not be available in all environments
-        pass
+    # Note: Dashboard updates are handled by the scheduler separately
+    # to avoid excessive file writes on every status check
 
     return StatusResponse(
         system=system_status,

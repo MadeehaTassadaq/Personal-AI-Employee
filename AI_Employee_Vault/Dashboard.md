@@ -1,6 +1,6 @@
 # Digital FTE Dashboard
 
-> Last Updated: 2026-02-01
+> Last Updated: 2026-02-01 15:31:14
 
 ---
 
@@ -12,8 +12,8 @@
 | File Watcher | Stopped | Check with `./scripts/run_watchers.sh` |
 | Backend API | Stopped | Start with `./scripts/run_backend.sh` |
 | Gmail MCP | Not Configured | OAuth token required |
-| WhatsApp MCP | Configured | QR scan required |
-| LinkedIn MCP | Configured | Token configured |
+| WhatsApp MCP | Not Configured | QR scan required |
+| LinkedIn MCP | Not Configured | Token configured |
 
 **Mode:** `DRY_RUN=false` (Live mode - real actions)
 

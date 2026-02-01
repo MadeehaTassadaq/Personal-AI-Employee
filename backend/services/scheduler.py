@@ -83,11 +83,11 @@ def init_scheduler():
     """Initialize the scheduler with default tasks."""
     from .dashboard_updater import update_dashboard_now
 
-    # Update dashboard every 30 seconds
+    # Update dashboard every 60 seconds to better align with frontend refreshes
     scheduler.add_periodic_task(
         name="dashboard_update",
         func=update_dashboard_now,
-        interval=30,  # Every 30 seconds
+        interval=60,  # Every 1 minute
         immediate=True
     )
 

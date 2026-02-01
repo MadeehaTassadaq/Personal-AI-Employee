@@ -262,10 +262,15 @@ class DashboardUpdater:
                     except ValueError:
                         pass
 
+        # Read existing dashboard to check if update is needed
+        current_content = ""
+        if self.dashboard_path.exists():
+            current_content = self.dashboard_path.read_text()
+
         # Create the dashboard content
         dashboard_content = f"""# Digital FTE Dashboard
 
-> Last Updated: {datetime.now().strftime('%Y-%m-%d')}
+> Last Updated: {datetime.now().strftime('%Y-%m-%d')} {datetime.now().strftime('%H:%M:%S')}
 
 ---
 
@@ -398,8 +403,9 @@ This dashboard provides an overview of the Digital FTE system status.
 For detailed operational rules, see [[Company_Handbook]].
 """
 
-        # Write the updated dashboard
-        self.dashboard_path.write_text(dashboard_content)
+        # Write the updated dashboard only if content has changed significantly
+        if current_content != dashboard_content:
+            self.dashboard_path.write_text(dashboard_content)
 
     def _is_watcher_running(self, watcher_name: str) -> bool:
         """Check if a specific watcher is running."""
