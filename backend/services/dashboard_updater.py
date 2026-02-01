@@ -290,13 +290,17 @@ class DashboardUpdater:
 <!-- Tasks in Inbox/ folder appear here -->
 {f"_Found {len(inbox_tasks)} new tasks_" if inbox_tasks else "_No new tasks_"}
 
-{chr(10).join([f"- {task['name']}" for task in inbox_tasks[:3]])}
+{chr(10).join([f"- [[Inbox/{task['name'].replace(' ', '-').replace('_', '-')}.md|{task['name']}]]" for task in inbox_tasks[:3]])}
+
+[[View All Inbox Tasks]](#view-inbox)
 
 ### Needs Action (In Progress)
 <!-- Tasks in Needs_Action/ folder appear here -->
 {f"_Found {len(needs_action_tasks)} tasks in progress_" if needs_action_tasks else "_No tasks in progress_"}
 
-{chr(10).join([f"- {task['name']}" for task in needs_action_tasks[:3]])}
+{chr(10).join([f"- [[Needs_Action/{task['name'].replace(' ', '-').replace('_', '-')}.md|{task['name']}]]" for task in needs_action_tasks[:3]])}
+
+[[View All Needs Action Tasks]](#view-needs-action)
 
 ---
 
@@ -305,9 +309,14 @@ class DashboardUpdater:
 <!-- Tasks in Pending_Approval/ folder appear here -->
 {f"_Found {len(pending_tasks)} items awaiting approval_" if pending_tasks else "_No items awaiting approval_"}
 
-{chr(10).join([f"- {task['name']} ({task['created_str'] if 'created_str' in task else task['created']})" for task in pending_tasks[:3]])}
+| Item | Type | Created | Status | Action |
+|------|------|---------|--------|--------|
+{chr(10).join([f"| [[Pending_Approval/{task['name'].replace(' ', '-').replace('_', '-')}.md|{task['name'][:50]}]] | Unknown | {task['created_str'] if 'created_str' in task else task['created']} | Awaiting Review | [[Approve Task]](#approve-task) / [[Reject Task]](#reject-task) |" for task in pending_tasks[:3]])}
+
+[[Manage All Pending Tasks]](#manage-pending-tasks)
 
 **To approve:** Move task file from `Pending_Approval/` to `Approved/`
+**To reject:** Move task file from `Pending_Approval/` to `Done/` with rejection reason
 
 ---
 
@@ -316,7 +325,9 @@ class DashboardUpdater:
 <!-- Tasks in Done/ folder appear here -->
 {f"_Found {len(recent_done)} recently completed tasks_" if recent_done else "_No completed tasks yet_"}
 
-{chr(10).join([f"- [{recent_done[i]['created_str'] if recent_done[i]['created_str'] else recent_done[i]['created']}] {recent_done[i]['name']}" for i in range(min(5, len(recent_done)))])}
+{chr(10).join([f"- [[Done/{recent_done[i]['name'].replace(' ', '-').replace('_', '-')}.md|[{recent_done[i]['created_str'] if recent_done[i]['created_str'] else recent_done[i]['created']}] {recent_done[i]['name']}]]" for i in range(min(5, len(recent_done)))])}
+
+[[View All Completed Tasks]](#view-completed)
 
 ---
 
@@ -326,6 +337,8 @@ class DashboardUpdater:
 - **View logs:** Check `Logs/` folder
 - **View plans:** Check `Plans/` folder
 - **Approve action:** Move file from `Pending_Approval/` to `Approved/`
+- **[[Start All Watchers]](./scripts/run_watchers.sh)** - Automatically process tasks through workflow
+- **[[View Complete Task Workflow]](#task-workflow-diagram)** - Visual representation of task progression
 
 ---
 
@@ -344,6 +357,39 @@ class DashboardUpdater:
 | Twitter Posts | {social_metrics['twitter_posts']} |
 
 ---
+
+## Task Workflow Diagram
+
+```mermaid
+graph LR
+    A[Inbox: New Tasks] --> B[["Requires Approval?"]]
+    B -->|Yes| C[Pending Approval]
+    B -->|No| D[Needs Action]
+    C --> E[["Approved?"]]
+    E -->|Yes| F[Approved: Ready for Execution]
+    E -->|No| G[Done: Rejected]
+    D --> H[Done: Completed]
+    F --> H
+    C -.-> I[Manual Approval Required]
+    F -.-> J[MCP Services Execute Action]
+
+    style A fill:#e1f5fe
+    style C fill:#fff3e0
+    style F fill:#f3e5f5
+    style H fill:#e8f5e8
+    style G fill:#ffebee
+```
+
+## Python Watchers
+
+The following Python watchers monitor and process tasks automatically:
+
+- **File Watcher** (`watchers/file_watcher.py`): Monitors `Inbox/` folder and moves files through workflow
+- **Gmail Watcher** (`watchers/gmail_watcher.py`): Monitors Gmail for new emails
+- **WhatsApp Watcher** (`watchers/whatsapp_watcher.py`): Monitors WhatsApp for new messages
+- **LinkedIn Watcher** (`watchers/linkedin_watcher.py`): Monitors LinkedIn for activity
+
+Start all watchers with: `./scripts/run_watchers.sh`
 
 ## Notes
 
