@@ -4,7 +4,7 @@ import os
 import re
 import json
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 import yaml
@@ -60,8 +60,15 @@ def get_task_info(file_path: Path) -> TaskFile:
     created = None
     if "created" in frontmatter:
         try:
-            created = datetime.fromisoformat(str(frontmatter["created"]))
-        except ValueError:
+            date_val = frontmatter["created"]
+            if isinstance(date_val, datetime):
+                created = date_val
+            else:
+                date_str = str(date_val)
+                if date_str.endswith('Z'):
+                    date_str = date_str[:-1] + '+00:00'
+                created = datetime.fromisoformat(date_str)
+        except (ValueError, TypeError):
             pass
 
     # Parse priority
@@ -124,8 +131,15 @@ async def list_folder_contents(folder_name: str) -> VaultFolderResponse:
             # Log error but continue
             print(f"Error reading {file_path}: {e}")
 
-    # Sort by created date (newest first)
-    files.sort(key=lambda f: f.created or datetime.min, reverse=True)
+    # Sort by created date (newest first), handling timezone-aware dates
+    def sort_key(f):
+        if f.created is None:
+            return datetime.min.replace(tzinfo=timezone.utc)
+        if f.created.tzinfo is None:
+            return f.created.replace(tzinfo=timezone.utc)
+        return f.created
+
+    files.sort(key=sort_key, reverse=True)
 
     return VaultFolderResponse(folder=folder_name, files=files, count=len(files))
 
