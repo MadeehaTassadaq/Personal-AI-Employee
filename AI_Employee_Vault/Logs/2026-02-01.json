@@ -1,0 +1,210 @@
+[
+  {
+    "timestamp": "2026-02-01T12:02:40.157211",
+    "watcher": "LinkedInMCP",
+    "event": "linkedin_post_requested",
+    "content_length": 924,
+    "visibility": "PUBLIC",
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:02:46.235432",
+    "watcher": "LinkedInMCP",
+    "event": "linkedin_posted",
+    "post_id": "urn:li:share:7423621259252424704",
+    "content_length": 924
+  },
+  {
+    "timestamp": "2026-02-01T12:04:53.688118",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 630,
+    "has_link": false,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:04:55.872526",
+    "watcher": "FacebookMCP",
+    "event": "facebook_posted",
+    "post_id": "958427130693191_122106146949231352",
+    "content_length": 630
+  },
+  {
+    "timestamp": "2026-02-01T12:08:21.936848",
+    "watcher": "GmailMCP",
+    "event": "send_email_requested",
+    "to": "madeehatassadaq@outlook.com",
+    "subject": "Congratulations - Selection as Consultant Gynaecologist",
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:08:22.634388",
+    "watcher": "GmailMCP",
+    "event": "email_sent",
+    "to": "madeehatassadaq@outlook.com",
+    "subject": "Congratulations - Selection as Consultant Gynaecologist",
+    "message_id": "19c1805f27cf18c2"
+  },
+  {
+    "timestamp": "2026-02-01T12:15:53.961778",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 295,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:16:25.887136",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://web.whatsapp.com/\", waiting until \"networkidle\"\n"
+  },
+  {
+    "timestamp": "2026-02-01T12:17:57.171338",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 102,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:18:28.975328",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://web.whatsapp.com/\", waiting until \"networkidle\"\n"
+  },
+  {
+    "timestamp": "2026-02-01T12:19:56.684592",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 41,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:20:30.240183",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://web.whatsapp.com/\", waiting until \"networkidle\"\n"
+  },
+  {
+    "timestamp": "2026-02-01T12:24:51.073191",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 54,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:25:23.158632",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://web.whatsapp.com/\", waiting until \"networkidle\"\n"
+  },
+  {
+    "timestamp": "2026-02-01T12:25:59.979410",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 41,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:26:31.750688",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_failed",
+    "phone": "+923264897218",
+    "error": "Page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"https://web.whatsapp.com/\", waiting until \"networkidle\"\n"
+  },
+  {
+    "timestamp": "2026-02-01T12:43:57.158594",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 47,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:45:27.634426",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 68,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:48:12.098620",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 68,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:55:12.801481",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 37,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:57:55.850620",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 152,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:58:31.337687",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923264897218",
+    "message_length": 152,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T12:59:59.261183",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923001234567",
+    "message_length": 152,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T13:00:46.533716",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923316147857",
+    "message_length": 152,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T13:02:39.399625",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923316147857",
+    "message_length": 152,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T13:05:02.473730",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923316147857",
+    "message_length": 55,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-01T13:06:07.532074",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_sent",
+    "phone": "+923316147857",
+    "message_length": 55
+  }
+]

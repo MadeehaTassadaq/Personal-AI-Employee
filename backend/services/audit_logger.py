@@ -191,6 +191,7 @@ class AuditLogger:
                 entries = []
 
         entries.append(entry.to_dict())
+        audit_file.parent.mkdir(parents=True, exist_ok=True)  # Create directory if it doesn't exist
         audit_file.write_text(json.dumps(entries, indent=2))
 
     def get_recent(self, limit: int = 50) -> list[AuditEntry]:
@@ -306,7 +307,26 @@ class AuditLogger:
                 stats["warnings"] += 1
 
             # Daily counts
-            day_key = datetime.fromisoformat(entry.get("timestamp", "")).strftime("%Y-%m-%d") if entry.get("timestamp") else "unknown"
+            day_key = "unknown"
+            if entry.get("timestamp"):
+                timestamp_val = entry["timestamp"]
+                if isinstance(timestamp_val, str):
+                    try:
+                        parsed_timestamp = datetime.fromisoformat(timestamp_val.replace('Z', '+00:00'))
+                        day_key = parsed_timestamp.strftime("%Y-%m-%d")
+                    except ValueError:
+                        try:
+                            parsed_timestamp = datetime.fromisoformat(timestamp_val)
+                            day_key = parsed_timestamp.strftime("%Y-%m-%d")
+                        except ValueError:
+                            day_key = "unknown"
+                elif isinstance(timestamp_val, (int, float)):
+                    # Handle timestamp as number
+                    try:
+                        parsed_timestamp = datetime.fromtimestamp(timestamp_val)
+                        day_key = parsed_timestamp.strftime("%Y-%m-%d")
+                    except (ValueError, OSError):
+                        day_key = "unknown"
             stats["daily_counts"][day_key] = stats["daily_counts"].get(day_key, 0) + 1
 
         # Calculate trends
@@ -357,7 +377,25 @@ class AuditLogger:
         platform_total = {}
 
         for entry in entries:
-            timestamp = datetime.fromisoformat(entry.get("timestamp", ""))
+            timestamp_val = entry.get("timestamp", "")
+            if isinstance(timestamp_val, str):
+                try:
+                    timestamp = datetime.fromisoformat(timestamp_val.replace('Z', '+00:00'))
+                except ValueError:
+                    try:
+                        timestamp = datetime.fromisoformat(timestamp_val)
+                    except ValueError:
+                        # Skip entry if timestamp can't be parsed
+                        continue
+            elif isinstance(timestamp_val, (int, float)):
+                try:
+                    timestamp = datetime.fromtimestamp(timestamp_val)
+                except (ValueError, OSError):
+                    # Skip entry if timestamp can't be parsed
+                    continue
+            else:
+                # Skip entry if timestamp is not a string or number
+                continue
             hour = timestamp.hour
 
             # Count by hour

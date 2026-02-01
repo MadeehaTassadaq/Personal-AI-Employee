@@ -1,6 +1,6 @@
 # Digital FTE Dashboard
 
-> Last Updated: 2026-01-31
+> Last Updated: 2026-02-01
 
 ---
 
@@ -39,9 +39,9 @@ _No tasks in progress_
 ## Pending Approval
 
 <!-- Tasks in Pending_Approval/ folder appear here -->
-_No items awaiting approval_
+_Found 1 items awaiting approval_
 
-
+- instagram digital fte 2026 02 01 (2026-02-01 12:00:00+00:00)
 
 **To approve:** Move task file from `Pending_Approval/` to `Approved/`
 
@@ -73,9 +73,9 @@ _Found 5 recently completed tasks_
 
 | Metric | Value |
 |--------|-------|
-| Tasks Completed Today | 2 |
+| Tasks Completed Today | 0 |
 | Tasks Pending | 0 |
-| Actions Awaiting Approval | 0 |
+| Actions Awaiting Approval | 1 |
 | Emails Sent | 0 |
 | WhatsApp Messages | 0 |
 | LinkedIn Posts | 0 |

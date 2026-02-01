@@ -7,14 +7,28 @@ description: Send WhatsApp messages via MCP server with approval workflow. Use w
 
 Send WhatsApp messages via MCP with mandatory approval workflow.
 
-## MCP Tool
+## MCP Tools
 
 ```
-Tool: whatsapp_send_message
+Tool: mcp__whatsapp__send_message
 Parameters:
   - phone: string (with country code, e.g., +1234567890)
-  - message: string
+  - message: string (the message content)
+
+Tool: mcp__whatsapp__check_session
+Parameters: none
+Returns: Session status (active or needs QR scan)
+
+Tool: mcp__whatsapp__get_unread_count
+Parameters: none
+Returns: Number of unread chat conversations
 ```
+
+## Quick Commands
+
+- **Send message**: `mcp__whatsapp__send_message(phone="+923001234567", message="Hello!")`
+- **Check session**: `mcp__whatsapp__check_session()`
+- **Get unreads**: `mcp__whatsapp__get_unread_count()`
 
 ## Approval Workflow
 
@@ -63,6 +77,23 @@ created: {{ISO_DATE}}
 - First run requires QR code scan
 - Session stored in `$WHATSAPP_SESSION_PATH`
 - Session may expire and need re-authentication
+
+## Troubleshooting
+
+**Session not detected even after QR scan:**
+1. Kill existing browser: `pkill -f "chrome.*whatsapp_session"`
+2. Call `mcp__whatsapp__check_session()` to open fresh browser
+3. Scan QR code in the new window
+4. Wait for chats to load before sending
+
+**Browser window not visible:**
+- Check `WHATSAPP_HEADLESS` env var is set to `"false"`
+- Look for Chromium window in taskbar
+
+**Message send fails:**
+- Verify phone number includes country code (+XX format)
+- Ensure WhatsApp Web shows your chats (logged in state)
+- Check if the contact exists on WhatsApp
 
 ## Rules
 

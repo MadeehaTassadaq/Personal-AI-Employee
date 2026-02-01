@@ -10,6 +10,9 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
+# Resolve project root (go up from backend/api/ to project root)
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+
 
 class CalendarEvent(BaseModel):
     """Calendar event model."""
@@ -40,8 +43,11 @@ except ImportError:
     CALENDAR_AVAILABLE = False
 
 
-CREDENTIALS_PATH = os.getenv("CALENDAR_CREDENTIALS_PATH", "./credentials/client_secrets.json")
-TOKEN_PATH = os.getenv("CALENDAR_TOKEN_PATH", "./credentials/calendar_token.json")
+# Resolve credential paths relative to project root
+_default_creds_path = str(PROJECT_ROOT / "credentials" / "client_secrets.json")
+_default_token_path = str(PROJECT_ROOT / "credentials" / "calendar_token.json")
+CREDENTIALS_PATH = os.getenv("CALENDAR_CREDENTIALS_PATH", _default_creds_path)
+TOKEN_PATH = os.getenv("CALENDAR_TOKEN_PATH", _default_token_path)
 SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
 _calendar_service = None

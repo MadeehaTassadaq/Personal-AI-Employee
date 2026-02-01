@@ -79,12 +79,26 @@ async def list_pending_approvals() -> VaultFolderResponse:
         # Get action type from frontmatter
         action_type = frontmatter.get("type", "unknown")
 
+        created_datetime = None
+        if "created" in frontmatter:
+            created_value = frontmatter["created"]
+            if isinstance(created_value, str):
+                try:
+                    created_datetime = datetime.fromisoformat(created_value.replace('Z', '+00:00'))
+                except ValueError:
+                    # Handle other possible datetime formats
+                    try:
+                        created_datetime = datetime.fromisoformat(created_value)
+                    except ValueError:
+                        # If all parsing fails, set to None
+                        created_datetime = None
+
         files.append(TaskFile(
             filename=file_path.name,
             path=str(file_path),
             folder="Pending_Approval",
             title=frontmatter.get("title", file_path.stem.replace("-", " ").title()),
-            created=datetime.fromisoformat(frontmatter["created"]) if "created" in frontmatter else None
+            created=created_datetime
         ))
 
     # Sort by created date

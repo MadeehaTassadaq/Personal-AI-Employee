@@ -38,7 +38,9 @@ function App() {
     resumeRalph,
     fetchCalendarStatus,
     fetchTodayEvents,
-    fetchCalendarEvents
+    fetchCalendarEvents,
+    fetchSocialStats,
+    fetchSocialPlatformStatus
   } = useApi();
 
   const [activeTab, setActiveTab] = useState<TabView>('overview');
@@ -69,6 +71,27 @@ function App() {
       icon: '[in]',
       status: status.watchers.linkedin === 'running' ? 'healthy' : 'unknown',
       connected: status.watchers.linkedin === 'running',
+      eventsToday: 0
+    },
+    {
+      name: 'Twitter',
+      icon: '[tw]',
+      status: 'unknown',
+      connected: false,
+      eventsToday: 0
+    },
+    {
+      name: 'Facebook',
+      icon: '[fb]',
+      status: 'unknown',
+      connected: false,
+      eventsToday: 0
+    },
+    {
+      name: 'Instagram',
+      icon: '[ig]',
+      status: 'unknown',
+      connected: false,
       eventsToday: 0
     },
     {
@@ -227,6 +250,12 @@ function App() {
 
               {/* Unified Activity Feed */}
               <UnifiedFeed fetchActivity={fetchActivity} />
+
+              {/* Social Media Dashboard */}
+              <SocialMediaDashboard
+                fetchSocialStats={fetchSocialStats}
+                fetchPlatformStatus={fetchSocialPlatformStatus}
+              />
             </div>
           </>
         )}

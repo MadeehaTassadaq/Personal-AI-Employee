@@ -10,11 +10,28 @@ Post to LinkedIn via MCP with mandatory approval workflow.
 ## MCP Tool
 
 ```
-Tool: linkedin_post
+Tool: mcp__linkedin__create_post
 Parameters:
-  - content: string (post text)
-  - visibility: string ("PUBLIC" | "CONNECTIONS")
-  - media_url: string (optional, URL to image/video)
+  - content: string (required, post text)
+  - visibility: string ("PUBLIC" | "CONNECTIONS", default: "PUBLIC")
+  - image_url: string (optional, URL to an image to include)
+  - link_url: string (optional, URL to a link/article to share)
+```
+
+## Image Posting
+
+To post with an image:
+1. Ensure the image URL is publicly accessible
+2. Pass the URL via `image_url` parameter
+3. LinkedIn will fetch and display the image as a preview
+
+Example with image:
+```
+mcp__linkedin__create_post(
+  content="Check out our new AI workspace!",
+  image_url="https://example.com/image.jpg",
+  visibility="PUBLIC"
+)
 ```
 
 ## Approval Workflow

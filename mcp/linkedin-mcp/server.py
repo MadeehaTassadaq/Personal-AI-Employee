@@ -63,16 +63,23 @@ async def _get_user_id() -> str:
     return ""
 
 
-async def _create_post(content: str, visibility: str = "PUBLIC") -> str:
-    """Create a LinkedIn post."""
+async def _create_post(content: str, visibility: str = "PUBLIC", image_url: str = None, link_url: str = None) -> str:
+    """Create a LinkedIn post with optional image or link."""
     log_action("linkedin_post_requested", {
         "content_length": len(content),
         "visibility": visibility,
+        "image_url": image_url,
+        "link_url": link_url,
         "dry_run": DRY_RUN
     })
 
     if DRY_RUN:
-        return f"[DRY RUN] Would create LinkedIn post:\nVisibility: {visibility}\nContent: {content[:100]}..."
+        media_info = ""
+        if image_url:
+            media_info = f"\nImage URL: {image_url}"
+        if link_url:
+            media_info += f"\nLink URL: {link_url}"
+        return f"[DRY RUN] Would create LinkedIn post:\nVisibility: {visibility}{media_info}\nContent: {content[:100]}..."
 
     if not ACCESS_TOKEN:
         return "Error: LinkedIn access token not configured"
@@ -82,16 +89,36 @@ async def _create_post(content: str, visibility: str = "PUBLIC") -> str:
         if not user_id:
             return "Error: Could not get LinkedIn user ID"
 
+        # Build the share content based on media type
+        share_content = {
+            "shareCommentary": {
+                "text": content
+            }
+        }
+
+        if image_url or link_url:
+            # Use ARTICLE category for external URLs (image or link)
+            share_content["shareMediaCategory"] = "ARTICLE"
+            media_entry = {
+                "status": "READY",
+                "originalUrl": link_url or image_url
+            }
+            # Add thumbnail if image_url is provided separately from link
+            if image_url and link_url:
+                media_entry["thumbnails"] = [{"url": image_url}]
+            elif image_url:
+                # If only image_url, use it as the article link with itself as thumbnail
+                media_entry["thumbnails"] = [{"url": image_url}]
+
+            share_content["media"] = [media_entry]
+        else:
+            share_content["shareMediaCategory"] = "NONE"
+
         post_data = {
             "author": f"urn:li:person:{user_id}",
             "lifecycleState": "PUBLISHED",
             "specificContent": {
-                "com.linkedin.ugc.ShareContent": {
-                    "shareCommentary": {
-                        "text": content
-                    },
-                    "shareMediaCategory": "NONE"
-                }
+                "com.linkedin.ugc.ShareContent": share_content
             },
             "visibility": {
                 "com.linkedin.ugc.MemberNetworkVisibility": visibility
@@ -109,7 +136,9 @@ async def _create_post(content: str, visibility: str = "PUBLIC") -> str:
                 post_id = response.headers.get("x-restli-id", "unknown")
                 log_action("linkedin_posted", {
                     "post_id": post_id,
-                    "content_length": len(content)
+                    "content_length": len(content),
+                    "has_image": bool(image_url),
+                    "has_link": bool(link_url)
                 })
                 return f"Post created successfully. Post ID: {post_id}"
             else:
@@ -183,7 +212,7 @@ async def handle_list_tools():
     return [
         Tool(
             name="create_post",
-            description="Create a LinkedIn post",
+            description="Create a LinkedIn post with optional image or link",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -192,6 +221,14 @@ async def handle_list_tools():
                         "type": "string",
                         "description": "Post visibility: PUBLIC or CONNECTIONS",
                         "default": "PUBLIC"
+                    },
+                    "image_url": {
+                        "type": "string",
+                        "description": "Optional URL to an image to include with the post"
+                    },
+                    "link_url": {
+                        "type": "string",
+                        "description": "Optional URL to a link/article to share"
                     }
                 },
                 "required": ["content"]
@@ -222,7 +259,9 @@ async def handle_call_tool(name: str, arguments: dict):
     if name == "create_post":
         result = await _create_post(
             content=arguments["content"],
-            visibility=arguments.get("visibility", "PUBLIC")
+            visibility=arguments.get("visibility", "PUBLIC"),
+            image_url=arguments.get("image_url"),
+            link_url=arguments.get("link_url")
         )
     elif name == "get_profile":
         result = await _get_profile()
