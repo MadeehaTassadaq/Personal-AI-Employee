@@ -9,9 +9,14 @@ export interface SystemStatus {
 }
 
 export interface VaultFile {
-  name: string;
+  filename: string;
   path: string;
-  modified: string;
+  folder: string;
+  created?: string;
+  priority?: string;
+  status?: string;
+  title?: string;
+  modified?: string;
 }
 
 export interface ApprovalItem {
@@ -138,7 +143,18 @@ export function useApi() {
       const response = await fetch(`${API_BASE}/vault/folder/${folder}`);
       if (!response.ok) throw new Error(`Failed to fetch ${folder}`);
       const data = await response.json();
-      return data.files || [];
+      // Map the backend response to match our interface expectations
+      const files = data.files || [];
+      return files.map((file: any) => ({
+        filename: file.filename,
+        path: file.path,
+        folder: file.folder,
+        created: file.created,
+        priority: file.priority,
+        status: file.status,
+        title: file.title,
+        modified: file.created // Map created to modified for display
+      }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       return [];
@@ -150,7 +166,16 @@ export function useApi() {
       const response = await fetch(`${API_BASE}/approvals/pending`);
       if (!response.ok) throw new Error('Failed to fetch approvals');
       const data = await response.json();
-      return data.files || [];
+      const files = data.files || [];
+
+      // Map the backend TaskFile objects to ApprovalItem interface
+      return files.map((file: any) => ({
+        id: file.filename || file.id || '',  // Use filename as id
+        title: file.title || file.filename || 'Untitled',
+        type: file.type || 'unknown',
+        created: file.created || new Date().toISOString(),
+        content: file.content || ''
+      }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       return [];
@@ -159,8 +184,16 @@ export function useApi() {
 
   const approveItem = async (id: string) => {
     try {
-      const response = await fetch(`${API_BASE}/approvals/${id}/approve`, {
-        method: 'POST'
+      // The backend expects the filename in the request body, not in the URL
+      const response = await fetch(`${API_BASE}/approvals/approve`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filename: id,
+          approved: true
+        })
       });
       if (!response.ok) throw new Error('Failed to approve item');
       await fetchStatus();
@@ -171,8 +204,16 @@ export function useApi() {
 
   const rejectItem = async (id: string) => {
     try {
-      const response = await fetch(`${API_BASE}/approvals/${id}/reject`, {
-        method: 'POST'
+      // The backend expects the filename in the request body, not in the URL
+      const response = await fetch(`${API_BASE}/approvals/approve`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          filename: id,
+          approved: false
+        })
       });
       if (!response.ok) throw new Error('Failed to reject item');
       await fetchStatus();
@@ -441,6 +482,39 @@ export function useApi() {
     }
   };
 
+  // Compose API - Submit post for approval
+  const submitPost = async (
+    platform: string,
+    content: string,
+    options?: { imageUrl?: string; link?: string; recipient?: string; subject?: string }
+  ) => {
+    try {
+      const response = await fetch(`${API_BASE}/compose`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          platform,
+          content,
+          image_url: options?.imageUrl,
+          link_url: options?.link,
+          recipient: options?.recipient,
+          subject: options?.subject
+        })
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.detail || 'Failed to submit post');
+      }
+      await fetchStatus(); // Refresh to update pending_approvals count
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
   // Task stats for business audit
   const fetchTaskStats = async () => {
     try {
@@ -507,6 +581,8 @@ export function useApi() {
     // Calendar
     fetchCalendarStatus,
     fetchTodayEvents,
-    fetchCalendarEvents
+    fetchCalendarEvents,
+    // Compose
+    submitPost
   };
 }

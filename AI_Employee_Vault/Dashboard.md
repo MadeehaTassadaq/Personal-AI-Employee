@@ -1,6 +1,6 @@
 # Digital FTE Dashboard
 
-> Last Updated: 2026-02-01 17:43:18
+> Last Updated: 2026-02-03 23:53:27
 
 ---
 
@@ -9,8 +9,8 @@
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Vault | Active | AI_Employee_Vault |
-| File Watcher | Stopped | Check with `./scripts/run_watchers.sh` |
-| Backend API | Stopped | Start with `./scripts/run_backend.sh` |
+| File Watcher | Active | Check with `./scripts/run_watchers.sh` |
+| Backend API | Active | Start with `./scripts/run_backend.sh` |
 | Gmail MCP | Not Configured | OAuth token required |
 | WhatsApp MCP | Configured | QR scan required |
 | LinkedIn MCP | Configured | Token configured |
@@ -21,11 +21,9 @@
 
 ## Pending Approvals
 
-> **1 items awaiting your decision**
+> **0 items awaiting your decision**
 
-| Item | Type | Created | Action |
-|------|------|---------|--------|
-| instagram digital fte 2026 02 01 | instagram_post | 2026-02-01 12:00:00+00:00 | Move to `Approved/` or `Done/` |
+_No pending approvals_
 
 **To approve:** Move file from `Pending_Approval/` to `Approved/`
 **To reject:** Move file to `Done/` with rejection note
@@ -53,16 +51,16 @@
 
 > Last 10 completed tasks
 
+- [2026-02-03] Facebook Post
+- [2026-02-03] Linkedin Post
+- [2026-02-03] Twitter Post
+- [2026-02-02] Linkedin Post
+- [2026-02-02] Twitter Post
 - [2026-01-31] facebook ai healthcare 2026 01 31
 - [2026-01-31] instagram ai healthcare 2026 01 31
 - [2026-01-30] facebook ai healthcare 2026 01 30
 - [2026-01-30] email meeting notification 2026 01 30
 - [2026-01-30] whatsapp test 2026 01 30
-- [2026-01-30] email test 2026 01 30
-- [2026-01-30] linkedin ai trends 2026 01 30
-- [2026-01-30] twitter ai trends 2026 01 30
-- [2026-01-29] Test New Task
-- [2026-01-29] Send Weekly Report
 
 ---
 
@@ -70,18 +68,18 @@
 
 | Metric | Today | This Week |
 |--------|-------|-----------|
-| Tasks Completed | 0 | 11 |
-| Pending Approvals | 1 | — |
+| Tasks Completed | 3 | 5 |
+| Pending Approvals | 0 | — |
 | Emails Sent | 0 | 0 |
 | Social Posts | 0 | 0 |
 
 ---
 
 <details>
-<summary>## Weekly Summary (Week of 2026-01-26)</summary>
+<summary>## Weekly Summary (Week of 2026-02-02)</summary>
 
-- **Total Tasks Completed**: 11
-- **Actions by Type**: Facebook_Post (2), Instagram_Post (1), Email_Send (2), Whatsapp_Send (1), Linkedin_Post (1), Twitter_Post (1), Unknown (1), Email (1), Test (1)
+- **Total Tasks Completed**: 3
+- **Actions by Type**: Social_Post (3)
 
 </details>
 

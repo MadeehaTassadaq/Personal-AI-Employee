@@ -208,3 +208,10 @@ Wait for consent; never auto-create ADRs. Group related decisions (stacks, authe
 
 ## Code Standards
 See `.specify/memory/constitution.md` for code quality, testing, performance, security, and architecture principles.
+
+## Active Technologies
+- Python 3.13 + FastAPI, pydantic, PyYAML, python-frontmatter (001-stable-dashboard)
+- File-based (Obsidian vault with YAML frontmatter Markdown files) (001-stable-dashboard)
+
+## Recent Changes
+- 001-stable-dashboard: Added Python 3.13 + FastAPI, pydantic, PyYAML, python-frontmatter

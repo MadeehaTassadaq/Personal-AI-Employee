@@ -197,6 +197,54 @@ Output location: `Plans/weekly-briefing-YYYY-MM-DD.md`
 
 ---
 
+---
+
+## Gold Tier Operational Rules
+
+### Approval Thresholds
+
+| Action Type | Threshold | Rule |
+|-------------|-----------|------|
+| Email | All | Requires approval |
+| WhatsApp | All | Requires approval |
+| LinkedIn Post | All | Requires approval |
+| Facebook Post | All | Requires approval |
+| Instagram Post | All | Requires approval |
+| Twitter/X | All | Requires approval |
+| Internal File Operations | None | Auto-approved |
+| Dashboard Updates | None | Auto-approved |
+| Report Generation | None | Auto-approved |
+
+### Watchdog Guardrails
+
+The watchdog service monitors system health with these thresholds:
+
+| Metric | Threshold | Action |
+|--------|-----------|--------|
+| Consecutive Failures | 5 | Auto-pause Ralph |
+| Errors per Hour | 10 | Alert + Investigate |
+| Pending Approvals | 25 | Pause new intake |
+| Needs Action Queue | 30 | Pause new intake |
+
+### Odoo Integration (Optional)
+
+If Odoo is configured, the system provides:
+
+- Invoice creation with approval
+- Expense recording with approval
+- Balance inquiries (read-only)
+- Financial audit reports
+
+**Configuration:**
+```
+ODOO_URL=http://localhost:8069
+ODOO_DB=odoo
+ODOO_USERNAME=admin
+ODOO_PASSWORD=<secure_password>
+```
+
+---
+
 ## Contact
 
 For issues with this system:

@@ -1,0 +1,172 @@
+[
+  {
+    "name": "add_task",
+    "description": "Create a new task for a user",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "The ID of the user creating the task"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the task"
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description of the task"
+        },
+        "due_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional due date for the task"
+        }
+      },
+      "required": ["user_id", "title"]
+    },
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether the operation was successful"
+        },
+        "task": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "description": "The ID of the created task"
+            },
+            "user_id": {
+              "type": "string",
+              "description": "The ID of the user who owns the task"
+            },
+            "title": {
+              "type": "string",
+              "description": "The title of the task"
+            },
+            "description": {
+              "type": "string",
+              "description": "The description of the task"
+            },
+            "status": {
+              "type": "string",
+              "enum": ["pending", "completed"],
+              "description": "The status of the task"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "date-time",
+              "description": "When the task was created"
+            }
+          },
+          "required": ["id", "user_id", "title", "status", "created_at"]
+        },
+        "error_code": {
+          "type": "string",
+          "description": "Error code if success is false"
+        },
+        "error_message": {
+          "type": "string",
+          "description": "Error message if success is false"
+        }
+      },
+      "required": ["success"]
+    },
+    "implementation": "async def add_task(user_id: str, title: str, description: str = None, due_date: str = None):\n    # Validate input parameters\n    user = await get_user_from_db(user_id)\n    if not user:\n        return {\"success\": False, \"error_code\": \"USER_NOT_FOUND\", \"error_message\": \"User does not exist\"}\n    \n    # Create new task in database\n    task = await create_task_in_db(user_id, title, description, due_date)\n    \n    return {\n        \"success\": True,\n        \"task\": task.to_dict()\n    }",
+    "needs_authentication": true
+  },
+  {
+    "name": "list_tasks",
+    "description": "Retrieve tasks for a user",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "description": "The ID of the user whose tasks to retrieve"
+        },
+        "status_filter": {
+          "type": "string",
+          "enum": ["all", "pending", "completed"],
+          "description": "Filter tasks by status"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 50,
+          "description": "Maximum number of tasks to return"
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "default": 0,
+          "description": "Number of tasks to skip"
+        }
+      },
+      "required": ["user_id"]
+    },
+    "output_schema": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean",
+          "description": "Whether the operation was successful"
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The ID of the task"
+              },
+              "user_id": {
+                "type": "string",
+                "description": "The ID of the user who owns the task"
+              },
+              "title": {
+                "type": "string",
+                "description": "The title of the task"
+              },
+              "description": {
+                "type": "string",
+                "description": "The description of the task"
+              },
+              "status": {
+                "type": "string",
+                "enum": ["pending", "completed"],
+                "description": "The status of the task"
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time",
+                "description": "When the task was created"
+              }
+            },
+            "required": ["id", "user_id", "title", "status", "created_at"]
+          }
+        },
+        "total_count": {
+          "type": "integer",
+          "description": "Total number of tasks matching the filter"
+        },
+        "error_code": {
+          "type": "string",
+          "description": "Error code if success is false"
+        },
+        "error_message": {
+          "type": "string",
+          "description": "Error message if success is false"
+        }
+      },
+      "required": ["success", "tasks", "total_count"]
+    },
+    "implementation": "async def list_tasks(user_id: str, status_filter: str = 'all', limit: int = 50, offset: int = 0):\n    # Validate input parameters\n    user = await get_user_from_db(user_id)\n    if not user:\n        return {\"success\": False, \"error_code\": \"USER_NOT_FOUND\", \"error_message\": \"User does not exist\"}\n    \n    # Query tasks from database\n    tasks, total_count = await get_tasks_from_db(user_id, status_filter, limit, offset)\n    \n    return {\n        \"success\": True,\n        \"tasks\": [task.to_dict() for task in tasks],\n        \"total_count\": total_count\n    }",
+    "needs_authentication": true
+  }
+]

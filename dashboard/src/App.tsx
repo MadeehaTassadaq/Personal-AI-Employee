@@ -12,6 +12,7 @@ import { SocialMediaDashboard } from './components/SocialMediaDashboard';
 import { OdooIntegration } from './components/OdooIntegration';
 import { BusinessAudit } from './components/BusinessAudit';
 import { CalendarView } from './components/CalendarView';
+import { ComposePanel } from './components/ComposePanel';
 
 type TabView = 'overview' | 'social' | 'finance' | 'audit';
 
@@ -40,7 +41,8 @@ function App() {
     fetchTodayEvents,
     fetchCalendarEvents,
     fetchSocialStats,
-    fetchSocialPlatformStatus
+    fetchSocialPlatformStatus,
+    submitPost
   } = useApi();
 
   const [activeTab, setActiveTab] = useState<TabView>('overview');
@@ -76,22 +78,22 @@ function App() {
     {
       name: 'Twitter',
       icon: '[tw]',
-      status: 'unknown',
-      connected: false,
+      status: status.watchers.twitter === 'running' ? 'healthy' : 'unknown',
+      connected: status.watchers.twitter === 'running',
       eventsToday: 0
     },
     {
       name: 'Facebook',
       icon: '[fb]',
-      status: 'unknown',
-      connected: false,
+      status: status.watchers.facebook === 'running' ? 'healthy' : 'unknown',
+      connected: status.watchers.facebook === 'running',
       eventsToday: 0
     },
     {
       name: 'Instagram',
       icon: '[ig]',
-      status: 'unknown',
-      connected: false,
+      status: status.watchers.instagram === 'running' ? 'healthy' : 'unknown',
+      connected: status.watchers.instagram === 'running',
       eventsToday: 0
     },
     {
@@ -256,6 +258,11 @@ function App() {
                 fetchSocialStats={fetchSocialStats}
                 fetchPlatformStatus={fetchSocialPlatformStatus}
               />
+
+              {/* Compose Panel for posting */}
+              <div className="panel-row">
+                <ComposePanel onSubmit={submitPost} />
+              </div>
             </div>
           </>
         )}

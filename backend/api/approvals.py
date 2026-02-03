@@ -15,6 +15,7 @@ from ..models.schemas import (
     ApprovalResponse,
     VaultFolderResponse
 )
+from ..services.publisher import get_publisher
 
 router = APIRouter()
 
@@ -137,11 +138,34 @@ async def approve_action(request: ApprovalRequest) -> ApprovalResponse:
     content = source_path.read_text()
     frontmatter, body = parse_frontmatter(content)
 
+    publish_result = None
+
     # Determine destination
     if request.approved:
         dest_folder = "Approved"
         frontmatter["status"] = "approved"
         frontmatter["approved_at"] = datetime.now().isoformat()
+
+        # If this is a social post, publish it immediately
+        if frontmatter.get("type") == "social_post":
+            publisher = get_publisher()
+            publish_result = await publisher.publish(source_path)
+            publisher.log_publish_result(request.filename, publish_result)
+
+            if publish_result.get("success"):
+                frontmatter["published"] = True
+                frontmatter["published_at"] = datetime.now().isoformat()
+                if publish_result.get("post_id"):
+                    frontmatter["post_id"] = publish_result.get("post_id")
+                if publish_result.get("tweet_id"):
+                    frontmatter["tweet_id"] = publish_result.get("tweet_id")
+                if publish_result.get("media_id"):
+                    frontmatter["media_id"] = publish_result.get("media_id")
+                body += f"\n\n## Published\nSuccessfully published to {frontmatter.get('platform', 'platform')} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+                dest_folder = "Done"  # Move directly to Done if published
+            else:
+                frontmatter["publish_error"] = publish_result.get("error", "Unknown error")
+                body += f"\n\n## Publish Error\n{publish_result.get('error', 'Unknown error')}\n"
     else:
         dest_folder = "Done"  # Rejected items go to Done
         frontmatter["status"] = "rejected"
@@ -163,11 +187,19 @@ async def approve_action(request: ApprovalRequest) -> ApprovalResponse:
     # Log the action
     log_approval(request.filename, request.approved, request.notes)
 
+    # Build response message
+    message = f"Action {'approved' if request.approved else 'rejected'}"
+    if publish_result:
+        if publish_result.get("success"):
+            message += f" and published to {frontmatter.get('platform', 'platform')}"
+        else:
+            message += f" but publishing failed: {publish_result.get('error', 'Unknown error')}"
+
     return ApprovalResponse(
         filename=request.filename,
         approved=request.approved,
         new_location=str(dest_path),
-        message=f"Action {'approved' if request.approved else 'rejected'}"
+        message=message
     )
 
 
@@ -195,6 +227,50 @@ async def list_approved_actions() -> VaultFolderResponse:
         ))
 
     return VaultFolderResponse(folder="Approved", files=files, count=len(files))
+
+
+@router.post("/publish/{filename}")
+async def publish_approved(filename: str) -> dict:
+    """Manually publish an approved post."""
+    source_path = VAULT_PATH / "Approved" / filename
+    if not source_path.exists():
+        raise HTTPException(status_code=404, detail=f"Approved file '{filename}' not found")
+
+    content = source_path.read_text()
+    frontmatter, body = parse_frontmatter(content)
+
+    if frontmatter.get("type") != "social_post":
+        raise HTTPException(status_code=400, detail="This file is not a social post")
+
+    publisher = get_publisher()
+    result = await publisher.publish(source_path)
+    publisher.log_publish_result(filename, result)
+
+    if result.get("success"):
+        # Update frontmatter and move to Done
+        frontmatter["published"] = True
+        frontmatter["published_at"] = datetime.now().isoformat()
+        if result.get("post_id"):
+            frontmatter["post_id"] = result.get("post_id")
+        body += f"\n\n## Published\nSuccessfully published at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
+
+        new_content = f"---\n{yaml.dump(frontmatter, default_flow_style=False)}---\n\n{body}"
+
+        dest_path = VAULT_PATH / "Done" / filename
+        dest_path.write_text(new_content)
+        source_path.unlink()
+
+        return {
+            "success": True,
+            "message": f"Published to {frontmatter.get('platform')}",
+            "new_location": str(dest_path)
+        }
+    else:
+        return {
+            "success": False,
+            "error": result.get("error", "Unknown error"),
+            "platform": result.get("platform")
+        }
 
 
 @router.post("/execute/{filename}")

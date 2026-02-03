@@ -49,6 +49,12 @@ class AuditAction(str, Enum):
     RALPH_TASK_COMPLETE = "ralph_task_complete"
     RALPH_ERROR = "ralph_error"
     RALPH_CHECKPOINT = "ralph_checkpoint"
+    RALPH_PAUSED = "ralph_paused"
+
+    # File operations
+    FILE_CREATED = "file_created"
+    FILE_MOVED = "file_moved"
+    APPROVAL_CREATED = "approval_created"
 
     # Generic
     INFO = "info"

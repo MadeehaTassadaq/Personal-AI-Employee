@@ -82,6 +82,7 @@ scheduler = TaskScheduler()
 def init_scheduler():
     """Initialize the scheduler with default tasks."""
     from .dashboard_updater import update_dashboard_now
+    from .watchdog import run_watchdog_check
 
     # Update dashboard every 60 seconds to better align with frontend refreshes
     scheduler.add_periodic_task(
@@ -91,8 +92,13 @@ def init_scheduler():
         immediate=True
     )
 
-    # You can add more periodic tasks here as needed
-    # For example: audit log cleanup, health checks, etc.
+    # Run watchdog health check every 30 seconds
+    scheduler.add_periodic_task(
+        name="watchdog_check",
+        func=run_watchdog_check,
+        interval=30,  # Every 30 seconds
+        immediate=False  # Wait before first check
+    )
 
     scheduler.start()
 

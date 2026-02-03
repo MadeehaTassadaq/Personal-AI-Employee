@@ -12,6 +12,16 @@ from pydantic import BaseModel
 router = APIRouter()
 
 
+def is_odoo_configured() -> bool:
+    """Check if Odoo environment variables are set."""
+    return all([
+        os.getenv("ODOO_URL"),
+        os.getenv("ODOO_DB"),
+        os.getenv("ODOO_USERNAME"),
+        os.getenv("ODOO_PASSWORD")
+    ])
+
+
 class InvoiceRequest(BaseModel):
     """Request model for creating an invoice."""
     partner_name: str
@@ -40,6 +50,38 @@ def get_odoo_client():
     return get_client()
 
 
+@router.get("/health")
+async def check_odoo_health():
+    """Check Odoo integration health status.
+
+    Returns:
+        Health status - configured, connected, or not_configured
+    """
+    if not is_odoo_configured():
+        return {
+            "status": "not_configured",
+            "message": "Odoo integration disabled. Set ODOO_URL, ODOO_DB, ODOO_USERNAME, ODOO_PASSWORD in .env to enable.",
+            "checked_at": datetime.now().isoformat()
+        }
+
+    try:
+        client = get_odoo_client()
+        version = await client.version()
+
+        return {
+            "status": "healthy",
+            "server_version": version.get("server_version", "unknown"),
+            "checked_at": datetime.now().isoformat()
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "error": str(e),
+            "message": "Odoo is configured but connection failed",
+            "checked_at": datetime.now().isoformat()
+        }
+
+
 @router.get("/status")
 async def check_odoo_status():
     """Check Odoo connection status.
@@ -47,6 +89,13 @@ async def check_odoo_status():
     Returns:
         Connection status and server version
     """
+    if not is_odoo_configured():
+        return {
+            "status": "not_configured",
+            "message": "Odoo integration disabled",
+            "checked_at": datetime.now().isoformat()
+        }
+
     try:
         client = get_odoo_client()
         version = await client.version()

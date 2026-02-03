@@ -250,13 +250,31 @@ class DashboardUpdater:
                 return None
 
     def _is_watcher_running(self, watcher_name: str) -> bool:
-        """Check if a specific watcher is running."""
-        # Simplified check - in production, check actual process status
-        return False
+        """Check if a specific watcher is running by reading state.json."""
+        state_file = Path(__file__).parent.parent / "state.json"
+        if not state_file.exists():
+            return False
+
+        try:
+            state = json.loads(state_file.read_text())
+            return state.get("watchers", {}).get(watcher_name, "stopped") == "running"
+        except (json.JSONDecodeError, KeyError):
+            return False
 
     def _is_service_running(self, service_name: str) -> bool:
-        """Check if a specific service is running."""
-        return False
+        """Check if a specific service is running by reading state.json."""
+        state_file = Path(__file__).parent.parent / "state.json"
+        if not state_file.exists():
+            return False
+
+        try:
+            state = json.loads(state_file.read_text())
+            if service_name == "backend":
+                # Backend is running if this code is executing
+                return True
+            return state.get("system", "stopped") == "running"
+        except (json.JSONDecodeError, KeyError):
+            return False
 
     # =========================================================================
     # SECTION GENERATORS (T006, T007, T008, T011-T015, T028)
