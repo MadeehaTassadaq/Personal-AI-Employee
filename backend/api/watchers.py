@@ -9,6 +9,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException
 
 from ..models.schemas import WatcherInfo, WatcherResponse, WatcherStatus
+from ..services.orchestrator import get_orchestrator
 
 router = APIRouter()
 
@@ -16,7 +17,7 @@ VAULT_PATH = Path(os.getenv("VAULT_PATH", "./vault"))
 STATE_FILE = Path(__file__).parent.parent / "state.json"
 
 # Available watchers
-AVAILABLE_WATCHERS = ["file", "gmail", "whatsapp", "linkedin"]
+AVAILABLE_WATCHERS = ["file", "gmail", "whatsapp", "linkedin", "facebook", "instagram", "twitter"]
 
 
 def load_state() -> dict:
@@ -97,14 +98,12 @@ async def start_watcher(name: str) -> WatcherResponse:
     if name not in AVAILABLE_WATCHERS:
         raise HTTPException(status_code=404, detail=f"Watcher '{name}' not found")
 
-    state = load_state()
+    # Use orchestrator to start the actual watcher process
+    orchestrator = get_orchestrator()
+    success = orchestrator.start_watcher(name)
 
-    if "watchers" not in state:
-        state["watchers"] = {}
-
-    state["watchers"][name] = "running"
-    state["system"] = "running"
-    save_state(state)
+    if not success:
+        raise HTTPException(status_code=500, detail=f"Failed to start watcher '{name}'")
 
     return WatcherResponse(
         name=name,
@@ -119,18 +118,12 @@ async def stop_watcher(name: str) -> WatcherResponse:
     if name not in AVAILABLE_WATCHERS:
         raise HTTPException(status_code=404, detail=f"Watcher '{name}' not found")
 
-    state = load_state()
+    # Use orchestrator to stop the actual watcher process
+    orchestrator = get_orchestrator()
+    success = orchestrator.stop_watcher(name)
 
-    if "watchers" not in state:
-        state["watchers"] = {}
-
-    state["watchers"][name] = "stopped"
-
-    # Check if any watchers still running
-    if not any(v == "running" for v in state.get("watchers", {}).values()):
-        state["system"] = "stopped"
-
-    save_state(state)
+    if not success:
+        raise HTTPException(status_code=500, detail=f"Failed to stop watcher '{name}'")
 
     return WatcherResponse(
         name=name,
@@ -142,38 +135,28 @@ async def stop_watcher(name: str) -> WatcherResponse:
 @router.post("/start-all")
 async def start_all_watchers() -> dict:
     """Start all watchers."""
+    orchestrator = get_orchestrator()
+    results = orchestrator.start_all_watchers()
+
     state = load_state()
-
-    if "watchers" not in state:
-        state["watchers"] = {}
-
-    for name in AVAILABLE_WATCHERS:
-        state["watchers"][name] = "running"
-
-    state["system"] = "running"
-    save_state(state)
 
     return {
         "message": "All watchers started",
-        "watchers": state["watchers"]
+        "watchers": state.get("watchers", {}),
+        "results": results
     }
 
 
 @router.post("/stop-all")
 async def stop_all_watchers() -> dict:
     """Stop all watchers."""
+    orchestrator = get_orchestrator()
+    results = orchestrator.stop_all_watchers()
+
     state = load_state()
-
-    if "watchers" not in state:
-        state["watchers"] = {}
-
-    for name in AVAILABLE_WATCHERS:
-        state["watchers"][name] = "stopped"
-
-    state["system"] = "stopped"
-    save_state(state)
 
     return {
         "message": "All watchers stopped",
-        "watchers": state["watchers"]
+        "watchers": state.get("watchers", {}),
+        "results": results
     }

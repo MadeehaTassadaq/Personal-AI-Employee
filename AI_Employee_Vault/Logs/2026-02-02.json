@@ -1,0 +1,147 @@
+[
+  {
+    "timestamp": "2026-02-02T11:00:14.715468",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "email",
+    "file": "email_2026-02-02_110014.md"
+  },
+  {
+    "timestamp": "2026-02-02T11:00:31.828834",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "email_2026-02-02_110014.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-02T11:01:31.636455",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "twitter",
+    "file": "tweet_2026-02-02_110131.md"
+  },
+  {
+    "timestamp": "2026-02-02T11:01:57.424418",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "tweet_2026-02-02_110131.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-02T11:03:30.637513",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "twitter",
+    "file": "tweet_2026-02-02_110330.md"
+  },
+  {
+    "timestamp": "2026-02-02T11:03:30.667693",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "facebook",
+    "file": "fb_post_2026-02-02_110330.md"
+  },
+  {
+    "timestamp": "2026-02-02T11:03:30.688712",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "linkedin",
+    "file": "li_post_2026-02-02_110330.md"
+  },
+  {
+    "timestamp": "2026-02-02T11:03:30.702821",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "whatsapp",
+    "file": "wa_msg_2026-02-02_110330.md"
+  },
+  {
+    "timestamp": "2026-02-02T11:05:25.057183",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "wa_msg_2026-02-02_110330.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-02T11:05:26.214433",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "fb_post_2026-02-02_110330.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-02T11:05:27.688556",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "li_post_2026-02-02_110330.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-02T11:05:30.082281",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "tweet_2026-02-02_110330.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-02T11:16:23.178280",
+    "watcher": "Publisher",
+    "event": "publish_success",
+    "file": "tweet_2026-02-02_110330.md",
+    "platform": "twitter",
+    "error": null
+  },
+  {
+    "timestamp": "2026-02-02T11:17:22.681619",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "fb_post_2026-02-02_110330.md",
+    "platform": "facebook",
+    "error": "{\"error\":{\"message\":\"(#200) If posting to a group, requires app being installed in the group, and \\\\\\n          either publish_to_groups permission with user token, or both pages_read_engagement \\\\\\n          and pages_manage_posts permission with page token; If posting to a page, \\\\\\n          requires both pages_read_engagement and pages_manage_posts as an admin with \\\\\\n          sufficient administrative permission\",\"type\":\"OAuthException\",\"code\":200,\"fbtrace_id\":\"ALdwrFXkyDePOLK6_5JaJLj\"}}"
+  },
+  {
+    "timestamp": "2026-02-02T11:17:29.676237",
+    "watcher": "Publisher",
+    "event": "publish_success",
+    "file": "li_post_2026-02-02_110330.md",
+    "platform": "linkedin",
+    "error": null
+  },
+  {
+    "timestamp": "2026-02-02T12:46:53.018543",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "facebook",
+    "file": "fb_post_2026-02-02_124653.md"
+  },
+  {
+    "timestamp": "2026-02-02T12:48:04.680211",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "fb_post_2026-02-02_124653.md",
+    "platform": "facebook",
+    "error": "{\"error\":{\"message\":\"(#200) If posting to a group, requires app being installed in the group, and \\\\\\n          either publish_to_groups permission with user token, or both pages_read_engagement \\\\\\n          and pages_manage_posts permission with page token; If posting to a page, \\\\\\n          requires both pages_read_engagement and pages_manage_posts as an admin with \\\\\\n          sufficient administrative permission\",\"type\":\"OAuthException\",\"code\":200,\"fbtrace_id\":\"AB_9MQNGP9Inc3lyNM9-Evc\"}}"
+  },
+  {
+    "timestamp": "2026-02-02T12:48:04.686167",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "fb_post_2026-02-02_124653.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-02T13:17:06.735303",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 297,
+    "has_link": true,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-02T13:17:07.647484",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_failed",
+    "status": 400,
+    "error": "Error validating access token: The session has been invalidated because the user changed their password or Facebook has changed the session for security reasons."
+  }
+]

@@ -41,7 +41,10 @@ class Orchestrator:
             "file": "watchers.file_watcher",
             "gmail": "watchers.gmail_watcher",
             "whatsapp": "watchers.whatsapp_watcher",
-            "linkedin": "watchers.linkedin_watcher"
+            "linkedin": "watchers.linkedin_watcher",
+            "facebook": "watchers.facebook_watcher",
+            "instagram": "watchers.instagram_watcher",
+            "twitter": "watchers.twitter_watcher"
         }
 
         if name not in watcher_map:
@@ -111,7 +114,7 @@ class Orchestrator:
             Dict of watcher names to success status
         """
         results = {}
-        for name in ["file", "gmail", "whatsapp", "linkedin"]:
+        for name in ["file", "gmail", "whatsapp", "linkedin", "facebook", "instagram", "twitter"]:
             results[name] = self.start_watcher(name)
         return results
 

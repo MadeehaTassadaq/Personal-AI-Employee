@@ -560,65 +560,278 @@ class RalphWiggum:
             return f"Completed: {step.description}"
 
     async def _handle_email_action(self, step: TaskStep) -> str:
-        """Handle email-related actions."""
-        # Import the email sender skill
-        try:
-            # This would normally dispatch to the email sender skill
-            # For now, simulate the action
-            await asyncio.sleep(1)
-            return f"Email action completed: {step.description}"
-        except ImportError:
-            logger.warning("Email sender skill not available")
-            # Fallback to manual processing
-            await asyncio.sleep(0.5)
-            return f"Email action completed: {step.description}"
+        """Handle email-related actions by creating approval file."""
+        # Extract email details from step description
+        description = step.description.lower()
+
+        # Create approval file for email
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+        approval_file = self.vault_path / "Pending_Approval" / f"email_{timestamp}.md"
+
+        content = f"""---
+type: email
+platform: email
+status: pending_approval
+created: {datetime.now().isoformat()}
+action: {step.description}
+---
+
+# Email Action Request
+
+## Description
+{step.description}
+
+## Action Required
+Please review and approve this email action. Move this file to `Approved/` to execute, or to `Done/` to reject.
+
+### Content
+[Add email content here]
+
+### Recipient
+[Add recipient email here]
+
+### Subject
+[Add subject here]
+"""
+
+        approval_file.write_text(content)
+        self._audit.log(
+            AuditAction.APPROVAL_CREATED,
+            platform="email",
+            actor="ralph",
+            file_path=str(approval_file),
+            details={"description": step.description}
+        )
+
+        return f"Email approval request created: {approval_file.name}"
 
     async def _handle_whatsapp_action(self, step: TaskStep) -> str:
-        """Handle WhatsApp-related actions."""
-        try:
-            # This would normally dispatch to the WhatsApp sender skill
-            # For now, simulate the action
-            await asyncio.sleep(1)
-            return f"WhatsApp action completed: {step.description}"
-        except ImportError:
-            logger.warning("WhatsApp sender skill not available")
-            await asyncio.sleep(0.5)
-            return f"WhatsApp action completed: {step.description}"
+        """Handle WhatsApp-related actions by creating approval file."""
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+        approval_file = self.vault_path / "Pending_Approval" / f"whatsapp_{timestamp}.md"
+
+        content = f"""---
+type: whatsapp
+platform: whatsapp
+status: pending_approval
+created: {datetime.now().isoformat()}
+action: {step.description}
+---
+
+# WhatsApp Message Request
+
+## Description
+{step.description}
+
+## Action Required
+Please review and approve this WhatsApp message. Move this file to `Approved/` to send, or to `Done/` to reject.
+
+### Content
+[Add message content here]
+
+### Recipient
+[Add phone number with country code, e.g., +1234567890]
+"""
+
+        approval_file.write_text(content)
+        self._audit.log(
+            AuditAction.APPROVAL_CREATED,
+            platform="whatsapp",
+            actor="ralph",
+            file_path=str(approval_file),
+            details={"description": step.description}
+        )
+
+        return f"WhatsApp approval request created: {approval_file.name}"
 
     async def _handle_linkedin_action(self, step: TaskStep) -> str:
-        """Handle LinkedIn-related actions."""
-        try:
-            # This would normally dispatch to the LinkedIn poster skill
-            # For now, simulate the action
-            await asyncio.sleep(1)
-            return f"LinkedIn action completed: {step.description}"
-        except ImportError:
-            logger.warning("LinkedIn poster skill not available")
-            await asyncio.sleep(0.5)
-            return f"LinkedIn action completed: {step.description}"
+        """Handle LinkedIn-related actions by creating approval file."""
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+        approval_file = self.vault_path / "Pending_Approval" / f"linkedin_{timestamp}.md"
+
+        content = f"""---
+type: social
+platform: linkedin
+status: pending_approval
+created: {datetime.now().isoformat()}
+action: {step.description}
+---
+
+# LinkedIn Post Request
+
+## Description
+{step.description}
+
+## Action Required
+Please review and approve this LinkedIn post. Move this file to `Approved/` to publish, or to `Done/` to reject.
+
+### Content
+[Add your LinkedIn post content here]
+
+### Link URL (optional)
+[Add URL to share, if any]
+"""
+
+        approval_file.write_text(content)
+        self._audit.log(
+            AuditAction.APPROVAL_CREATED,
+            platform="linkedin",
+            actor="ralph",
+            file_path=str(approval_file),
+            details={"description": step.description}
+        )
+
+        return f"LinkedIn approval request created: {approval_file.name}"
 
     async def _handle_read_action(self, step: TaskStep) -> str:
-        """Handle read/review-related actions."""
-        # For now, simulate reading
-        await asyncio.sleep(0.5)
-        return f"Read action completed: {step.description}"
+        """Handle read/review-related actions by reading vault files."""
+        description = step.description.lower()
+
+        # Search for relevant files in the vault
+        search_terms = ['inbox', 'dashboard', 'handbook', 'goals', 'report']
+        files_read = []
+
+        for term in search_terms:
+            if term in description:
+                # Try to find and read the relevant file
+                if term == 'inbox':
+                    inbox_path = self.vault_path / "Inbox"
+                    if inbox_path.exists():
+                        files = list(inbox_path.glob("*.md"))
+                        files_read.extend([f.name for f in files[:5]])
+                elif term == 'dashboard':
+                    dashboard_path = self.vault_path / "Dashboard.md"
+                    if dashboard_path.exists():
+                        files_read.append("Dashboard.md")
+                elif term == 'handbook':
+                    handbook_path = self.vault_path / "Company_Handbook.md"
+                    if handbook_path.exists():
+                        files_read.append("Company_Handbook.md")
+                elif term == 'goals':
+                    goals_path = self.vault_path / "Business_Goals.md"
+                    if goals_path.exists():
+                        files_read.append("Business_Goals.md")
+                elif term == 'report':
+                    reports_path = self.vault_path / "Reports"
+                    if reports_path.exists():
+                        files = list(reports_path.glob("*.md"))
+                        files_read.extend([f.name for f in files[:3]])
+
+        if files_read:
+            return f"Read action completed. Files reviewed: {', '.join(files_read)}"
+        else:
+            return f"Read action completed: {step.description}"
 
     async def _handle_write_action(self, step: TaskStep) -> str:
-        """Handle write/create-related actions."""
-        # For now, simulate writing
-        await asyncio.sleep(0.5)
-        return f"Write action completed: {step.description}"
+        """Handle write/create-related actions by creating files in vault."""
+        description = step.description.lower()
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+
+        # Determine target folder based on context
+        if 'report' in description:
+            target_folder = self.vault_path / "Reports"
+            filename = f"report_{timestamp}.md"
+        elif 'plan' in description:
+            target_folder = self.vault_path / "Plans"
+            filename = f"plan_{timestamp}.md"
+        else:
+            target_folder = self.vault_path / "Needs_Action"
+            filename = f"task_{timestamp}.md"
+
+        target_folder.mkdir(parents=True, exist_ok=True)
+        file_path = target_folder / filename
+
+        content = f"""---
+type: document
+status: draft
+created: {datetime.now().isoformat()}
+source: ralph_wiggum
+---
+
+# {step.description}
+
+## Content
+
+[Generated content placeholder]
+
+## Notes
+
+Created by Ralph Wiggum automated task processing.
+"""
+
+        file_path.write_text(content)
+
+        self._audit.log(
+            AuditAction.FILE_CREATED,
+            platform="ralph",
+            actor="ralph",
+            file_path=str(file_path),
+            details={"description": step.description}
+        )
+
+        return f"Write action completed: {file_path.name}"
 
     async def _handle_organize_action(self, step: TaskStep) -> str:
-        """Handle file organization actions."""
-        # For now, simulate organizing
-        await asyncio.sleep(0.5)
-        return f"Organize action completed: {step.description}"
+        """Handle file organization actions by moving files between folders."""
+        description = step.description.lower()
+        files_moved = 0
+
+        # Check for approved files that need to be moved to Done
+        approved_path = self.vault_path / "Approved"
+        done_path = self.vault_path / "Done"
+        done_path.mkdir(parents=True, exist_ok=True)
+
+        if approved_path.exists():
+            for file_path in approved_path.glob("*.md"):
+                if file_path.name.startswith("."):
+                    continue
+
+                # Read frontmatter to check if processed
+                content = file_path.read_text()
+                if 'status: processed' in content or 'status: published' in content:
+                    dest = done_path / file_path.name
+                    file_path.rename(dest)
+                    files_moved += 1
+
+                    self._audit.log(
+                        AuditAction.FILE_MOVED,
+                        platform="ralph",
+                        actor="ralph",
+                        file_path=str(dest),
+                        details={"moved_from": str(file_path)}
+                    )
+
+        if files_moved > 0:
+            return f"Organize action completed: {files_moved} files moved to Done"
+        else:
+            return f"Organize action completed: {step.description}"
 
     async def _handle_process_action(self, step: TaskStep) -> str:
-        """Handle generic processing actions."""
-        # For now, simulate processing
-        await asyncio.sleep(0.5)
+        """Handle generic processing actions with intelligent routing."""
+        description = step.description.lower()
+
+        # Route to more specific handlers based on content
+        if any(term in description for term in ['email', 'send mail', 'draft email']):
+            return await self._handle_email_action(step)
+        elif any(term in description for term in ['whatsapp', 'message', 'text']):
+            return await self._handle_whatsapp_action(step)
+        elif any(term in description for term in ['linkedin', 'post', 'social']):
+            return await self._handle_linkedin_action(step)
+        elif any(term in description for term in ['read', 'review', 'check']):
+            return await self._handle_read_action(step)
+        elif any(term in description for term in ['write', 'create', 'draft']):
+            return await self._handle_write_action(step)
+        elif any(term in description for term in ['move', 'organize', 'file']):
+            return await self._handle_organize_action(step)
+
+        # Generic process - log and complete
+        self._audit.log(
+            AuditAction.INFO,
+            platform="ralph",
+            actor="ralph",
+            details={"action": "process", "description": step.description}
+        )
+
         return f"Process action completed: {step.description}"
 
     async def _attempt_correction(self, task: RalphTask, failed_step: TaskStep) -> bool:

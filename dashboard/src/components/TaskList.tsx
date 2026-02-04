@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 
 interface VaultFile {
-  name: string;
+  filename: string;
   path?: string;
+  folder?: string;
+  created?: string;
+  priority?: string;
+  status?: string;
+  title?: string;
   modified?: string;
 }
 
@@ -29,12 +34,12 @@ export function TaskList({
       // Filter out .gitkeep and convert to VaultFile format
       const taskFiles = (Array.isArray(data) ? data : [])
         .filter((f: string | VaultFile) => {
-          const name = typeof f === 'string' ? f : f.name;
-          return name !== '.gitkeep';
+          const name = typeof f === 'string' ? f : f.filename;
+          return name && name !== '.gitkeep';
         })
         .map((f: string | VaultFile) => {
           if (typeof f === 'string') {
-            return { name: f };
+            return { filename: f };
           }
           return f;
         });
@@ -46,13 +51,15 @@ export function TaskList({
     return () => clearInterval(interval);
   }, [folder, fetchFolder]);
 
-  const getPriority = (name: string): 'high' | 'medium' | 'low' => {
+  const getPriority = (name: string | undefined): 'high' | 'medium' | 'low' => {
+    if (!name || typeof name !== 'string') return 'low';
     if (name.toLowerCase().includes('urgent')) return 'high';
     if (name.toLowerCase().includes('important')) return 'medium';
     return 'low';
   };
 
-  const formatName = (name: string): string => {
+  const formatName = (name: string | undefined): string => {
+    if (!name || typeof name !== 'string') return '';
     return name
       .replace('.md', '')
       .replace(/-/g, ' ')
@@ -85,12 +92,13 @@ export function TaskList({
       ) : (
         <div className="task-list">
           {files.map((file, index) => {
-            const priority = getPriority(file.name);
+            if (!file.filename) return null; // Skip files without filenames
+            const priority = getPriority(file.filename);
             return (
               <div key={index} className="task-item">
                 <div className={`priority-indicator priority-${priority}`} />
                 <div className="task-info">
-                  <span className="task-title">{formatName(file.name)}</span>
+                  <span className="task-title">{formatName(file.filename)}</span>
                   <span className="task-status">{folder}</span>
                 </div>
                 {file.modified && (
@@ -100,7 +108,7 @@ export function TaskList({
                 )}
               </div>
             );
-          })}
+          }).filter(Boolean)} {/* Remove any null values from the map */}
         </div>
       )}
     </div>

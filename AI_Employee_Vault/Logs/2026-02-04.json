@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2026-02-04T00:02:17.310488",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923018714482",
+    "message_length": 6,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-04T00:02:35.444624",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_sent",
+    "phone": "+923018714482",
+    "message_length": 6
+  }
+]

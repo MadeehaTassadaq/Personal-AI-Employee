@@ -1,0 +1,418 @@
+[
+  {
+    "timestamp": "2026-02-03T20:36:11.803892",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 62,
+    "has_link": false,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T20:36:24.766599",
+    "watcher": "LinkedInMCP",
+    "event": "linkedin_post_requested",
+    "content_length": 62,
+    "visibility": "PUBLIC",
+    "image_url": null,
+    "link_url": null,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T20:36:33.755032",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://via.placeholder.com/600x400.png...",
+    "caption_length": 63,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T20:36:34.187937",
+    "watcher": "InstagramMCP",
+    "event": "instagram_container_failed",
+    "error": "Invalid OAuth access token - Cannot parse access token"
+  },
+  {
+    "timestamp": "2026-02-03T23:05:38.410353",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "facebook",
+    "file": "fb_post_2026-02-03_230538.md"
+  },
+  {
+    "timestamp": "2026-02-03T23:06:15.104166",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "instagram",
+    "file": "ig_post_2026-02-03_230615.md"
+  },
+  {
+    "timestamp": "2026-02-03T23:08:27.067163",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "ig_post_2026-02-03_230615.md",
+    "platform": "unknown",
+    "error": "Instagram credentials not configured"
+  },
+  {
+    "timestamp": "2026-02-03T23:08:27.068670",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "ig_post_2026-02-03_230615.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-03T23:08:29.655162",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "fb_post_2026-02-03_230538.md",
+    "platform": "facebook",
+    "error": "{\"error\":{\"message\":\"Error validating application. Application has been deleted.\",\"type\":\"OAuthException\",\"code\":190,\"fbtrace_id\":\"AO1ZA9IMItV2iF03APISj5h\"}}"
+  },
+  {
+    "timestamp": "2026-02-03T23:08:29.656544",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "fb_post_2026-02-03_230538.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-03T23:09:03.379373",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "twitter",
+    "file": "tweet_2026-02-03_230903.md"
+  },
+  {
+    "timestamp": "2026-02-03T23:09:17.437235",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "linkedin",
+    "file": "li_post_2026-02-03_230917.md"
+  },
+  {
+    "timestamp": "2026-02-03T23:09:40.165945",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "whatsapp",
+    "file": "wa_msg_2026-02-03_230940.md"
+  },
+  {
+    "timestamp": "2026-02-03T23:13:12.573311",
+    "watcher": "Publisher",
+    "event": "publish_success",
+    "file": "li_post_2026-02-03_230917.md",
+    "platform": "linkedin",
+    "error": null
+  },
+  {
+    "timestamp": "2026-02-03T23:13:12.574706",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "li_post_2026-02-03_230917.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-03T23:13:24.498288",
+    "watcher": "Publisher",
+    "event": "publish_success",
+    "file": "tweet_2026-02-03_230903.md",
+    "platform": "twitter",
+    "error": null
+  },
+  {
+    "timestamp": "2026-02-03T23:13:24.499597",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "tweet_2026-02-03_230903.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-03T23:13:38.859628",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "wa_msg_2026-02-03_230940.md",
+    "platform": "unknown",
+    "error": "WhatsApp credentials not configured"
+  },
+  {
+    "timestamp": "2026-02-03T23:13:38.861078",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "wa_msg_2026-02-03_230940.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-03T23:34:55.440507",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "facebook",
+    "file": "fb_post_2026-02-03_233455.md"
+  },
+  {
+    "timestamp": "2026-02-03T23:35:11.999907",
+    "watcher": "Compose",
+    "event": "post_created",
+    "platform": "instagram",
+    "file": "ig_post_2026-02-03_233511.md"
+  },
+  {
+    "timestamp": "2026-02-03T23:35:26.864699",
+    "watcher": "Publisher",
+    "event": "publish_success",
+    "file": "fb_post_2026-02-03_233455.md",
+    "platform": "facebook",
+    "error": null
+  },
+  {
+    "timestamp": "2026-02-03T23:35:26.870805",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "fb_post_2026-02-03_233455.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-03T23:35:44.702603",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "ig_post_2026-02-03_233511.md",
+    "platform": "unknown",
+    "error": "Instagram credentials not configured"
+  },
+  {
+    "timestamp": "2026-02-03T23:35:44.707532",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "ig_post_2026-02-03_233511.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-03T23:38:36.039690",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://via.placeholder.com/1080x1080.png...",
+    "caption_length": 104,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:38:42.958528",
+    "watcher": "InstagramMCP",
+    "event": "instagram_container_failed",
+    "error": "Only photo or video can be accepted as media type."
+  },
+  {
+    "timestamp": "2026-02-03T23:38:48.647107",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://raw.githubusercontent.com/python-pillow/Pi...",
+    "caption_length": 141,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:38:49.593781",
+    "watcher": "InstagramMCP",
+    "event": "instagram_container_failed",
+    "error": "Only photo or video can be accepted as media type."
+  },
+  {
+    "timestamp": "2026-02-03T23:38:54.240341",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://www.python.org/static/img/python-logo.png...",
+    "caption_length": 111,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:38:58.523761",
+    "watcher": "InstagramMCP",
+    "event": "instagram_container_failed",
+    "error": "The aspect ratio is not supported."
+  },
+  {
+    "timestamp": "2026-02-03T23:39:03.561577",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://placehold.co/1080x1080.png...",
+    "caption_length": 111,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:39:04.346303",
+    "watcher": "InstagramMCP",
+    "event": "instagram_container_failed",
+    "error": "Only photo or video can be accepted as media type."
+  },
+  {
+    "timestamp": "2026-02-03T23:39:10.515707",
+    "watcher": "FacebookMCP",
+    "event": "facebook_post_requested",
+    "content_length": 110,
+    "has_link": false,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:39:12.159277",
+    "watcher": "FacebookMCP",
+    "event": "facebook_posted",
+    "post_id": "958427130693191_122106911505231352",
+    "content_length": 110
+  },
+  {
+    "timestamp": "2026-02-03T23:39:22.434451",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://cdn.pixabay.com/photo/2017/08/30/01/05/mil...",
+    "caption_length": 177,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:39:30.944624",
+    "watcher": "InstagramMCP",
+    "event": "instagram_posted",
+    "post_id": "18082656365241246",
+    "caption_length": 177
+  },
+  {
+    "timestamp": "2026-02-03T23:39:43.427171",
+    "watcher": "LinkedInMCP",
+    "event": "linkedin_post_requested",
+    "content_length": 241,
+    "visibility": "PUBLIC",
+    "image_url": null,
+    "link_url": null,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:39:45.625266",
+    "watcher": "LinkedInMCP",
+    "event": "linkedin_posted",
+    "post_id": "urn:li:share:7424521439174680596",
+    "content_length": 241,
+    "has_image": false,
+    "has_link": false
+  },
+  {
+    "timestamp": "2026-02-03T23:41:32.355792",
+    "watcher": "CalendarMCP",
+    "event": "list_events_requested",
+    "days": 7,
+    "max_results": 20
+  },
+  {
+    "timestamp": "2026-02-03T23:43:15.909378",
+    "watcher": "GmailMCP",
+    "event": "send_email_requested",
+    "to": "drmadeehatassadaq@gmail.com",
+    "subject": "Testing",
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:43:16.697843",
+    "watcher": "GmailMCP",
+    "event": "email_sent",
+    "to": "drmadeehatassadaq@gmail.com",
+    "subject": "Testing",
+    "message_id": "19c24cede1c026f1"
+  },
+  {
+    "timestamp": "2026-02-03T23:43:30.701431",
+    "watcher": "CalendarMCP",
+    "event": "create_event_requested",
+    "summary": "Testing Digital FTE Calendar Integration",
+    "start_time": "2026-02-04T15:00:00",
+    "end_time": "2026-02-04T16:00:00",
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:43:31.418899",
+    "watcher": "CalendarMCP",
+    "event": "event_created",
+    "summary": "Testing Digital FTE Calendar Integration",
+    "event_id": "gtvhn3lhlbb6ikpg504o3qru7o"
+  },
+  {
+    "timestamp": "2026-02-03T23:43:40.073683",
+    "watcher": "CalendarMCP",
+    "event": "create_event_requested",
+    "summary": "Weekly Team Sync - Digital FTE Project",
+    "start_time": "2026-02-10T10:00:00",
+    "end_time": "2026-02-10T11:00:00",
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:43:41.453828",
+    "watcher": "CalendarMCP",
+    "event": "event_created",
+    "summary": "Weekly Team Sync - Digital FTE Project",
+    "event_id": "krj2ms90ruji2dhis64s2durhs"
+  },
+  {
+    "timestamp": "2026-02-03T23:45:08.549301",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+1234567890",
+    "message_length": 88,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:45:45.716023",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923001234567",
+    "message_length": 88,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:46:03.284578",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_sent",
+    "phone": "+923001234567",
+    "message_length": 88
+  },
+  {
+    "timestamp": "2026-02-03T23:46:08.819631",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923001234567",
+    "message_length": 152,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:46:26.380254",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_sent",
+    "phone": "+923001234567",
+    "message_length": 152
+  },
+  {
+    "timestamp": "2026-02-03T23:46:41.576185",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+03316147857",
+    "message_length": 64,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:47:16.785917",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923316147857",
+    "message_length": 64,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:47:27.056176",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923001234567",
+    "message_length": 64,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-03T23:50:58.569449",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+923018714482",
+    "message_length": 6,
+    "dry_run": false
+  }
+]

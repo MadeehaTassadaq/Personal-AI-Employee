@@ -1,9 +1,10 @@
 ---
-type: instagram_post
-status: pending_approval
-created: 2026-02-01T12:00:00Z
-post_type: single
+approved_at: '2026-02-01T18:37:53.169223'
+created: 2026-02-01 12:00:00+00:00
 platform: instagram
+post_type: single
+status: approved
+type: instagram_post
 ---
 
 # Instagram Post Approval Request

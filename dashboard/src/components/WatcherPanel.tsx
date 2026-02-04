@@ -11,7 +11,7 @@ interface WatcherPanelProps {
   onStopAll: () => void;
 }
 
-const WATCHER_NAMES = ['file', 'gmail', 'whatsapp', 'linkedin'];
+const WATCHER_NAMES = ['file', 'gmail', 'whatsapp', 'linkedin', 'facebook', 'instagram', 'twitter'];
 
 export function WatcherPanel({ 
   watchers, 
