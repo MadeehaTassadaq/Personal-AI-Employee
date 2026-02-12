@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { useApi } from '../hooks/useApi';
 
 interface ComposePanelProps {
-  onSubmit: (platform: string, content: string, options?: PostOptions) => Promise<void>;
+  onSubmit: (platform: string, content: string, options?: PostOptions) => Promise<{ success: boolean } | undefined>;
 }
 
 interface PostOptions {
@@ -23,6 +24,7 @@ const PLATFORMS: { id: Platform; name: string; icon: string; maxLength?: number;
 ];
 
 export function ComposePanel({ onSubmit }: ComposePanelProps) {
+  const { generateAIContent } = useApi();
   const [platform, setPlatform] = useState<Platform>('facebook');
   const [content, setContent] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -30,6 +32,7 @@ export function ComposePanel({ onSubmit }: ComposePanelProps) {
   const [recipient, setRecipient] = useState('');
   const [subject, setSubject] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
@@ -104,6 +107,40 @@ export function ComposePanel({ onSubmit }: ComposePanelProps) {
         return 'Compose your email...';
       default:
         return "What's on your mind?";
+    }
+  };
+
+  const handleAIGenerate = async () => {
+    setError(null);
+    setIsGenerating(true);
+
+    try {
+      // Call the backend API to generate AI content
+      const response = await generateAIContent({
+        platform,
+        context: content || `Generate a ${platform} post`,
+        options: {
+          recipient,
+          subject,
+        }
+      });
+
+      if (response?.content) {
+        setContent(response.content);
+        if (response.hashtags) {
+          setContent(prev => prev + '\n\n' + response.hashtags.join(' '));
+        }
+        if (response.subject && platform === 'email') {
+          setSubject(response.subject);
+        }
+        setSuccess('Content generated! Review and edit as needed.');
+      } else {
+        setError('Failed to generate content. Please try again.');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to generate content');
+    } finally {
+      setIsGenerating(false);
     }
   };
 
@@ -200,14 +237,25 @@ export function ComposePanel({ onSubmit }: ComposePanelProps) {
 
         {/* Main Content */}
         <div className="compose-field">
-          <label>
-            {platform === 'email' ? 'Message' : 'Content'}
-            {currentPlatform.maxLength && (
-              <span className={`char-count ${isOverLimit ? 'over-limit' : ''}`}>
-                {charCount}/{currentPlatform.maxLength}
-              </span>
-            )}
-          </label>
+          <div className="compose-label-row">
+            <label>
+              {platform === 'email' ? 'Message' : 'Content'}
+              {currentPlatform.maxLength && (
+                <span className={`char-count ${isOverLimit ? 'over-limit' : ''}`}>
+                  {charCount}/{currentPlatform.maxLength}
+                </span>
+              )}
+            </label>
+            <button
+              className="ai-generate-btn"
+              onClick={handleAIGenerate}
+              disabled={isGenerating}
+              title="Generate content with AI"
+            >
+              <span className="ai-icon">✨</span>
+              {isGenerating ? 'Generating...' : 'Generate with AI'}
+            </button>
+          </div>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}

@@ -1,0 +1,387 @@
+[
+  {
+    "timestamp": "2026-02-12T10:55:23.815185",
+    "watcher": "InstagramMCP",
+    "event": "instagram_post_requested",
+    "image_url": "https://i.ibb.co/GfF1bCgB/Feb-1-2026-11-56-33-AM.j...",
+    "caption_length": 545,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-12T10:55:35.951647",
+    "watcher": "InstagramMCP",
+    "event": "instagram_posted",
+    "post_id": "17961067865901551",
+    "caption_length": 545
+  },
+  {
+    "timestamp": "2026-02-12T11:23:06.969824",
+    "watcher": "GmailWatcher",
+    "event": "email_received",
+    "gmail_id": "19c4f7ad2a474f8e",
+    "from": "LinkedIn Premium <linkedin@em.linkedin.com>",
+    "sender_email": "linkedin@em.linkedin.com",
+    "subject": "Dr Madeeha, thanks for being a valued member",
+    "category": "general",
+    "priority": "medium",
+    "response_needed": false
+  },
+  {
+    "timestamp": "2026-02-12T11:23:07.002657",
+    "watcher": "GmailWatcher",
+    "event": "email_received",
+    "gmail_id": "19c4eea0f16c527c",
+    "from": "Google <google-noreply@google.com>",
+    "sender_email": "google-noreply@google.com",
+    "subject": "\u26a0\ufe0f Your Gmail storage is 92% full",
+    "category": "client_inquiry",
+    "priority": "high",
+    "response_needed": true
+  },
+  {
+    "timestamp": "2026-02-12T11:23:07.031240",
+    "watcher": "GmailWatcher",
+    "event": "email_received",
+    "gmail_id": "19c4e8cc64e85cc9",
+    "from": "\"Z.ai API Team\" <api@team.z.ai>",
+    "sender_email": "api@team.z.ai",
+    "subject": "GLM-5 is Now Live!",
+    "category": "general",
+    "priority": "medium",
+    "response_needed": false
+  },
+  {
+    "timestamp": "2026-02-12T11:23:08.473768",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "20260212-112306-email-dr-madeeha-thanks-for-being-a-valued-member.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  },
+  {
+    "timestamp": "2026-02-12T11:23:09.947998",
+    "watcher": "Publisher_instagram",
+    "event": "post_error",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:09.951259",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "instagram-post-sawera-hospital-services.md",
+    "platform": "instagram",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:09.977523",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "20260212-112307-email--your-gmail-storage-is-92-full.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  },
+  {
+    "timestamp": "2026-02-12T11:23:11.481171",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "20260212-112307-email-glm-5-is-now-live.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  },
+  {
+    "timestamp": "2026-02-12T11:23:18.173100",
+    "watcher": "Publisher_instagram",
+    "event": "post_error",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:18.178392",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "ig_post_digital_fte_learning_2026-02-12.md",
+    "platform": "instagram",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:23.999614",
+    "watcher": "Publisher_instagram",
+    "event": "post_error",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:24.005666",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "instagram-post-sawera-hospital-services.md",
+    "platform": "instagram",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:29.864785",
+    "watcher": "Publisher_instagram",
+    "event": "post_error",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:29.868243",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "ig_post_digital_fte_learning_2026-02-12.md",
+    "platform": "instagram",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:40.117346",
+    "watcher": "Publisher_instagram",
+    "event": "post_error",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:40.125576",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "instagram-post-sawera-hospital-services.md",
+    "platform": "instagram",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:45.758769",
+    "watcher": "Publisher_instagram",
+    "event": "post_error",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:23:45.761486",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "ig_post_digital_fte_learning_2026-02-12.md",
+    "platform": "instagram",
+    "error": ""
+  },
+  {
+    "timestamp": "2026-02-12T11:29:40.610666",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "linkedin_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:40.612636",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "linkedin_test_20260212.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-12T11:29:41.806222",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "facebook_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:41.809552",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "facebook_test_20260212.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-12T11:29:42.840393",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "twitter_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:42.842112",
+    "watcher": "ApprovalSystem",
+    "event": "approval_granted",
+    "file": "twitter_test_20260212.md",
+    "notes": null
+  },
+  {
+    "timestamp": "2026-02-12T11:29:42.975987",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "linkedin_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:42.981879",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "twitter_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:43.002267",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "facebook_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:48.007598",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "linkedin_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:48.011566",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "twitter_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:48.024939",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "facebook_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:53.033002",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "linkedin_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:53.039363",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "twitter_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:29:53.056522",
+    "watcher": "Publisher",
+    "event": "publish_failed",
+    "file": "facebook_test_20260212.md",
+    "platform": "unknown",
+    "error": "No content found in file"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.098929",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021832151290024291"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.102317",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021818105891103063"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.105290",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021817982943699232"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.107831",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021817930376413612"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.110493",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021817876936626663"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.113320",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021817688629420171"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.115917",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021817524933861578"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.118496",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021812267285905895"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.120502",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021801653804916793"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:01.122298",
+    "watcher": "TwitterWatcher",
+    "event": "twitter_activity",
+    "type": "mention",
+    "id": "2021773507148100047"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:02.605035",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "20260212-115301-twitter-mention-by-lucien-remy.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:04.109533",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "20260212-115301-twitter-mention-by-yawnifier.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:05.615944",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "20260212-115301-twitter-mention-by-dd4m0n-.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:07.124275",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "20260212-115301-twitter-mention-by-allaboutbit.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:08.631313",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "20260212-115301-twitter-mention-by-kainblackxxx.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  },
+  {
+    "timestamp": "2026-02-12T11:53:10.136091",
+    "watcher": "FileWatcher",
+    "event": "task_completed",
+    "file": "20260212-115301-twitter-mention-by-kimigasuki328.md",
+    "workflow": "Inbox \u2192 Needs_Action \u2192 Done"
+  }
+]

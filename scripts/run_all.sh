@@ -6,11 +6,15 @@ echo "Starting Digital FTE services..."
 # Change to project directory
 cd "$(dirname "$0")/.."
 
-# Activate virtual environment
+# Activate virtual environment and load .env
 source .venv/bin/activate
 
-# Set environment variables
-export VAULT_PATH="./vault"
+# Load environment variables from .env
+if [ -f .env ]; then
+    export $(grep -v '^#' .env | xargs)
+fi
+
+# Set additional environment variables
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 
 # Start backend API in background
@@ -20,7 +24,7 @@ BACKEND_PID=$!
 
 # Start file watcher in background
 echo "Starting file watcher..."
-python watchers/file_watcher.py ./vault &
+python watchers/file_watcher.py ${VAULT_PATH:-./AI_Employee_Vault} &
 WATCHER_PID=$!
 
 # Start dashboard in background

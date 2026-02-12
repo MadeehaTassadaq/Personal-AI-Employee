@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useApi } from '../hooks/useApi';
 
 interface PlatformHealth {
   name: string;
@@ -21,7 +20,6 @@ interface HealthMetrics {
 }
 
 export const PlatformHealthMonitor: React.FC = () => {
-  const { fetchAudit, fetchAuditStats, fetchAuditAnalytics } = useApi();
   const [platforms, setPlatforms] = useState<PlatformHealth[]>([]);
   const [healthMetrics, setHealthMetrics] = useState<HealthMetrics[]>([]);
   const [loading, setLoading] = useState(true);

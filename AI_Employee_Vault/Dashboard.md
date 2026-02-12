@@ -1,6 +1,6 @@
 # Digital FTE Dashboard
 
-> Last Updated: 2026-02-04 00:03:28
+> Last Updated: 2026-02-12 12:00:00
 
 ---
 
@@ -40,10 +40,9 @@ _No pending approvals_
 
 ## Signals / Inputs
 
-> **2 new items in Inbox/**
+> **0 new items in Inbox/**
 
-- [[Inbox/prepare-report|Prepare Report]]
-- [[Inbox/test-task-from-cli|test task from cli]]
+_No new signals_
 
 ---
 
@@ -51,16 +50,12 @@ _No pending approvals_
 
 > Last 10 completed tasks
 
-- [2026-02-03] Facebook Post
-- [2026-02-03] Linkedin Post
-- [2026-02-03] Twitter Post
-- [2026-02-02] Linkedin Post
-- [2026-02-02] Twitter Post
-- [2026-01-31] facebook ai healthcare 2026 01 31
-- [2026-01-31] instagram ai healthcare 2026 01 31
-- [2026-01-30] facebook ai healthcare 2026 01 30
-- [2026-01-30] email meeting notification 2026 01 30
-- [2026-01-30] whatsapp test 2026 01 30
+- [2026-02-12] 20260212 115301 twitter mention by kimigasuki328
+- [2026-02-12] 20260212 115301 twitter mention by kainblackxxx
+- [2026-02-12] 20260212 115301 twitter mention by allaboutbit
+- [2026-02-12] 20260212 115301 twitter mention by yawnifier
+- [2026-02-12] 20260212 115301 twitter mention by dd4m0n 
+- [2026-02-12] 20260212 115301 twitter mention by lucien remy
 
 ---
 
@@ -68,7 +63,7 @@ _No pending approvals_
 
 | Metric | Today | This Week |
 |--------|-------|-----------|
-| Tasks Completed | 3 | 5 |
+| Tasks Completed | 6 | 6 |
 | Pending Approvals | 0 | — |
 | Emails Sent | 0 | 0 |
 | Social Posts | 0 | 0 |
@@ -76,10 +71,10 @@ _No pending approvals_
 ---
 
 <details>
-<summary>## Weekly Summary (Week of 2026-02-02)</summary>
+<summary>## Weekly Summary (Week of 2026-02-09)</summary>
 
-- **Total Tasks Completed**: 3
-- **Actions by Type**: Social_Post (3)
+- **Total Tasks Completed**: 6
+- **Actions by Type**: Unknown (6)
 
 </details>
 

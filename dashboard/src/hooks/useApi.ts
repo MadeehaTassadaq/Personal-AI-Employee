@@ -41,7 +41,7 @@ export interface AuditEntry {
   level: string;
   platform: string;
   actor: string;
-  details?: Record<string, any>;
+  details: Record<string, any>;
   task_id?: string;
   file_path?: string;
   duration_ms?: number;
@@ -70,8 +70,7 @@ export interface PlatformStatus {
 export function useApi() {
   const [status, setStatus] = useState<SystemStatus>({
     system: 'stopped',
-    watchers: {},
-    pending_approvals: 0
+    watchers: {}
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -143,7 +142,6 @@ export function useApi() {
       const response = await fetch(`${API_BASE}/vault/folder/${folder}`);
       if (!response.ok) throw new Error(`Failed to fetch ${folder}`);
       const data = await response.json();
-      // Map the backend response to match our interface expectations
       const files = data.files || [];
       return files.map((file: any) => ({
         filename: file.filename,
@@ -153,7 +151,7 @@ export function useApi() {
         priority: file.priority,
         status: file.status,
         title: file.title,
-        modified: file.created // Map created to modified for display
+        modified: file.created
       }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -167,10 +165,8 @@ export function useApi() {
       if (!response.ok) throw new Error('Failed to fetch approvals');
       const data = await response.json();
       const files = data.files || [];
-
-      // Map the backend TaskFile objects to ApprovalItem interface
       return files.map((file: any) => ({
-        id: file.filename || file.id || '',  // Use filename as id
+        id: file.filename || file.id || '',
         title: file.title || file.filename || 'Untitled',
         type: file.type || 'unknown',
         created: file.created || new Date().toISOString(),
@@ -184,7 +180,6 @@ export function useApi() {
 
   const approveItem = async (id: string) => {
     try {
-      // The backend expects the filename in the request body, not in the URL
       const response = await fetch(`${API_BASE}/approvals/approve`, {
         method: 'POST',
         headers: {
@@ -204,7 +199,6 @@ export function useApi() {
 
   const rejectItem = async (id: string) => {
     try {
-      // The backend expects the filename in the request body, not in the URL
       const response = await fetch(`${API_BASE}/approvals/approve`, {
         method: 'POST',
         headers: {
@@ -318,6 +312,7 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to start Ralph');
       }
+      await fetchStatus();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       throw err;
@@ -333,6 +328,7 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to stop Ralph');
       }
+      await fetchStatus();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       throw err;
@@ -348,6 +344,7 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to pause Ralph');
       }
+      await fetchStatus();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       throw err;
@@ -363,17 +360,12 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to resume Ralph');
       }
+      await fetchStatus();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       throw err;
     }
   };
-
-  useEffect(() => {
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 5000);
-    return () => clearInterval(interval);
-  }, [fetchStatus]);
 
   // Social Media API methods
   const fetchSocialStats = async () => {
@@ -432,7 +424,11 @@ export function useApi() {
     }
   };
 
-  const fetchOdooInvoices = async (params: { state?: string; type?: string; limit?: number } = {}) => {
+  const fetchOdooInvoices = async (params: {
+    state?: string;
+    type?: string;
+    limit?: number;
+  } = {}) => {
     try {
       const searchParams = new URLSearchParams();
       if (params.state) searchParams.set('state', params.state);
@@ -463,7 +459,7 @@ export function useApi() {
   const fetchTodayEvents = async () => {
     try {
       const response = await fetch(`${API_BASE}/calendar/today`);
-      if (!response.ok) throw new Error('Failed to fetch today\'s events');
+      if (!response.ok) throw new Error("Failed to fetch today's events");
       return await response.json();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -498,7 +494,7 @@ export function useApi() {
           platform,
           content,
           image_url: options?.imageUrl,
-          link_url: options?.link,
+          link: options?.link,
           recipient: options?.recipient,
           subject: options?.subject
         })
@@ -507,7 +503,31 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to submit post');
       }
-      await fetchStatus(); // Refresh to update pending_approvals count
+      await fetchStatus();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  // AI Content Generation
+  const generateAIContent = async (params: {
+    platform: string;
+    context: string;
+    options?: { recipient?: string; subject?: string };
+  }) => {
+    try {
+      const response = await fetch(`${API_BASE}/ai/generate-content`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params)
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.detail || 'Failed to generate content');
+      }
       return await response.json();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -543,6 +563,12 @@ export function useApi() {
     }
   };
 
+  useEffect(() => {
+    fetchStatus();
+    const interval = setInterval(fetchStatus, 5000);
+    return () => clearInterval(interval);
+  }, [fetchStatus]);
+
   return {
     status,
     error,
@@ -558,31 +584,25 @@ export function useApi() {
     rejectItem,
     fetchActivity,
     triggerProcessing,
-    // Gold tier - Audit
     fetchAudit,
     fetchAuditStats,
     fetchAuditAnalytics,
-    // Gold tier - Ralph Wiggum
     fetchRalphStatus,
     startRalph,
     stopRalph,
     pauseRalph,
     resumeRalph,
-    // Gold tier - Social Media
     fetchSocialStats,
     fetchSocialPlatformStatus,
     fetchSocialHealth,
-    // Gold tier - Odoo
     fetchOdooStatus,
     fetchFinancialSummary,
     fetchOdooInvoices,
-    // Gold tier - Business Audit
-    fetchTaskStats,
-    // Calendar
     fetchCalendarStatus,
     fetchTodayEvents,
     fetchCalendarEvents,
-    // Compose
-    submitPost
+    submitPost,
+    fetchTaskStats,
+    generateAIContent
   };
 }

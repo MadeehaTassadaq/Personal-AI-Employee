@@ -15,6 +15,7 @@ import httpx
 
 from .audit_logger import AuditLogger, AuditAction, AuditLevel, get_audit_logger
 from .error_recovery import ErrorRecoveryService, RetryConfig, with_retry, get_error_recovery
+from .ai_reasoning import AIReasoningService, get_ai_reasoning_service
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +105,7 @@ class RalphWiggum:
         self._loop_task: Optional[asyncio.Task] = None
         self._audit = get_audit_logger()
         self._error_recovery = get_error_recovery()
+        self._ai_reasoning = get_ai_reasoning_service(vault_path)
         self._callbacks: list[Callable[[str, Any], None]] = []
 
     def on_event(self, callback: Callable[[str, Any], None]) -> None:
@@ -461,8 +463,16 @@ class RalphWiggum:
             return "email"
         if any(w in text_lower for w in ["whatsapp", "message"]):
             return "whatsapp"
-        if any(w in text_lower for w in ["linkedin", "post"]):
+        if any(w in text_lower for w in ["linkedin"]):
             return "linkedin"
+        if any(w in text_lower for w in ["facebook", "fb post"]):
+            return "facebook"
+        if any(w in text_lower for w in ["instagram", "ig post", "insta"]):
+            return "instagram"
+        if any(w in text_lower for w in ["twitter", "tweet", "x post"]):
+            return "twitter"
+        if any(w in text_lower for w in ["social", "social media", "post"]):
+            return "social"
         if any(w in text_lower for w in ["read", "review", "check"]):
             return "read"
         if any(w in text_lower for w in ["write", "create", "draft"]):
@@ -538,6 +548,10 @@ class RalphWiggum:
             "email": self._handle_email_action,
             "whatsapp": self._handle_whatsapp_action,
             "linkedin": self._handle_linkedin_action,
+            "facebook": self._handle_facebook_action,
+            "instagram": self._handle_instagram_action,
+            "twitter": self._handle_twitter_action,
+            "social": self._handle_social_action,
             "read": self._handle_read_action,
             "write": self._handle_write_action,
             "organize": self._handle_organize_action,
@@ -560,13 +574,43 @@ class RalphWiggum:
             return f"Completed: {step.description}"
 
     async def _handle_email_action(self, step: TaskStep) -> str:
-        """Handle email-related actions by creating approval file."""
-        # Extract email details from step description
-        description = step.description.lower()
+        """Handle email-related actions by creating approval file with AI-generated content."""
+        # Get full task context if available
+        task = self.state.current_task
+        if task:
+            context = self._ai_reasoning.parse_task_context(
+                task.content, Path(task.file_path)
+            )
+            # Override with step-specific info
+            context.description = step.description
+        else:
+            # Create minimal context from step
+            from .ai_reasoning import TaskContext
+            context = TaskContext(
+                task_id="step_task",
+                task_type="email",
+                title=step.description,
+                platform="email",
+                description=step.description,
+            )
 
-        # Create approval file for email
+        # Generate content using AI
+        generated = await self._ai_reasoning.generate_email_content(context)
+
+        # Create approval file with AI-generated content
         timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
         approval_file = self.vault_path / "Pending_Approval" / f"email_{timestamp}.md"
+
+        # Ensure Pending_Approval directory exists
+        approval_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # Determine recipient display
+        recipient_display = context.recipient or '[NEEDS RECIPIENT - add email address]'
+        subject_display = generated.subject or context.subject or '[NEEDS SUBJECT]'
+
+        # Build confidence indicator
+        confidence_pct = int(generated.confidence * 100)
+        fallback_note = ' (Fallback template used - Claude unavailable)' if generated.fallback_used else ''
 
         content = f"""---
 type: email
@@ -574,6 +618,10 @@ platform: email
 status: pending_approval
 created: {datetime.now().isoformat()}
 action: {step.description}
+recipient: {recipient_display}
+subject: "{subject_display}"
+ai_generated: true
+ai_confidence: {generated.confidence}
 ---
 
 # Email Action Request
@@ -581,17 +629,21 @@ action: {step.description}
 ## Description
 {step.description}
 
-## Action Required
-Please review and approve this email action. Move this file to `Approved/` to execute, or to `Done/` to reject.
-
-### Content
-[Add email content here]
-
-### Recipient
-[Add recipient email here]
+## AI-Generated Content
 
 ### Subject
-[Add subject here]
+{subject_display}
+
+### Body
+{generated.content}
+
+### Recipient
+{recipient_display}
+
+## Review Required
+- **Confidence**: {confidence_pct}%{fallback_note}
+- Edit content as needed before approving
+- Move this file to `Approved/` to send, or to `Done/` to reject
 """
 
         approval_file.write_text(content)
@@ -600,15 +652,53 @@ Please review and approve this email action. Move this file to `Approved/` to ex
             platform="email",
             actor="ralph",
             file_path=str(approval_file),
-            details={"description": step.description}
+            details={
+                "description": step.description,
+                "ai_generated": True,
+                "ai_confidence": generated.confidence,
+                "fallback_used": generated.fallback_used,
+            }
         )
 
-        return f"Email approval request created: {approval_file.name}"
+        return f"Email approval request created with AI-generated content: {approval_file.name}"
 
     async def _handle_whatsapp_action(self, step: TaskStep) -> str:
-        """Handle WhatsApp-related actions by creating approval file."""
+        """Handle WhatsApp-related actions by creating approval file with AI-generated content."""
+        # Get full task context if available
+        task = self.state.current_task
+        if task:
+            context = self._ai_reasoning.parse_task_context(
+                task.content, Path(task.file_path)
+            )
+            # Override with step-specific info
+            context.description = step.description
+        else:
+            # Create minimal context from step
+            from .ai_reasoning import TaskContext
+            context = TaskContext(
+                task_id="step_task",
+                task_type="whatsapp",
+                title=step.description,
+                platform="whatsapp",
+                description=step.description,
+            )
+
+        # Generate content using AI
+        generated = await self._ai_reasoning.generate_whatsapp_message(context)
+
+        # Create approval file with AI-generated content
         timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
         approval_file = self.vault_path / "Pending_Approval" / f"whatsapp_{timestamp}.md"
+
+        # Ensure Pending_Approval directory exists
+        approval_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # Determine recipient display
+        recipient_display = context.recipient or '[NEEDS RECIPIENT - add phone number with country code, e.g., +1234567890]'
+
+        # Build confidence indicator
+        confidence_pct = int(generated.confidence * 100)
+        fallback_note = ' (Fallback template used - Claude unavailable)' if generated.fallback_used else ''
 
         content = f"""---
 type: whatsapp
@@ -616,6 +706,9 @@ platform: whatsapp
 status: pending_approval
 created: {datetime.now().isoformat()}
 action: {step.description}
+phone: "{recipient_display}"
+ai_generated: true
+ai_confidence: {generated.confidence}
 ---
 
 # WhatsApp Message Request
@@ -623,14 +716,18 @@ action: {step.description}
 ## Description
 {step.description}
 
-## Action Required
-Please review and approve this WhatsApp message. Move this file to `Approved/` to send, or to `Done/` to reject.
+## AI-Generated Content
 
-### Content
-[Add message content here]
+### Message
+{generated.content}
 
 ### Recipient
-[Add phone number with country code, e.g., +1234567890]
+{recipient_display}
+
+## Review Required
+- **Confidence**: {confidence_pct}%{fallback_note}
+- Edit content as needed before approving
+- Move this file to `Approved/` to send, or to `Done/` to reject
 """
 
         approval_file.write_text(content)
@@ -639,15 +736,53 @@ Please review and approve this WhatsApp message. Move this file to `Approved/` t
             platform="whatsapp",
             actor="ralph",
             file_path=str(approval_file),
-            details={"description": step.description}
+            details={
+                "description": step.description,
+                "ai_generated": True,
+                "ai_confidence": generated.confidence,
+                "fallback_used": generated.fallback_used,
+            }
         )
 
-        return f"WhatsApp approval request created: {approval_file.name}"
+        return f"WhatsApp approval request created with AI-generated content: {approval_file.name}"
 
     async def _handle_linkedin_action(self, step: TaskStep) -> str:
-        """Handle LinkedIn-related actions by creating approval file."""
+        """Handle LinkedIn-related actions by creating approval file with AI-generated content."""
+        # Get full task context if available
+        task = self.state.current_task
+        if task:
+            context = self._ai_reasoning.parse_task_context(
+                task.content, Path(task.file_path)
+            )
+            # Override with step-specific info
+            context.description = step.description
+        else:
+            # Create minimal context from step
+            from .ai_reasoning import TaskContext
+            context = TaskContext(
+                task_id="step_task",
+                task_type="social",
+                title=step.description,
+                platform="linkedin",
+                description=step.description,
+            )
+
+        # Generate content using AI
+        generated = await self._ai_reasoning.generate_social_post(context, "linkedin")
+
+        # Create approval file with AI-generated content
         timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
         approval_file = self.vault_path / "Pending_Approval" / f"linkedin_{timestamp}.md"
+
+        # Ensure Pending_Approval directory exists
+        approval_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # Format hashtags
+        hashtags_display = ' '.join([f'#{tag.lstrip("#")}' for tag in generated.hashtags]) if generated.hashtags else '[Add relevant hashtags]'
+
+        # Build confidence indicator
+        confidence_pct = int(generated.confidence * 100)
+        fallback_note = ' (Fallback template used - Claude unavailable)' if generated.fallback_used else ''
 
         content = f"""---
 type: social
@@ -655,6 +790,8 @@ platform: linkedin
 status: pending_approval
 created: {datetime.now().isoformat()}
 action: {step.description}
+ai_generated: true
+ai_confidence: {generated.confidence}
 ---
 
 # LinkedIn Post Request
@@ -662,14 +799,21 @@ action: {step.description}
 ## Description
 {step.description}
 
-## Action Required
-Please review and approve this LinkedIn post. Move this file to `Approved/` to publish, or to `Done/` to reject.
+## AI-Generated Content
 
-### Content
-[Add your LinkedIn post content here]
+### Post Content
+{generated.content}
+
+### Hashtags
+{hashtags_display}
 
 ### Link URL (optional)
 [Add URL to share, if any]
+
+## Review Required
+- **Confidence**: {confidence_pct}%{fallback_note}
+- Edit content as needed before approving
+- Move this file to `Approved/` to publish, or to `Done/` to reject
 """
 
         approval_file.write_text(content)
@@ -678,10 +822,303 @@ Please review and approve this LinkedIn post. Move this file to `Approved/` to p
             platform="linkedin",
             actor="ralph",
             file_path=str(approval_file),
-            details={"description": step.description}
+            details={
+                "description": step.description,
+                "ai_generated": True,
+                "ai_confidence": generated.confidence,
+                "fallback_used": generated.fallback_used,
+            }
         )
 
-        return f"LinkedIn approval request created: {approval_file.name}"
+        return f"LinkedIn approval request created with AI-generated content: {approval_file.name}"
+
+    async def _handle_facebook_action(self, step: TaskStep) -> str:
+        """Handle Facebook-related actions by creating approval file with AI-generated content."""
+        # Get full task context if available
+        task = self.state.current_task
+        if task:
+            context = self._ai_reasoning.parse_task_context(
+                task.content, Path(task.file_path)
+            )
+            # Override with step-specific info
+            context.description = step.description
+        else:
+            # Create minimal context from step
+            from .ai_reasoning import TaskContext
+            context = TaskContext(
+                task_id="step_task",
+                task_type="social",
+                title=step.description,
+                platform="facebook",
+                description=step.description,
+            )
+
+        # Generate content using AI
+        generated = await self._ai_reasoning.generate_social_post(context, "facebook")
+
+        # Create approval file with AI-generated content
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+        approval_file = self.vault_path / "Pending_Approval" / f"facebook_{timestamp}.md"
+
+        # Ensure Pending_Approval directory exists
+        approval_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # Format hashtags (Facebook typically doesn't use many hashtags)
+        hashtags_display = ' '.join([f'#{tag.lstrip("#")}' for tag in generated.hashtags]) if generated.hashtags else ''
+
+        # Build confidence indicator
+        confidence_pct = int(generated.confidence * 100)
+        fallback_note = ' (Fallback template used - Claude unavailable)' if generated.fallback_used else ''
+
+        content = f"""---
+type: social
+platform: facebook
+status: pending_approval
+created: {datetime.now().isoformat()}
+action: {step.description}
+ai_generated: true
+ai_confidence: {generated.confidence}
+---
+
+# Facebook Post Request
+
+## Description
+{step.description}
+
+## AI-Generated Content
+
+### Post Content
+{generated.content}
+
+### Hashtags (optional)
+{hashtags_display}
+
+### Link URL (optional)
+[Add URL to share, if any]
+
+## Review Required
+- **Confidence**: {confidence_pct}%{fallback_note}
+- Edit content as needed before approving
+- Move this file to `Approved/` to publish, or to `Done/` to reject
+"""
+
+        approval_file.write_text(content)
+        self._audit.log(
+            AuditAction.APPROVAL_CREATED,
+            platform="facebook",
+            actor="ralph",
+            file_path=str(approval_file),
+            details={
+                "description": step.description,
+                "ai_generated": True,
+                "ai_confidence": generated.confidence,
+                "fallback_used": generated.fallback_used,
+            }
+        )
+
+        return f"Facebook approval request created with AI-generated content: {approval_file.name}"
+
+    async def _handle_instagram_action(self, step: TaskStep) -> str:
+        """Handle Instagram-related actions by creating approval file with AI-generated content."""
+        # Get full task context if available
+        task = self.state.current_task
+        if task:
+            context = self._ai_reasoning.parse_task_context(
+                task.content, Path(task.file_path)
+            )
+            # Override with step-specific info
+            context.description = step.description
+        else:
+            # Create minimal context from step
+            from .ai_reasoning import TaskContext
+            context = TaskContext(
+                task_id="step_task",
+                task_type="social",
+                title=step.description,
+                platform="instagram",
+                description=step.description,
+            )
+
+        # Generate content using AI
+        generated = await self._ai_reasoning.generate_social_post(context, "instagram")
+
+        # Create approval file with AI-generated content
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+        approval_file = self.vault_path / "Pending_Approval" / f"instagram_{timestamp}.md"
+
+        # Ensure Pending_Approval directory exists
+        approval_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # Format hashtags (Instagram can have up to 30)
+        hashtags_display = ' '.join([f'#{tag.lstrip("#")}' for tag in generated.hashtags[:30]]) if generated.hashtags else '[Add up to 30 relevant hashtags]'
+
+        # Build confidence indicator
+        confidence_pct = int(generated.confidence * 100)
+        fallback_note = ' (Fallback template used - Claude unavailable)' if generated.fallback_used else ''
+
+        content = f"""---
+type: social
+platform: instagram
+status: pending_approval
+created: {datetime.now().isoformat()}
+action: {step.description}
+ai_generated: true
+ai_confidence: {generated.confidence}
+---
+
+# Instagram Post Request
+
+## Description
+{step.description}
+
+## AI-Generated Content
+
+### Caption
+{generated.content}
+
+### Hashtags
+{hashtags_display}
+
+### Image Requirements
+**Note:** Instagram posts require an image URL.
+Add the image URL below before approving:
+```
+image_url: [PUBLIC_IMAGE_URL_HERE]
+```
+
+### Link URL (optional)
+[Add URL for link sticker, if any]
+
+## Review Required
+- **Confidence**: {confidence_pct}%{fallback_note}
+- **CRITICAL:** Add a public image URL before approving
+- Edit content as needed before approving
+- Move this file to `Approved/` to publish, or to `Done/` to reject
+"""
+
+        approval_file.write_text(content)
+        self._audit.log(
+            AuditAction.APPROVAL_CREATED,
+            platform="instagram",
+            actor="ralph",
+            file_path=str(approval_file),
+            details={
+                "description": step.description,
+                "ai_generated": True,
+                "ai_confidence": generated.confidence,
+                "fallback_used": generated.fallback_used,
+            }
+        )
+
+        return f"Instagram approval request created with AI-generated content: {approval_file.name}"
+
+    async def _handle_twitter_action(self, step: TaskStep) -> str:
+        """Handle Twitter/X-related actions by creating approval file with AI-generated content."""
+        # Get full task context if available
+        task = self.state.current_task
+        if task:
+            context = self._ai_reasoning.parse_task_context(
+                task.content, Path(task.file_path)
+            )
+            # Override with step-specific info
+            context.description = step.description
+        else:
+            # Create minimal context from step
+            from .ai_reasoning import TaskContext
+            context = TaskContext(
+                task_id="step_task",
+                task_type="social",
+                title=step.description,
+                platform="twitter",
+                description=step.description,
+            )
+
+        # Generate content using AI
+        generated = await self._ai_reasoning.generate_social_post(context, "twitter")
+
+        # Create approval file with AI-generated content
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H%M%S')
+        approval_file = self.vault_path / "Pending_Approval" / f"twitter_{timestamp}.md"
+
+        # Ensure Pending_Approval directory exists
+        approval_file.parent.mkdir(parents=True, exist_ok=True)
+
+        # Check character count
+        char_count = len(generated.content)
+        char_status = "✓" if char_count <= 280 else "⚠ OVER LIMIT"
+
+        # Format hashtags (Twitter typically uses 1-2 hashtags)
+        hashtags_display = ' '.join([f'#{tag.lstrip("#")}' for tag in generated.hashtags[:2]]) if generated.hashtags else ''
+
+        # Build confidence indicator
+        confidence_pct = int(generated.confidence * 100)
+        fallback_note = ' (Fallback template used - Claude unavailable)' if generated.fallback_used else ''
+
+        content = f"""---
+type: social
+platform: twitter
+status: pending_approval
+created: {datetime.now().isoformat()}
+action: {step.description}
+ai_generated: true
+ai_confidence: {generated.confidence}
+---
+
+# Twitter/X Post Request
+
+## Description
+{step.description}
+
+## AI-Generated Content
+
+### Tweet
+{generated.content}
+
+### Character Count
+{char_count}/280 {char_status}
+
+### Hashtags (optional)
+{hashtags_display}
+
+## Review Required
+- **Confidence**: {confidence_pct}%{fallback_note}
+- Edit content as needed before approving
+- Move this file to `Approved/` to publish, or to `Done/` to reject
+"""
+
+        approval_file.write_text(content)
+        self._audit.log(
+            AuditAction.APPROVAL_CREATED,
+            platform="twitter",
+            actor="ralph",
+            file_path=str(approval_file),
+            details={
+                "description": step.description,
+                "ai_generated": True,
+                "ai_confidence": generated.confidence,
+                "fallback_used": generated.fallback_used,
+                "char_count": char_count,
+            }
+        )
+
+        return f"Twitter approval request created with AI-generated content: {approval_file.name}"
+
+    async def _handle_social_action(self, step: TaskStep) -> str:
+        """Handle generic social media actions by detecting platform."""
+        description = step.description.lower()
+
+        # Detect platform from description
+        if 'linkedin' in description:
+            return await self._handle_linkedin_action(step)
+        elif 'facebook' in description or 'fb ' in description:
+            return await self._handle_facebook_action(step)
+        elif 'instagram' in description or 'ig ' in description:
+            return await self._handle_instagram_action(step)
+        elif 'twitter' in description or 'tweet' in description:
+            return await self._handle_twitter_action(step)
+        else:
+            # Default to LinkedIn for generic social posts
+            return await self._handle_linkedin_action(step)
 
     async def _handle_read_action(self, step: TaskStep) -> str:
         """Handle read/review-related actions by reading vault files."""
@@ -815,8 +1252,16 @@ Created by Ralph Wiggum automated task processing.
             return await self._handle_email_action(step)
         elif any(term in description for term in ['whatsapp', 'message', 'text']):
             return await self._handle_whatsapp_action(step)
-        elif any(term in description for term in ['linkedin', 'post', 'social']):
+        elif any(term in description for term in ['linkedin', 'linked in']):
             return await self._handle_linkedin_action(step)
+        elif any(term in description for term in ['facebook', 'fb post', 'fb ']):
+            return await self._handle_facebook_action(step)
+        elif any(term in description for term in ['instagram', 'ig post', 'insta']):
+            return await self._handle_instagram_action(step)
+        elif any(term in description for term in ['twitter', 'tweet', 'x post']):
+            return await self._handle_twitter_action(step)
+        elif any(term in description for term in ['social', 'social media', 'post']):
+            return await self._handle_social_action(step)
         elif any(term in description for term in ['read', 'review', 'check']):
             return await self._handle_read_action(step)
         elif any(term in description for term in ['write', 'create', 'draft']):

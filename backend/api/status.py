@@ -52,6 +52,7 @@ async def get_status():
     inbox_count = count_files("Inbox")
     needs_action_count = count_files("Needs_Action")
     pending_count = count_files("Pending_Approval")
+    approved_count = count_files("Approved")
 
     # Convert watcher statuses
     watchers = {}
@@ -76,7 +77,8 @@ async def get_status():
         watchers=watchers,
         pending_approvals=pending_count,
         inbox_count=inbox_count,
-        needs_action_count=needs_action_count
+        needs_action_count=needs_action_count,
+        approved_count=approved_count
     )
 
 
@@ -99,3 +101,61 @@ async def stop_system():
         state["watchers"][watcher] = "stopped"
     save_state(state)
     return {"status": "stopped", "message": "System stopped"}
+
+
+@router.get("/credentials")
+async def check_credentials():
+    """Check which platforms have properly configured credentials."""
+    credentials_dir = Path("./credentials")
+
+    return {
+        "dry_run": os.getenv("DRY_RUN", "true").lower() == "true",
+        "platforms": {
+            "facebook": {
+                "configured": bool(os.getenv("FACEBOOK_PAGE_ACCESS_TOKEN") and os.getenv("FACEBOOK_PAGE_ID")),
+                "required_env_vars": ["FACEBOOK_PAGE_ACCESS_TOKEN", "FACEBOOK_PAGE_ID"]
+            },
+            "linkedin": {
+                "configured": bool(os.getenv("LINKEDIN_ACCESS_TOKEN")),
+                "required_env_vars": ["LINKEDIN_ACCESS_TOKEN"]
+            },
+            "instagram": {
+                "configured": bool(os.getenv("INSTAGRAM_ACCESS_TOKEN") and os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID")),
+                "required_env_vars": ["INSTAGRAM_ACCESS_TOKEN", "INSTAGRAM_BUSINESS_ACCOUNT_ID"]
+            },
+            "twitter": {
+                "configured": bool(
+                    os.getenv("TWITTER_API_KEY") and
+                    os.getenv("TWITTER_API_SECRET") and
+                    os.getenv("TWITTER_ACCESS_TOKEN") and
+                    os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
+                ),
+                "required_env_vars": [
+                    "TWITTER_API_KEY",
+                    "TWITTER_API_SECRET",
+                    "TWITTER_ACCESS_TOKEN",
+                    "TWITTER_ACCESS_TOKEN_SECRET"
+                ]
+            },
+            "whatsapp": {
+                "configured": (credentials_dir / "whatsapp_session").exists(),
+                "required_files": ["./credentials/whatsapp_session"],
+                "note": "Run WhatsApp MCP server once and scan QR code to establish session"
+            },
+            "gmail": {
+                "configured": (credentials_dir / "gmail_token.json").exists(),
+                "required_files": ["./credentials/gmail_token.json"],
+                "note": "Run Gmail OAuth flow to generate token file"
+            },
+            "calendar": {
+                "configured": (credentials_dir / "calendar_token.json").exists(),
+                "required_files": ["./credentials/calendar_token.json"],
+                "note": "Run Calendar OAuth flow to generate token file"
+            }
+        },
+        "approved_folder": {
+            "path": str(VAULT_PATH / "Approved"),
+            "file_count": count_files("Approved"),
+            "files_awaiting_execution": count_files("Approved")
+        }
+    }

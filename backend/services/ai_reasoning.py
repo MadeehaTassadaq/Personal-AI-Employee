@@ -10,16 +10,13 @@ import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Optional
+from typing import Optional
 
 import httpx
 import yaml
+from openai import AsyncOpenAI
 
-from .error_recovery import (
-    ErrorRecoveryService,
-    RetryConfig,
-    get_error_recovery,
-)
+from .error_recovery import get_error_recovery
 
 logger = logging.getLogger(__name__)
 
@@ -57,12 +54,18 @@ class AIReasoningService:
 
     Handles context extraction from vault tasks and generates
     intelligent, pre-filled content for approval workflows.
+
+    Supports both Claude (Anthropic) and OpenAI APIs.
     """
 
     # Claude API configuration
     CLAUDE_API_URL = "https://api.anthropic.com/v1/messages"
     CLAUDE_MODEL = "claude-3-5-sonnet-20241022"
     CLAUDE_API_VERSION = "2023-06-01"
+
+    # OpenAI API configuration
+    OPENAI_MODEL = "gpt-4o-mini"  # or "gpt-4o", "gpt-4-turbo", etc.
+
     MAX_TOKENS = 1024
     API_TIMEOUT = 30.0
 
@@ -106,6 +109,7 @@ class AIReasoningService:
         self.vault_path = Path(vault_path)
         self._error_recovery = get_error_recovery()
         self._error_recovery.register_service("claude_api")
+        self._error_recovery.register_service("openai_api")
         self._company_context: Optional[dict] = None
 
     def parse_task_context(self, task_content: str, task_path: Path) -> TaskContext:
@@ -572,23 +576,97 @@ Best regards,
     async def _call_claude_api(
         self, user_prompt: str, system_prompt: str
     ) -> Optional[str]:
-        """Call Claude API for content generation.
+        """Call AI API for content generation.
+
+        Supports both Claude (Anthropic) and OpenAI APIs.
+        Prefers OpenAI if OPENAI_API_KEY is set, otherwise falls back to Claude.
 
         Args:
             user_prompt: The user message
             system_prompt: The system instructions
 
         Returns:
-            Claude's response text or None if failed
+            AI's response text or None if failed
         """
-        # Check API key
-        api_key = os.getenv("CLAUDE_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
-        if not api_key:
-            logger.warning(
-                "CLAUDE_API_KEY/ANTHROPIC_API_KEY not set, using fallback"
-            )
+        # Try OpenAI first if configured
+        openai_key = os.getenv("OPENAI_API_KEY")
+        if openai_key:
+            return await self._call_openai_api(user_prompt, system_prompt, openai_key)
+
+        # Fall back to Claude
+        claude_key = os.getenv("CLAUDE_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
+        if claude_key:
+            return await self._call_anthropic_api(user_prompt, system_prompt, claude_key)
+
+        logger.warning("No API key configured (OPENAI_API_KEY or CLAUDE_API_KEY), using fallback")
+        return None
+
+    async def _call_openai_api(
+        self, user_prompt: str, system_prompt: str, api_key: str
+    ) -> Optional[str]:
+        """Call OpenAI API for content generation.
+
+        Args:
+            user_prompt: The user message
+            system_prompt: The system instructions
+            api_key: OpenAI API key
+
+        Returns:
+            OpenAI's response text or None if failed
+        """
+        # Check circuit breaker
+        if self._error_recovery.is_circuit_open("openai_api"):
+            logger.warning("OpenAI API circuit breaker open, using fallback")
             return None
 
+        try:
+            client = AsyncOpenAI(
+                api_key=api_key,
+                timeout=self.API_TIMEOUT,
+            )
+
+            response = await client.chat.completions.create(
+                model=self.OPENAI_MODEL,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+                max_tokens=self.MAX_TOKENS,
+                temperature=0.7,
+            )
+
+            if response and response.choices:
+                text_response = response.choices[0].message.content or ""
+                self._error_recovery.record_success("openai_api")
+
+                # Extract JSON from response (may be wrapped in markdown)
+                json_match = re.search(r"\{.*\}", text_response, re.DOTALL)
+                if json_match:
+                    return json_match.group()
+                return text_response
+
+            logger.error(f"OpenAI API error: No response content")
+            self._error_recovery.record_failure("openai_api")
+            return None
+
+        except Exception as e:
+            logger.error(f"Error calling OpenAI API: {e}")
+            self._error_recovery.record_failure("openai_api")
+            return None
+
+    async def _call_anthropic_api(
+        self, user_prompt: str, system_prompt: str, api_key: str
+    ) -> Optional[str]:
+        """Call Anthropic Claude API for content generation.
+
+        Args:
+            user_prompt: The user message
+            system_prompt: The system instructions
+            api_key: Anthropic API key
+
+        Returns:
+            Claude's response text or None if failed
+        """
         # Check circuit breaker
         if self._error_recovery.is_circuit_open("claude_api"):
             logger.warning("Claude API circuit breaker open, using fallback")
