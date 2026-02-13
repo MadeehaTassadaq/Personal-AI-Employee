@@ -5,8 +5,9 @@ import { AuditLog } from './components/AuditLog';
 import { SocialMediaDashboard } from './components/SocialMediaDashboard';
 import { ComposePanel } from './components/ComposePanel';
 import { CalendarView } from './components/CalendarView';
+import HealthcareView from './components/healthcare/HealthcareView';
 
-type TabView = 'dashboard' | 'inbox' | 'approvals' | 'social' | 'calendar' | 'compose' | 'audit' | 'settings';
+type TabView = 'dashboard' | 'inbox' | 'approvals' | 'social' | 'calendar' | 'compose' | 'audit' | 'healthcare' | 'settings';
 
 interface NavItem {
   id: TabView;
@@ -19,13 +20,15 @@ function App() {
   const {
     status,
     error,
-    isDemo,
     startAllWatchers,
     stopAllWatchers,
     fetchActivity,
     fetchAudit,
     fetchSocialStats,
     fetchSocialPlatformStatus,
+    fetchCalendarStatus,
+    fetchTodayEvents,
+    fetchCalendarEvents,
     submitPost
   } = useApi();
 
@@ -47,6 +50,7 @@ function App() {
     { id: 'inbox', label: 'Inbox', icon: '📥', badge: status.inbox_count || 0 },
     { id: 'approvals', label: 'Approvals', icon: '✅', badge: status.pending_approvals || 0 },
     { id: 'social', label: 'Social Media', icon: '📱' },
+    { id: 'healthcare', label: 'Healthcare', icon: '🏥' },
     { id: 'calendar', label: 'Calendar', icon: '📅' },
     { id: 'compose', label: 'Compose', icon: '✏️' },
     { id: 'audit', label: 'Audit Log', icon: '📋' },
@@ -138,11 +142,6 @@ function App() {
                 })}
               </div>
             </div>
-            {isDemo && (
-              <div className="demo-badge">
-                🎭 Demo Mode
-              </div>
-            )}
           </div>
         </header>
 
@@ -244,7 +243,7 @@ function App() {
               {/* Recent Activity */}
               <div className="activity-card">
                 <h2 className="card-title">Recent Activity</h2>
-                <UnifiedFeed fetchActivity={fetchActivity} limit={5} />
+                <UnifiedFeed fetchActivity={fetchActivity} />
               </div>
             </div>
           )}
@@ -280,8 +279,14 @@ function App() {
             />
           )}
 
+          {activeTab === 'healthcare' && <HealthcareView />}
+
           {activeTab === 'calendar' && (
-            <CalendarView />
+            <CalendarView
+              fetchTodayEvents={fetchTodayEvents}
+              fetchEvents={fetchCalendarEvents}
+              fetchCalendarStatus={fetchCalendarStatus}
+            />
           )}
 
           {activeTab === 'compose' && (
@@ -303,7 +308,7 @@ function App() {
                 </div>
                 <div className="setting-item">
                   <label>Dry Run Mode</label>
-                  <span className="status-badge">{isDemo ? 'Enabled' : 'Disabled'}</span>
+                  <span className="status-badge">{'Enabled'}</span>
                 </div>
                 <div className="setting-item">
                   <label>Auto-start Watchers</label>
