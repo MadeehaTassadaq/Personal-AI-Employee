@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Appointment List View -->
+        <record id="view_appointment_tree" model="ir.ui.view">
+            <field name="name">medical.appointment.tree</field>
+            <field name="model">medical.appointment</field>
+            <field name="arch" type="xml">
+                <tree string="Appointments" decoration-success="status == 'completed'"
+                      decoration-warning="status in ['scheduled', 'confirmed']"
+                      decoration-danger="status in ['cancelled', 'no_show']"
+                      decoration-info="status == 'in_progress'">
+                    <field name="appointment_date"/>
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="appointment_type"/>
+                    <field name="status"/>
+                    <field name="reminder_sent"/>
+                    <button name="action_confirm" string="Confirm"
+                            type="object" class="btn-link"
+                            attrs="{'invisible': [('status', '!=', 'scheduled')]}"/>
+                    <button name="action_complete" string="Complete"
+                            type="object" class="btn-link"
+                            attrs="{'invisible': [('status', '=', 'completed')]}"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Appointment Form View -->
+        <record id="view_appointment_form" model="ir.ui.view">
+            <field name="name">medical.appointment.form</field>
+            <field name="model">medical.appointment</field>
+            <field name="arch" type="xml">
+                <form string="Appointment">
+                    <header>
+                        <button name="action_confirm" string="Confirm"
+                                type="object" class="btn-primary"
+                                attrs="{'invisible': [('status', '!=', 'scheduled')]}"/>
+                        <button name="action_in_progress" string="Start"
+                                type="object" class="btn-primary"
+                                attrs="{'invisible': [('status', '!=', 'confirmed')]}"/>
+                        <button name="action_complete" string="Complete"
+                                type="object" class="btn-success"
+                                attrs="{'invisible': [('status', '=', 'completed')]}"/>
+                        <button name="action_cancel" string="Cancel"
+                                type="object" class="btn-danger"
+                                attrs="{'invisible': [('status', 'in', ['completed', 'cancelled'])]}"/>
+                        <field name="status" widget="statusbar"
+                               statusbar_visible="scheduled,confirmed,in_progress,completed"
+                               statusbar_colors='{"scheduled":"blue","confirmed":"green","in_progress":"orange","completed":"gray","cancelled":"red","no_show":"red"}'/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="patient_id" required="1"/>
+                                <field name="doctor_id" required="1"/>
+                                <field name="appointment_date" required="1"/>
+                                <field name="duration"/>
+                            </group>
+                            <group>
+                                <field name="appointment_type" required="1"/>
+                                <field name="reminder_sent" readonly="1"/>
+                                <field name="reminder_method"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Visit Details">
+                                <group>
+                                    <field name="chief_complaint" placeholder="Reason for visit..."/>
+                                    <field name="diagnosis" placeholder="Diagnosis..."/>
+                                    <field name="prescription" placeholder="Prescription..."/>
+                                    <field name="vitals_recorded"/>
+                                </group>
+                            </page>
+                            <page string="Notes">
+                                <field name="notes" nolabel="1" placeholder="Additional notes..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Appointment Calendar View -->
+        <record id="view_appointment_calendar" model="ir.ui.view">
+            <field name="name">medical.appointment.calendar</field>
+            <field name="model">medical.appointment</field>
+            <field name="arch" type="xml">
+                <calendar string="Appointments" date_start="appointment_date"
+                         date_stop="appointment_date" color="patient_id"
+                         mode="month" quick_add="appointment_type">
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="appointment_type"/>
+                    <field name="status"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Appointment Search View -->
+        <record id="view_appointment_search" model="ir.ui.view">
+            <field name="name">medical.appointment.search</field>
+            <field name="model">medical.appointment</field>
+            <field name="arch" type="xml">
+                <search string="Search Appointments">
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="appointment_date"/>
+                    <field name="appointment_type"/>
+                    <field name="status"/>
+                    <filter string="Scheduled" name="scheduled" domain="[('status', '=', 'scheduled')]"/>
+                    <filter string="Confirmed" name="confirmed" domain="[('status', '=', 'confirmed')]"/>
+                    <filter string="In Progress" name="in_progress" domain="[('status', '=', 'in_progress')]"/>
+                    <filter string="Completed" name="completed" domain="[('status', '=', 'completed')]"/>
+                    <filter string="No Reminder Sent" name="no_reminder"
+                            domain="[('reminder_sent', '=', False)]"/>
+                    <separator/>
+                    <filter string="My Appointments" name="my_appointments"
+                            domain="[('doctor_id', '=', uid.partner_id.id)]"/>
+                    <filter string="Upcoming" name="upcoming"
+                            domain="[('appointment_date', '>=', (context_today()).strftime('%Y-%m-%d'))]"/>
+                    <group>
+                        <filter string="Patient" name="patient" domain="[]" context="{'group_by': 'patient_id'}"/>
+                        <filter string="Doctor" name="doctor" domain="[]" context="{'group_by': 'doctor_id'}"/>
+                        <filter string="Status" name="status" domain="[]" context="{'group_by': 'status'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Appointment Action -->
+        <record id="action_appointment_list" model="ir.actions.act_window">
+            <field name="name">Appointments</field>
+            <field name="res_model">medical.appointment</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="context">{'default_status': 'scheduled'}</field>
+            <field name="search_view_id" ref="view_appointment_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first appointment to get started.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

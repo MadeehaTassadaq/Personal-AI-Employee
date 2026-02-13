@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Extended Partner Form View with Healthcare Fields -->
+        <record id="view_partner_form_healthcare" model="ir.ui.view">
+            <field name="name">res.partner.form.healthcare</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <div class="h4 mb-0">Healthcare</div>
+                    <div class="row">
+                        <div class="col-3">
+                            <field name="is_patient" nolabel="1"/>
+                        </div>
+                        <div class="col-3">
+                            <field name="is_doctor" nolabel="1"/>
+                        </div>
+                        <div class="col-6" attrs="{'invisible': [('is_patient', '=', False)]}">
+                            <field name="medical_record_number" placeholder="Auto-generated if patient"/>
+                        </div>
+                    </div>
+                </xpath>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Healthcare Info" attrs="{'invisible': [('is_patient', '=', False)]}">
+                        <group>
+                            <group string="Patient Information">
+                                <field name="date_of_birth"/>
+                                <field name="age" readonly="1"/>
+                                <field name="blood_type"/>
+                                <field name="risk_category" widget="badge"
+                                       decoration-success="risk_category == 'low'"
+                                       decoration-warning="risk_category == 'medium'"
+                                       decoration-danger="risk_category == 'high'"/>
+                            </group>
+                            <group string="Medical History">
+                                <field name="allergies" placeholder="Known allergies..."/>
+                                <field name="chronic_conditions" placeholder="Chronic conditions..."/>
+                                <field name="past_surgeries" placeholder="Previous surgeries..."/>
+                                <field name="family_history" placeholder="Family medical history..."/>
+                            </group>
+                        </group>
+                        <group string="Women's Health" attrs="{'invisible': [('is_patient', '=', True)]}">
+                            <group>
+                                <field name="pregnancy_status"/>
+                                <field name="expected_due_date" attrs="{'invisible': [('pregnancy_status', 'not in', ['pregnant', 'high_risk'])]}"/>
+                                <field name="last_prenatal_checkup" attrs="{'invisible': [('pregnancy_status', 'not in', ['pregnant', 'high_risk'])]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Emergency Contact">
+                                <field name="emergency_contact_id"/>
+                                <field name="emergency_contact_phone" placeholder="Emergency contact phone"/>
+                            </group>
+                            <group string="Primary Care">
+                                <field name="primary_physician_id"/>
+                            </group>
+                        </group>
+                        <group string="Insurance Information">
+                            <group>
+                                <field name="insurance_provider" placeholder="Insurance company"/>
+                                <field name="insurance_policy_number" placeholder="Policy number"/>
+                            </group>
+                            <group>
+                                <field name="insurance_member_id" placeholder="Member ID"/>
+                            </group>
+                        </group>
+                        <group string="Visit History">
+                            <field name="last_visit_date"/>
+                            <field name="next_appointment"/>
+                            <field name="total_visits" readonly="1"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Patient List View -->
+        <record id="view_patient_tree" model="ir.ui.view">
+            <field name="name">medical.patient.tree</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <tree string="Patients" decoration-success="risk_category == 'low'"
+                      decoration-warning="risk_category == 'medium'"
+                      decoration-danger="risk_category == 'high'">
+                    <field name="name"/>
+                    <field name="medical_record_number"/>
+                    <field name="phone"/>
+                    <field name="date_of_birth"/>
+                    <field name="age"/>
+                    <field name="blood_type"/>
+                    <field name="risk_category"/>
+                    <field name="last_visit_date"/>
+                    <field name="total_visits"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Patient Search View -->
+        <record id="view_patient_search" model="ir.ui.view">
+            <field name="name">medical.patient.search</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <search string="Search Patients">
+                    <field name="name"/>
+                    <field name="medical_record_number"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                    <field name="blood_type"/>
+                    <field name="risk_category"/>
+                    <filter string="Is Patient" name="is_patient" domain="[('is_patient', '=', True)]"/>
+                    <filter string="High Risk" name="high_risk" domain="[('risk_category', '=', 'high')]"/>
+                    <filter string="Pregnant" name="pregnant" domain="[('pregnancy_status', 'in', ['pregnant', 'high_risk'])]"/>
+                    <separator/>
+                    <filter string="My Patients" name="my_patients"
+                            domain="[('primary_physician_id', '=', uid.partner_id.id)]"/>
+                    <group>
+                        <filter string="Blood Type" name="blood_type" domain="[]" context="{'group_by': 'blood_type'}"/>
+                        <filter string="Risk Category" name="risk_category" domain="[]" context="{'group_by': 'risk_category'}"/>
+                    </group>
+                </search>
+            </field>
+            </record>
+
+        <!-- Patient Action -->
+        <record id="action_patient_list" model="ir.actions.act_window">
+            <field name="name">Patients</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_patient', '=', True)]</field>
+            <field name="context">{'default_is_patient': True}</field>
+            <field name="search_view_id" ref="view_patient_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first patient to get started.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

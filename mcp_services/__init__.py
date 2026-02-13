@@ -27,7 +27,7 @@ for server in mcp_servers:
     server_path = mcp_dir / server
     if server_path.exists() and (server_path / "__init__.py").exists():
         try:
-            importlib.import_module(f"mcp.{server}")
+            importlib.import_module(f"mcp_services.{server}")
         except ImportError as e:
             pass  # Skip if dependencies not installed
 

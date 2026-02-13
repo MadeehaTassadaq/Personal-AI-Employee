@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vitals List View -->
+        <record id="view_vitals_tree" model="ir.ui.view">
+            <field name="name">medical.vitals.tree</field>
+            <field name="model">medical.vitals</field>
+            <field name="arch" type="xml">
+                <tree string="Vitals">
+                    <field name="patient_id"/>
+                    <field name="date_taken"/>
+                    <field name="temperature"/>
+                    <field name="blood_pressure_systolic"/>
+                    <field name="blood_pressure_diastolic"/>
+                    <field name="heart_rate"/>
+                    <field name="oxygen_saturation"/>
+                    <field name="weight"/>
+                    <field name="bmi"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Vitals Form View -->
+        <record id="view_vitals_form" model="ir.ui.view">
+            <field name="name">medical.vitals.form</field>
+            <field name="model">medical.vitals</field>
+            <field name="arch" type="xml">
+                <form string="Patient Vitals">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="patient_id" required="1"/>
+                                <field name="appointment_id"/>
+                                <field name="date_taken" required="1"/>
+                                <field name="recorded_by_id" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Vital Signs">
+                                <group>
+                                    <group string="Temperature">
+                                        <field name="temperature"/>
+                                        <field name="temperature_method"/>
+                                    </group>
+                                    <group string="Blood Pressure">
+                                        <field name="blood_pressure_systolic"
+                                               placeholder="Systolic"/>
+                                        <field name="blood_pressure_diastolic"
+                                               placeholder="Diastolic"/>
+                                        <field name="blood_pressure_arm"/>
+                                        <field name="blood_pressure_position"/>
+                                    </group>
+                                    <group string="Cardiovascular">
+                                        <field name="heart_rate"/>
+                                        <field name="heart_rate_rhythm"/>
+                                        <field name="respiratory_rate"/>
+                                        <field name="oxygen_saturation"/>
+                                    </group>
+                                    <group string="Physical">
+                                        <field name="weight"/>
+                                        <field name="height"/>
+                                        <field name="bmi" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Pain Assessment">
+                                <group>
+                                    <field name="pain_level"/>
+                                    <field name="pain_location"/>
+                                </group>
+                            </page>
+                            <page string="Notes">
+                                <field name="notes" nolabel="1"
+                                       placeholder="Additional observations..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vitals Search View -->
+        <record id="view_vitals_search" model="ir.ui.view">
+            <field name="name">medical.vitals.search</field>
+            <field name="model">medical.vitals</field>
+            <field name="arch" type="xml">
+                <search string="Search Vitals">
+                    <field name="patient_id"/>
+                    <field name="date_taken"/>
+                    <field name="appointment_id"/>
+                    <filter string="Today" name="today"
+                            domain="[('date_taken', '>=', (context_today()).strftime('%Y-%m-%d 00:00:00')),
+                                    ('date_taken', '&lt;=', (context_today()).strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter string="This Week" name="this_week"
+                            domain="[('date_taken', '>=', (context_today() - datetime.timedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                    <separator/>
+                    <filter string="High Blood Pressure" name="high_bp"
+                            domain="[('blood_pressure_systolic', '>', 140)]"/>
+                    <filter string="High Temperature" name="high_temp"
+                            domain="[('temperature', '>', 38)]"/>
+                    <filter string="Low Oxygen" name="low_o2"
+                            domain="[('oxygen_saturation', '&lt;', 95)]"/>
+                    <group>
+                        <filter string="Patient" name="patient" domain="[]" context="{'group_by': 'patient_id'}"/>
+                        <filter string="Recorded By" name="recorded_by" domain="[]" context="{'group_by': 'recorded_by_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Vitals Action -->
+        <record id="action_vitals_list" model="ir.actions.act_window">
+            <field name="name">Patient Vitals</field>
+            <field name="res_model">medical.vitals</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_vitals_search"/>
+        </record>
+
+    </data>
+</odoo>
