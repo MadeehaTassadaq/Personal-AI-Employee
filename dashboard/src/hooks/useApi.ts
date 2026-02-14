@@ -840,6 +840,18 @@ export function useApi() {
     }
   };
 
+  // Healthcare stats
+  const fetchHealthcareStats = async (): Promise<HealthcareStats> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/stats`);
+      if (!response.ok) throw new Error('Failed to fetch healthcare stats');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
   useEffect(() => {
     fetchStatus();
     const interval = setInterval(fetchStatus, 5000);
@@ -893,6 +905,7 @@ export function useApi() {
     fetchPatientVitals,
     recordVitals,
     createPatientInvoice,
-    fetchPatientInvoices
+    fetchPatientInvoices,
+    fetchHealthcareStats
   };
 }

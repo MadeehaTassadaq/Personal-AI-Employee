@@ -14,6 +14,18 @@ export default function PatientProfile({ patientId }: PatientProfileProps) {
   const [activeTab, setActiveTab] = useState<'overview' | 'vitals' | 'billing'>('overview');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showVitalsForm, setShowVitalsForm] = useState(false);
+  const [newVitals, setNewVitals] = useState({
+    temperature: '',
+    blood_pressure_systolic: '',
+    blood_pressure_diastolic: '',
+    heart_rate: '',
+    respiratory_rate: '',
+    oxygen_saturation: '',
+    weight: '',
+    height: '',
+    notes: ''
+  });
 
   useEffect(() => {
     loadData();
@@ -35,6 +47,29 @@ export default function PatientProfile({ patientId }: PatientProfileProps) {
       setError(err instanceof Error ? err.message : 'Failed to load patient data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRecordVitals = async () => {
+    try {
+      await api.recordVitals(patientId, newVitals);
+      setShowVitalsForm(false);
+      setNewVitals({
+        temperature: '',
+        blood_pressure_systolic: '',
+        blood_pressure_diastolic: '',
+        heart_rate: '',
+        respiratory_rate: '',
+        oxygen_saturation: '',
+        weight: '',
+        height: '',
+        notes: ''
+      });
+      // Reload vitals after recording
+      const vitalsData = await api.fetchPatientVitals(patientId);
+      setVitals(vitalsData.vitals || []);
+    } catch (error) {
+      console.error('Failed to record vitals:', error);
     }
   };
 
@@ -84,7 +119,7 @@ export default function PatientProfile({ patientId }: PatientProfileProps) {
         <div className="flex justify-between items-start">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{patient.name}</h1>
-            <p className="text-gray-600">MRN: {patient.medical_record_number}</p>
+            <p className="text-sm text-gray-600">MRN: {patient.medical_record_number}</p>
           </div>
           <span className={`px-3 py-1 rounded text-sm font-medium ${getRiskBadge(patient.risk_category)}`}>
             {patient.risk_category.toUpperCase()} RISK
@@ -186,7 +221,7 @@ export default function PatientProfile({ patientId }: PatientProfileProps) {
                   <div>
                     <span className="text-gray-600">BP:</span>
                     <span className="font-medium ml-2">
-                      {v.blood_pressure_systolic || 'N/A'}/{v.blood_pressure_diastolic || 'N/A'}
+                      {v.blood_pressure_systolic || 'N/A'}/{v.blood_pressure_diastolic || 'N/A'} mmHg
                     </span>
                   </div>
                   <div>
@@ -199,7 +234,136 @@ export default function PatientProfile({ patientId }: PatientProfileProps) {
                   </div>
                 </div>
               </div>
-            ))
+            </div>
+          ))
+          )}
+
+          {/* Record Vitals Button */}
+          {!showVitalsForm && (
+            <div className="mt-6">
+              <button
+                onClick={() => setShowVitalsForm(true)}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                + Record Vitals
+              </button>
+            </div>
+          )}
+
+          {/* Record Vitals Form */}
+          {showVitalsForm && (
+            <div className="mt-6 bg-white p-6 rounded-lg shadow">
+              <h3 className="text-lg font-semibold mb-4">Record New Vitals</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Temperature (°C)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={newVitals.temperature}
+                    onChange={(e) => setNewVitals({...newVitals, temperature: e.target.value})}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    placeholder="36.5"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Blood Pressure (mmHg)</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      value={newVitals.blood_pressure_systolic}
+                      onChange={(e) => setNewVitals({...newVitals, blood_pressure_systolic: e.target.value})}
+                      placeholder="120"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                    <input
+                      type="number"
+                      value={newVitals.blood_pressure_diastolic}
+                      onChange={(e) => setNewVitals({...newVitals, blood_pressure_diastolic: e.target.value})}
+                      placeholder="80"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Heart Rate (bpm)</label>
+                  <input
+                    type="number"
+                    value={newVitals.heart_rate}
+                    onChange={(e) => setNewVitals({...newVitals, heart_rate: e.target.value})}
+                    placeholder="72"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Respiratory Rate (/min)</label>
+                  <input
+                    type="number"
+                    value={newVitals.respiratory_rate}
+                    onChange={(e) => setNewVitals({...newVitals, respiratory_rate: e.target.value})}
+                    placeholder="16"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Oxygen Saturation (%)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={newVitals.oxygen_saturation}
+                    onChange={(e) => setNewVitals({...newVitals, oxygen_saturation: e.target.value})}
+                    placeholder="98"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={newVitals.weight}
+                    onChange={(e) => setNewVitals({...newVitals, weight: e.target.value})}
+                    placeholder="70.5"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
+                  <input
+                    type="number"
+                    value={newVitals.height}
+                    onChange={(e) => setNewVitals({...newVitals, height: e.target.value})}
+                    placeholder="175"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                  <textarea
+                    value={newVitals.notes}
+                    onChange={(e) => setNewVitals({...newVitals, notes: e.target.value})}
+                    placeholder="Additional notes..."
+                    rows="3"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+              </div>
+              <div className="flex justify-end gap-4 mt-6">
+                <button
+                  onClick={() => setShowVitalsForm(false)}
+                  className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleRecordVitals}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                >
+                  Save Vitals
+                </button>
+              </div>
+            </div>
           )}
         </div>
       )}
@@ -226,6 +390,53 @@ export default function PatientProfile({ patientId }: PatientProfileProps) {
               </div>
             ))
           )}
+        </div>
+
+        {/* Create Invoice Form */}
+        <div className="mt-6 bg-white p-6 rounded-lg shadow">
+          <h3 className="text-lg font-semibold mb-4">Create Invoice</h3>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <input
+                type="text"
+                placeholder="Service description"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Amount</label>
+              <input
+                type="number"
+                step="0.01"
+                placeholder="0.00"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+              <input
+                type="number"
+                min="1"
+                placeholder="1"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-4 mt-6">
+            <button
+              onClick={() => {}}
+              className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+              >
+              Cancel
+            </button>
+            <button
+              onClick={() => {}}
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+              Create Invoice
+            </button>
+          </div>
         </div>
       )}
     </div>

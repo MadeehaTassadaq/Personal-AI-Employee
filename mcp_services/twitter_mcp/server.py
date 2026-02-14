@@ -22,7 +22,7 @@ from mcp.types import Tool, TextContent
 app = Server("twitter-mcp")
 
 # Configuration
-DRY_RUN = os.getenv("DRY_RUN", "true").lower() == "true"
+DRY_RUN = False  # Set to False for live posting
 API_KEY = os.getenv("TWITTER_API_KEY", "")
 API_SECRET = os.getenv("TWITTER_API_SECRET", "")
 ACCESS_TOKEN = os.getenv("TWITTER_ACCESS_TOKEN", "")

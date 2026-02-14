@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 # Import internal functions from server
-from server import _post_to_page, _get_page_insights, _get_page_notifications, _get_page_info, _check_connection
+from .server import _post_to_page, _get_page_insights, _get_page_notifications, _get_page_info, _check_connection
 
 # Expose functions with mcp__ prefix for tool discovery
 async def mcp__facebook__post_to_page(content: str, link: str = None):

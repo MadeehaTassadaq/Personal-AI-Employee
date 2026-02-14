@@ -169,7 +169,7 @@ class DailyScheduler:
         """
         try:
             # Try to use calendar MCP if available
-            from mcp.calendar_mcp import server as calendar_server
+            from mcp_services.calendar_mcp import server as calendar_server
 
             # Get today's events
             events_response = await calendar_server._get_today_events()

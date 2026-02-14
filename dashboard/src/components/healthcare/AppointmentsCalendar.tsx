@@ -6,9 +6,21 @@ export default function AppointmentsCalendar() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [view, setView] = useState<'upcoming' | 'today'>('upcoming');
   const [loading, setLoading] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [newAppointment, setNewAppointment] = useState({
+    patient_id: 0,
+    doctor_id: 0,
+    appointment_date: new Date().toISOString().slice(0, 16),
+    appointment_type: 'consultation',
+    duration: 30,
+    notes: ''
+  });
+  const [patients, setPatients] = useState<any[]>([]);
+  const [doctors, setDoctors] = useState<any[]>([]);
 
   useEffect(() => {
     loadAppointments();
+    loadPatientsAndDoctors();
   }, [view]);
 
   const loadAppointments = async () => {
@@ -26,6 +38,39 @@ export default function AppointmentsCalendar() {
       console.error('Failed to load appointments:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadPatientsAndDoctors = async () => {
+    try {
+      const patientsResult = await api.fetchHealthcarePatients('');
+      setPatients(patientsResult.patients || []);
+      // In a real app, doctors would come from a separate API
+      // For now, we'll use a mock list
+      setDoctors([
+        { id: 1, name: 'Dr. Smith' },
+        { id: 2, name: 'Dr. Johnson' }
+      ]);
+    } catch (error) {
+      console.error('Failed to load data:', error);
+    }
+  };
+
+  const handleCreateAppointment = async () => {
+    try {
+      await api.createHealthcareAppointment(newAppointment);
+      setShowCreateForm(false);
+      setNewAppointment({
+        patient_id: 0,
+        doctor_id: 0,
+        appointment_date: new Date().toISOString().slice(0, 16),
+        appointment_type: 'consultation',
+        duration: 30,
+        notes: ''
+      });
+      await loadAppointments();
+    } catch (error) {
+      console.error('Failed to create appointment:', error);
     }
   };
 
@@ -75,6 +120,12 @@ export default function AppointmentsCalendar() {
           >
             Today
           </button>
+          <button
+            onClick={() => setShowCreateForm(true)}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
+            + New
+          </button>
         </div>
       </div>
 
@@ -119,8 +170,107 @@ export default function AppointmentsCalendar() {
                 </div>
               </div>
             </div>
-          ))
-        )}
+          ))}
+
+      {/* Create Appointment Form */}
+      {showCreateForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-6">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full p-6">
+            <h2 className="text-xl font-bold mb-4">Schedule New Appointment</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Patient</label>
+                <select
+                  value={newAppointment.patient_id}
+                  onChange={(e) => setNewAppointment({...newAppointment, patient_id: parseInt(e.target.value)})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Select Patient</option>
+                  {patients.map((p) => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Doctor</label>
+                <select
+                  value={newAppointment.doctor_id}
+                  onChange={(e) => setNewAppointment({...newAppointment, doctor_id: parseInt(e.target.value)})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                >
+                  <option value="">Select Doctor</option>
+                  {doctors.map((d) => (
+                    <option key={d.id} value={d.id}>{d.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Date & Time</label>
+                <input
+                  type="datetime-local"
+                  value={newAppointment.appointment_date}
+                  onChange={(e) => setNewAppointment({...newAppointment, appointment_date: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                <select
+                  value={newAppointment.appointment_type}
+                  onChange={(e) => setNewAppointment({...newAppointment, appointment_type: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="consultation">Consultation</option>
+                  <option value="followup">Follow-up</option>
+                  <option value="checkup">Check-up</option>
+                  <option value="emergency">Emergency</option>
+                  <option value="prenatal">Prenatal</option>
+                  <option value="lab_test">Lab Test</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Duration (minutes)</label>
+                <input
+                  type="number"
+                  min="15"
+                  max="120"
+                  value={newAppointment.duration}
+                  onChange={(e) => setNewAppointment({...newAppointment, duration: parseInt(e.target.value) || 30})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+                <textarea
+                  value={newAppointment.notes}
+                  onChange={(e) => setNewAppointment({...newAppointment, notes: e.target.value})}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  rows="3"
+                />
+              </div>
+              <div className="flex justify-end gap-4 mt-6">
+                <button
+                  onClick={() => setShowCreateForm(false)}
+                  className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleCreateAppointment}
+                  disabled={!newAppointment.patient_id || !newAppointment.doctor_id}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Create Appointment
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );

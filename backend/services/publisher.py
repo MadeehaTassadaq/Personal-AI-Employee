@@ -143,33 +143,40 @@ class Publisher:
             return {"success": False, "error": str(e), "platform": "facebook"}
 
     async def publish_twitter(self, content: str) -> dict:
-        """Publish to Twitter/X via API."""
+        """Publish to Twitter/X via API using OAuth 1.0a."""
         if self.dry_run:
             return {"success": True, "dry_run": True, "platform": "twitter"}
 
-        if not self.twitter_bearer_token:
-            return {"success": False, "error": "Twitter credentials not configured", "platform": "twitter"}
+        # Check for OAuth 1.0a credentials (required for posting)
+        if not all([self.twitter_api_key, self.twitter_api_secret, self.twitter_access_token, self.twitter_access_secret]):
+            return {"success": False, "error": "Twitter OAuth 1.0a credentials not configured", "platform": "twitter"}
 
         try:
+            from requests_oauthlib import OAuth1Session
+
+            # Create OAuth1 session
+            twitter = OAuth1Session(
+                client_key=self.twitter_api_key,
+                client_secret=self.twitter_api_secret,
+                resource_owner_key=self.twitter_access_token,
+                resource_owner_secret=self.twitter_access_secret
+            )
+
             url = "https://api.twitter.com/2/tweets"
-            headers = {
-                "Authorization": f"Bearer {self.twitter_bearer_token}",
-                "Content-Type": "application/json"
-            }
             post_data = {"text": content}
 
-            async with httpx.AsyncClient() as client:
-                response = await client.post(url, headers=headers, json=post_data)
+            # Post tweet
+            response = twitter.post(url, json=post_data)
 
-                if response.status_code == 201:
-                    data = response.json()
-                    tweet_id = data.get("data", {}).get("id")
-                    self.log_action("twitter", "post_success", {"tweet_id": tweet_id})
-                    return {"success": True, "tweet_id": tweet_id, "platform": "twitter"}
-                else:
-                    error_msg = response.text
-                    self.log_action("twitter", "post_failed", {"error": error_msg})
-                    return {"success": False, "error": error_msg, "platform": "twitter"}
+            if response.status_code in [200, 201]:
+                data = response.json()
+                tweet_id = data.get("data", {}).get("id")
+                self.log_action("twitter", "post_success", {"tweet_id": tweet_id})
+                return {"success": True, "tweet_id": tweet_id, "platform": "twitter"}
+            else:
+                error_msg = response.text
+                self.log_action("twitter", "post_failed", {"error": error_msg})
+                return {"success": False, "error": error_msg, "platform": "twitter"}
 
         except Exception as e:
             self.log_action("twitter", "post_error", {"error": str(e)})

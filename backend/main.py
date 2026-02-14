@@ -7,7 +7,6 @@ from datetime import datetime
 from pathlib import Path
 from contextlib import asynccontextmanager
 from typing import Set
- 
 
 from dotenv import load_dotenv
 
@@ -17,7 +16,7 @@ load_dotenv()
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api import status, watchers, vault, approvals, audit, ralph, ceo_briefing, odoo, social, calendar, trigger, compose, business_audit, ai_content
+from backend.api import status, watchers, vault, approvals, audit, ralph, ceo_briefing, odoo, social, calendar, trigger, compose, business_audit, ai_content, healthcare
 from backend.services.audit_logger import get_audit_logger, AuditAction
 from backend.services.ralph_wiggum import get_ralph
 from backend.services.scheduler import init_scheduler, shutdown_scheduler
@@ -128,19 +127,19 @@ async def lifespan(app: FastAPI):
         for watcher_name in watchers_to_start:
             try:
                 success = orchestrator.start_watcher(watcher_name)
-                status = "✓ Started" if success else "✗ Failed"
+                status = "Started" if success else "Failed"
                 print(f"[BACKEND]   {watcher_name}: {status}")
             except Exception as e:
-                print(f"[BACKEND]   {watcher_name}: ✗ Error: {e}")
+                print(f"[BACKEND]   {watcher_name}: Error: {e}")
 
-        # Start the approved watcher (async, runs in main process)
+        # Start approved watcher (async, runs in main process)
         try:
             loop = asyncio.get_running_loop()
             success = await orchestrator.start_approved_watcher(loop)
-            status = "✓ Started" if success else "✗ Failed"
+            status = "Started" if success else "Failed"
             print(f"[BACKEND]   approved: {status}")
         except Exception as e:
-            print(f"[BACKEND]   approved: ✗ Error: {e}")
+            print(f"[BACKEND]   approved: Error: {e}")
 
         print("[BACKEND] All watchers initialized")
 
@@ -197,6 +196,7 @@ app.include_router(odoo.router, prefix="/api/odoo", tags=["Odoo Accounting"])
 app.include_router(social.router, prefix="/api/social", tags=["Social Media"])
 app.include_router(calendar.router, prefix="/api/calendar", tags=["Calendar"])
 app.include_router(trigger.router, prefix="/api/trigger", tags=["Trigger"])
+app.include_router(healthcare.router, prefix="/api/healthcare", tags=["Healthcare"])
 app.include_router(compose.router, prefix="/api/compose", tags=["Compose"])
 app.include_router(business_audit.router, prefix="/api/business-audit", tags=["Business Audit"])
 app.include_router(ai_content.router, prefix="/api/ai", tags=["AI Content Generation"])

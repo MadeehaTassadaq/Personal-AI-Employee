@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_medical_appointment_user,medical.appointment.user,model_medical_appointment,base.group_user,1,0,0,0
-access_medical_appointment_manager,medical.appointment.manager,model_medical_appointment,medical_healthcare.group_healthcare_manager,1,1,1,1
-access_medical_vitals_user,medical.vitals.user,model_medical_vitals,base.group_user,1,0,0,0
-access_medical_vitals_manager,medical.vitals.manager,model_medical_vitals,medical_healthcare.group_healthcare_manager,1,1,1,1

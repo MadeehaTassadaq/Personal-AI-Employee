@@ -1,3 +1,4 @@
+
 """Healthcare tools for Odoo MCP Server.
 
 Extends the Odoo MCP server with healthcare-specific functionality

@@ -19,7 +19,7 @@ from mcp.types import Tool, TextContent
 app = Server("instagram-mcp")
 
 # Configuration
-DRY_RUN = os.getenv("DRY_RUN", "true").lower() == "true"
+DRY_RUN = False  # Set to False for live posting
 PAGE_ACCESS_TOKEN = os.getenv("FACEBOOK_PAGE_ACCESS_TOKEN", "")
 INSTAGRAM_ACCOUNT_ID = os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID", "")
 API_VERSION = "v18.0"
