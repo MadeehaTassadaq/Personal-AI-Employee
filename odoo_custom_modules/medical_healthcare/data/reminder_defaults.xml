@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Default Reminder Configurations -->
+    <record id="reminder_config_24h" model="medical.reminder.config">
+        <field name="name">24 Hours Before</field>
+        <field name="sequence">10</field>
+        <field name="active" eval="True"/>
+        <field name="reminder_hours_before">24</field>
+        <field name="send_whatsapp" eval="True"/>
+        <field name="whatsapp_template">Dear {patient_name}, this is a reminder of your appointment tomorrow at {appointment_time}. Doctor: {doctor_name}. Please reply YES to confirm or call to reschedule.</field>
+        <field name="include_doctor_name" eval="True"/>
+    </record>
+
+    <record id="reminder_config_2h" model="medical.reminder.config">
+        <field name="name">2 Hours Before</field>
+        <field name="sequence">20</field>
+        <field name="active" eval="True"/>
+        <field name="reminder_hours_before">2</field>
+        <field name="send_whatsapp" eval="True"/>
+        <field name="whatsapp_template">Reminder: Your appointment is in 2 hours at {appointment_time} with {doctor_name}. Please be on time!</field>
+        <field name="include_doctor_name" eval="True"/>
+    </record>
+
+    <record id="reminder_config_48h" model="medical.reminder.config">
+        <field name="name">48 Hours Before (High Risk)</field>
+        <field name="sequence">5</field>
+        <field name="active" eval="True"/>
+        <field name="reminder_hours_before">48</field>
+        <field name="send_whatsapp" eval="True"/>
+        <field name="risk_category_filter">high</field>
+        <field name="whatsapp_template">Dear {patient_name}, this is a special reminder for your important appointment on {appointment_date} at {appointment_time}. Please prepare accordingly.</field>
+        <field name="include_doctor_name" eval="True"/>
+    </record>
+
+    <!-- Default Appointment Types -->
+    <record id="apt_type_consultation" model="medical.appointment.type">
+        <field name="name">Consultation</field>
+        <field name="code">consultation</field>
+        <field name="default_duration">30</field>
+    </record>
+
+    <record id="apt_type_followup" model="medical.appointment.type">
+        <field name="name">Follow-up</field>
+        <field name="code">followup</field>
+        <field name="default_duration">20</field>
+    </record>
+
+    <record id="apt_type_checkup" model="medical.appointment.type">
+        <field name="name">Regular Check-up</field>
+        <field name="code">checkup</field>
+        <field name="default_duration">30</field>
+    </record>
+
+    <record id="apt_type_emergency" model="medical.appointment.type">
+        <field name="name">Emergency</field>
+        <field name="code">emergency</field>
+        <field name="default_duration">60</field>
+    </record>
+
+    <record id="apt_type_prenatal" model="medical.appointment.type">
+        <field name="name">Prenatal Check-up</field>
+        <field name="code">prenatal</field>
+        <field name="default_duration">45</field>
+    </record>
+
+    <record id="apt_type_lab_test" model="medical.appointment.type">
+        <field name="name">Lab Test</field>
+        <field name="code">lab_test</field>
+        <field name="default_duration">15</field>
+    </record>
+</odoo>

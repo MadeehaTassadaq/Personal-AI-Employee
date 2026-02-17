@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_medical_appointment_user,medical.appointment.user,model_medical_appointment,base.group_user,1,0,0,0
+access_medical_appointment_manager,medical.appointment.manager,model_medical_appointment,medical_healthcare.group_healthcare_manager,1,1,1,1
+access_medical_vitals_user,medical.vitals.user,model_medical_vitals,base.group_user,1,0,0,0
+access_medical_vitals_manager,medical.vitals.manager,model_medical_vitals,medical_healthcare.group_healthcare_manager,1,1,1,1
+access_medical_reminder_config_user,medical.reminder.config.user,model_medical_reminder_config,base.group_user,1,0,0,0
+access_medical_reminder_config_manager,medical.reminder.config.manager,model_medical_reminder_config,medical_healthcare.group_healthcare_manager,1,1,1,1
+access_medical_reminder_history_user,medical.reminder.history.user,model_medical_reminder_history,base.group_user,1,0,0,0
+access_medical_reminder_history_manager,medical.reminder.history.manager,model_medical_reminder_history,medical_healthcare.group_healthcare_manager,1,1,1,1
+access_medical_appointment_type_user,medical.appointment.type.user,model_medical_appointment_type,base.group_user,1,0,0,0
+access_medical_appointment_type_manager,medical.appointment.type.manager,model_medical_appointment_type,medical_healthcare.group_healthcare_manager,1,1,1,1

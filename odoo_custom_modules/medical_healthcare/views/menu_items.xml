@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Healthcare Menu -->
+        <menuitem id="menu_healthcare_root"
+                  name="Healthcare"
+                  sequence="60"
+                  web_icon="medical_healthcare,static/description/icon.png"
+                  groups="base.group_user"/>
+
+        <!-- Patients Submenu -->
+        <menuitem id="menu_patients"
+                  name="Patients"
+                  parent="menu_healthcare_root"
+                  sequence="10"
+                  action="action_patient_list"/>
+
+        <!-- Appointments Submenu -->
+        <menuitem id="menu_appointments"
+                  name="Appointments"
+                  parent="menu_healthcare_root"
+                  sequence="20"
+                  action="action_appointment_list"/>
+
+        <!-- Vitals Submenu -->
+        <menuitem id="menu_vitals"
+                  name="Vitals"
+                  parent="menu_healthcare_root"
+                  sequence="30"
+                  action="action_vitals_list"/>
+
+        <!-- Reminders Submenu -->
+        <menuitem id="menu_reminders"
+                  name="Reminders"
+                  parent="menu_healthcare_root"
+                  sequence="50"/>
+
+        <menuitem id="menu_reminder_config"
+                  name="Reminder Configuration"
+                  parent="menu_reminders"
+                  sequence="10"
+                  action="action_reminder_config"/>
+
+        <menuitem id="menu_reminder_history"
+                  name="Reminder History"
+                  parent="menu_reminders"
+                  sequence="20"
+                  action="action_reminder_history"/>
+
+        <menuitem id="menu_appointment_types"
+                  name="Appointment Types"
+                  parent="menu_reminders"
+                  sequence="30"
+                  action="action_appointment_type"/>
+
+        <!-- Reports Submenu -->
+        <menuitem id="menu_healthcare_reports"
+                  name="Reports"
+                  parent="menu_healthcare_root"
+                  sequence="90"/>
+
+        <!-- Configuration Submenu -->
+        <menuitem id="menu_healthcare_config"
+                  name="Configuration"
+                  parent="menu_healthcare_root"
+                  sequence="100"
+                  groups="medical_healthcare.group_healthcare_manager"/>
+
+    </data>
+</odoo>
