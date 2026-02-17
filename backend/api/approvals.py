@@ -146,8 +146,10 @@ async def approve_action(request: ApprovalRequest) -> ApprovalResponse:
         frontmatter["status"] = "approved"
         frontmatter["approved_at"] = datetime.now().isoformat()
 
-        # If this is a social post, publish it immediately
-        if frontmatter.get("type") == "social_post":
+        # If this is a social post or whatsapp/email message, publish it immediately
+        # Support both "social_post" and "social" types for backwards compatibility
+        action_type = frontmatter.get("type", "")
+        if action_type in ["social_post", "social", "whatsapp", "email"]:
             publisher = get_publisher()
             publish_result = await publisher.publish(source_path)
             publisher.log_publish_result(request.filename, publish_result)
@@ -239,8 +241,10 @@ async def publish_approved(filename: str) -> dict:
     content = source_path.read_text()
     frontmatter, body = parse_frontmatter(content)
 
-    if frontmatter.get("type") != "social_post":
-        raise HTTPException(status_code=400, detail="This file is not a social post")
+    # Support multiple action types
+    action_type = frontmatter.get("type", "")
+    if action_type not in ["social_post", "social", "whatsapp", "email"]:
+        raise HTTPException(status_code=400, detail=f"This file type '{action_type}' cannot be published")
 
     publisher = get_publisher()
     result = await publisher.publish(source_path)
@@ -303,3 +307,106 @@ async def mark_executed(filename: str, notes: Optional[str] = None) -> dict:
         "status": "completed",
         "new_location": str(dest_path)
     }
+
+
+@router.post("/notify")
+async def notify_pending_approvals() -> dict:
+    """Send notifications for pending approvals.
+
+    Returns a summary of pending approvals and their count.
+    The dashboard can poll this endpoint or use it to trigger notifications.
+    """
+    folder_path = VAULT_PATH / "Pending_Approval"
+    if not folder_path.exists():
+        return {"count": 0, "items": [], "summary": "No pending approvals"}
+
+    # Get all pending files
+    pending_items = []
+    for file_path in folder_path.glob("*.md"):
+        if file_path.name == ".gitkeep":
+            continue
+
+        content = file_path.read_text()
+        frontmatter, body = parse_frontmatter(content)
+
+        action_type = frontmatter.get("type", "unknown")
+        title = frontmatter.get("title", file_path.stem.replace("-", " ").title())
+        priority = frontmatter.get("priority", "normal")
+        platform = frontmatter.get("platform", "unknown")
+
+        pending_items.append({
+            "filename": file_path.name,
+            "title": title,
+            "type": action_type,
+            "priority": priority,
+            "platform": platform,
+            "created": frontmatter.get("created", "")
+        })
+
+    # Sort by priority and created date
+    priority_order = {"urgent": 0, "high": 1, "normal": 2, "low": 3}
+    pending_items.sort(
+        key=lambda x: (priority_order.get(x["priority"], 2), x.get("created", "")),
+        reverse=False
+    )
+
+    # Build summary
+    count = len(pending_items)
+    summary_parts = []
+    if count > 0:
+        summary_parts.append(f"{count} pending approval(s)")
+        type_counts = {}
+        for item in pending_items:
+            item_type = item["type"]
+            type_counts[item_type] = type_counts.get(item_type, 0) + 1
+        summary_parts.extend([f"{count} {t}" for t, count in type_counts.items()])
+
+        # Count by priority
+        urgent_count = sum(1 for i in pending_items if i["priority"] == "urgent")
+        if urgent_count > 0:
+            summary_parts.append(f"{urgent_count} urgent")
+
+    return {
+        "count": count,
+        "items": pending_items,
+        "summary": ", ".join(summary_parts) if summary_parts else "No pending approvals",
+        "timestamp": datetime.now().isoformat()
+    }
+
+
+@router.get("/summary")
+async def get_approval_summary() -> dict:
+    """Get a summary of approval statistics.
+
+    Returns counts of pending, approved, and completed items.
+    """
+    summary = {
+        "pending": 0,
+        "approved": 0,
+        "completed": 0,
+        "by_type": {},
+        "by_platform": {}
+    }
+
+    # Check Pending_Approval
+    for folder in ["Pending_Approval", "Approved"]:
+        folder_path = VAULT_PATH / folder
+        if folder_path.exists():
+            count = len(list(folder_path.glob("*.md")))
+            if folder == "Pending_Approval":
+                summary["pending"] = count
+            else:
+                summary["approved"] = count
+
+    # Check Done for completed today
+    today = datetime.now().strftime("%Y-%m-%d")
+    done_path = VAULT_PATH / "Done"
+    if done_path.exists():
+        for file_path in done_path.glob("*.md"):
+            content = file_path.read_text()
+            frontmatter, _ = parse_frontmatter(content)
+            executed_at = frontmatter.get("executed_at", "")
+            if executed_at and executed_at.startswith(today):
+                summary["completed"] += 1
+
+    return summary

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: APP_NAME-config
+  namespace: NAMESPACE
+  labels:
+    app: APP_NAME
+data:
+  LOG_LEVEL: "info"
+  DEBUG: "false"
+  # Add non-sensitive configuration here
+  # Example: API_TIMEOUT: "30"

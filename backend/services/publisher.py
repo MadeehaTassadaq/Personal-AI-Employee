@@ -1,23 +1,68 @@
-"""Publisher service for executing approved social media posts and messages."""
+"""Publisher service for executing approved social media posts and messages.
+
+This service publishes directly to platform APIs with proper authentication.
+"""
 
 import os
 import json
 import httpx
 from pathlib import Path
 from datetime import datetime
-from typing import Optional, Any
+from typing import Optional
 
 import yaml
 
 
 class Publisher:
-    """Publishes approved content to social media platforms."""
+    """Publishes approved content to social media platforms via direct API calls.
+
+    Each platform uses its configured credentials and implements proper API handling.
+    """
 
     def __init__(self):
-        """Initialize publisher with MCP server endpoints."""
-        # MCP server configurations
-        self.mcp_base = "http://localhost"
+        """Initialize publisher with API credentials."""
         self.vault_path = Path(os.getenv("VAULT_PATH", "./vault"))
+        self.dry_run = os.getenv("DRY_RUN", "true").lower() == "true"
+
+        # Load credentials
+        self.facebook_token = os.getenv("FACEBOOK_PAGE_ACCESS_TOKEN", "")
+        self.facebook_page_id = os.getenv("FACEBOOK_PAGE_ID", "")
+        self.instagram_account_id = os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID", "")
+
+        self.twitter_api_key = os.getenv("TWITTER_API_KEY", "")
+        self.twitter_api_secret = os.getenv("TWITTER_API_SECRET", "")
+        self.twitter_access_token = os.getenv("TWITTER_ACCESS_TOKEN", "")
+        self.twitter_access_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET", "")
+        self.twitter_bearer_token = os.getenv("TWITTER_BEARER_TOKEN", "")
+
+        self.linkedin_token = os.getenv("LINKEDIN_ACCESS_TOKEN", "")
+
+        # Gmail OAuth - would need token file
+        self.gmail_token_path = os.getenv("GMAIL_CREDENTIALS_PATH", "./credentials/gmail_token.json")
+
+        # WhatsApp session path
+        self.whatsapp_session_path = os.getenv("WHATSAPP_SESSION_PATH", "./credentials/whatsapp_session")
+
+    def log_action(self, platform: str, action: str, details: dict) -> None:
+        """Log a publisher action."""
+        log_file = self.vault_path / "Logs" / f"{datetime.now().strftime('%Y-%m-%d')}.json"
+
+        log_entry = {
+            "timestamp": datetime.now().isoformat(),
+            "watcher": f"Publisher_{platform}",
+            "event": action,
+            **details
+        }
+
+        logs = []
+        if log_file.exists():
+            try:
+                logs = json.loads(log_file.read_text())
+            except json.JSONDecodeError:
+                logs = []
+
+        logs.append(log_entry)
+        log_file.write_text(json.dumps(logs, indent=2))
 
     def parse_frontmatter(self, content: str) -> tuple[dict, str]:
         """Parse YAML frontmatter from markdown content."""
@@ -36,17 +81,26 @@ class Publisher:
         return frontmatter, body
 
     def extract_content_from_body(self, body: str) -> str:
-        """Extract the actual post content from markdown body."""
-        # Look for content section
+        """Extract actual post content from markdown body.
+
+        Supports multiple content section formats:
+        - ### Content
+        - ### Post Content
+        - ### Message Content
+        - ## Caption (Instagram posts)
+        """
         lines = body.split('\n')
         in_content = False
         content_lines = []
 
         for line in lines:
-            if '### Content' in line:
+            # Check for content markers (both ## and ### levels)
+            content_markers = ['### Content', '### Post Content', '### Message Content', '## Caption']
+            if any(marker in line for marker in content_markers):
                 in_content = True
                 continue
-            elif line.startswith('### ') and in_content:
+            # Stop at next heading of same or higher level
+            elif in_content and (line.startswith('### ') or line.startswith('## ')):
                 break
             elif in_content and line.strip():
                 content_lines.append(line)
@@ -54,221 +108,278 @@ class Publisher:
         return '\n'.join(content_lines).strip()
 
     async def publish_facebook(self, content: str, link_url: Optional[str] = None) -> dict:
-        """Publish to Facebook Page."""
-        try:
-            # Use environment variables for Facebook credentials
-            page_access_token = os.getenv("FACEBOOK_PAGE_ACCESS_TOKEN")
-            page_id = os.getenv("FACEBOOK_PAGE_ID")
+        """Publish to Facebook Page via Graph API."""
+        if self.dry_run:
+            return {"success": True, "dry_run": True, "platform": "facebook"}
 
-            if not page_access_token or not page_id:
-                return {"success": False, "error": "Facebook credentials not configured"}
+        if not self.facebook_token or not self.facebook_page_id:
+            return {"success": False, "error": "Facebook credentials not configured", "platform": "facebook"}
+
+        try:
+            url = f"https://graph.facebook.com/v18.0/{self.facebook_page_id}/feed"
+            post_data = {
+                "message": content,
+                "access_token": self.facebook_token
+            }
+            if link_url:
+                post_data["link"] = link_url
 
             async with httpx.AsyncClient() as client:
-                params = {
-                    "message": content,
-                    "access_token": page_access_token
-                }
-                if link_url:
-                    params["link"] = link_url
+                response = await client.post(url, json=post_data)
 
-                response = await client.post(
-                    f"https://graph.facebook.com/v18.0/{page_id}/feed",
-                    params=params
-                )
-
-                if response.status_code == 200:
+                if response.status_code in [200, 201]:
                     data = response.json()
-                    return {"success": True, "post_id": data.get("id"), "platform": "facebook"}
+                    post_id = data.get("id", "")
+                    self.log_action("facebook", "post_success", {"post_id": post_id})
+                    return {"success": True, "post_id": post_id, "platform": "facebook"}
                 else:
-                    return {"success": False, "error": response.text, "platform": "facebook"}
+                    error_data = response.json()
+                    error_msg = error_data.get("error", {}).get("message", response.text)
+                    self.log_action("facebook", "post_failed", {"error": error_msg})
+                    return {"success": False, "error": error_msg, "platform": "facebook"}
 
         except Exception as e:
+            self.log_action("facebook", "post_error", {"error": str(e)})
             return {"success": False, "error": str(e), "platform": "facebook"}
 
     async def publish_twitter(self, content: str) -> dict:
-        """Publish to Twitter/X."""
+        """Publish to Twitter/X via API using OAuth 1.0a."""
+        if self.dry_run:
+            return {"success": True, "dry_run": True, "platform": "twitter"}
+
+        # Check for OAuth 1.0a credentials (required for posting)
+        if not all([self.twitter_api_key, self.twitter_api_secret, self.twitter_access_token, self.twitter_access_secret]):
+            return {"success": False, "error": "Twitter OAuth 1.0a credentials not configured", "platform": "twitter"}
+
         try:
-            bearer_token = os.getenv("TWITTER_BEARER_TOKEN")
-            api_key = os.getenv("TWITTER_API_KEY")
-            api_secret = os.getenv("TWITTER_API_SECRET")
-            access_token = os.getenv("TWITTER_ACCESS_TOKEN")
-            access_secret = os.getenv("TWITTER_ACCESS_TOKEN_SECRET")
-
-            if not all([api_key, api_secret, access_token, access_secret]):
-                return {"success": False, "error": "Twitter credentials not configured"}
-
-            # Twitter API v2 requires OAuth 1.0a for posting
             from requests_oauthlib import OAuth1Session
 
-            oauth = OAuth1Session(
-                api_key,
-                client_secret=api_secret,
-                resource_owner_key=access_token,
-                resource_owner_secret=access_secret
+            # Create OAuth1 session
+            twitter = OAuth1Session(
+                client_key=self.twitter_api_key,
+                client_secret=self.twitter_api_secret,
+                resource_owner_key=self.twitter_access_token,
+                resource_owner_secret=self.twitter_access_secret
             )
 
-            response = oauth.post(
-                "https://api.twitter.com/2/tweets",
-                json={"text": content}
-            )
+            url = "https://api.twitter.com/2/tweets"
+            post_data = {"text": content}
+
+            # Post tweet
+            response = twitter.post(url, json=post_data)
 
             if response.status_code in [200, 201]:
                 data = response.json()
-                return {"success": True, "tweet_id": data.get("data", {}).get("id"), "platform": "twitter"}
+                tweet_id = data.get("data", {}).get("id")
+                self.log_action("twitter", "post_success", {"tweet_id": tweet_id})
+                return {"success": True, "tweet_id": tweet_id, "platform": "twitter"}
             else:
-                return {"success": False, "error": response.text, "platform": "twitter"}
+                error_msg = response.text
+                self.log_action("twitter", "post_failed", {"error": error_msg})
+                return {"success": False, "error": error_msg, "platform": "twitter"}
 
-        except ImportError:
-            return {"success": False, "error": "requests-oauthlib not installed", "platform": "twitter"}
         except Exception as e:
+            self.log_action("twitter", "post_error", {"error": str(e)})
             return {"success": False, "error": str(e), "platform": "twitter"}
 
-    async def publish_linkedin(self, content: str, link_url: Optional[str] = None) -> dict:
-        """Publish to LinkedIn."""
-        try:
-            access_token = os.getenv("LINKEDIN_ACCESS_TOKEN")
-            person_id = os.getenv("LINKEDIN_PERSON_ID")
+    async def _get_linkedin_user_id(self) -> Optional[str]:
+        """Get current user's LinkedIn member ID."""
+        if not self.linkedin_token:
+            return None
 
-            if not access_token:
-                return {"success": False, "error": "LinkedIn credentials not configured"}
+        try:
+            url = "https://api.linkedin.com/v2/userinfo"
+            headers = {
+                "Authorization": f"Bearer {self.linkedin_token}",
+                "X-Restli-Protocol-Version": "2.0.0"
+            }
 
             async with httpx.AsyncClient() as client:
-                # First get the person URN if not provided
-                if not person_id:
-                    me_response = await client.get(
-                        "https://api.linkedin.com/v2/userinfo",
-                        headers={"Authorization": f"Bearer {access_token}"}
-                    )
-                    if me_response.status_code == 200:
-                        person_id = me_response.json().get("sub")
+                response = await client.get(url, headers=headers)
 
-                if not person_id:
-                    return {"success": False, "error": "Could not get LinkedIn person ID"}
-
-                post_data = {
-                    "author": f"urn:li:person:{person_id}",
-                    "lifecycleState": "PUBLISHED",
-                    "specificContent": {
-                        "com.linkedin.ugc.ShareContent": {
-                            "shareCommentary": {
-                                "text": content
-                            },
-                            "shareMediaCategory": "NONE"
-                        }
-                    },
-                    "visibility": {
-                        "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
-                    }
-                }
-
-                response = await client.post(
-                    "https://api.linkedin.com/v2/ugcPosts",
-                    headers={
-                        "Authorization": f"Bearer {access_token}",
-                        "Content-Type": "application/json",
-                        "X-Restli-Protocol-Version": "2.0.0"
-                    },
-                    json=post_data
-                )
-
-                if response.status_code in [200, 201]:
-                    return {"success": True, "platform": "linkedin"}
+                if response.status_code == 200:
+                    data = response.json()
+                    return data.get("sub", "")
                 else:
-                    return {"success": False, "error": response.text, "platform": "linkedin"}
+                    self.log_action("linkedin", "user_id_failed", {"status": response.status_code})
+                    return None
 
         except Exception as e:
+            self.log_action("linkedin", "user_id_error", {"error": str(e)})
+            return None
+
+    async def publish_linkedin(self, content: str, link_url: Optional[str] = None) -> dict:
+        """Publish to LinkedIn via API."""
+        if self.dry_run:
+            return {"success": True, "dry_run": True, "platform": "linkedin"}
+
+        if not self.linkedin_token:
+            return {"success": False, "error": "LinkedIn credentials not configured", "platform": "linkedin"}
+
+        try:
+            # Get user's member URN first
+            user_id = await self._get_linkedin_user_id()
+            if not user_id:
+                return {"success": False, "error": "Could not retrieve LinkedIn user ID", "platform": "linkedin"}
+
+            author_urn = f"urn:li:person:{user_id}"
+
+            url = "https://api.linkedin.com/v2/ugcPosts"
+            headers = {
+                "Authorization": f"Bearer {self.linkedin_token}",
+                "Content-Type": "application/json",
+                "X-Restli-Protocol-Version": "2.0.0",
+                "LinkedIn-Version": "202401"
+            }
+
+            # Build post data with required visibility field
+            post_data = {
+                "author": author_urn,
+                "lifecycleState": "PUBLISHED",
+                "visibility": {
+                    "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC"
+                },
+                "specificContent": {
+                    "com.linkedin.ugc.ShareContent": {
+                        "shareCommentary": {"text": content},
+                        "shareMediaCategory": "NONE"
+                    }
+                }
+            }
+
+            # Add link/media if provided
+            if link_url:
+                post_data["specificContent"]["com.linkedin.ugc.ShareContent"]["media"] = [
+                    {
+                        "status": "READY",
+                        "description": {"text": content},
+                        "attributes": [],
+                        "media": f"urn:li:digitalmediaAsset:{link_url}"
+                    }
+                ]
+                post_data["specificContent"]["com.linkedin.ugc.ShareContent"]["shareMediaCategory"] = "ARTICLE"
+
+            async with httpx.AsyncClient() as client:
+                response = await client.post(url, headers=headers, json=post_data)
+
+                if response.status_code == 201:
+                    post_id = response.headers.get("x-restli-id", "")
+                    self.log_action("linkedin", "post_success", {"post_id": post_id})
+                    return {"success": True, "post_id": post_id, "platform": "linkedin"}
+                else:
+                    error_msg = response.text
+                    self.log_action("linkedin", "post_failed", {"error": error_msg})
+                    return {"success": False, "error": error_msg, "platform": "linkedin"}
+
+        except Exception as e:
+            self.log_action("linkedin", "post_error", {"error": str(e)})
             return {"success": False, "error": str(e), "platform": "linkedin"}
 
     async def publish_instagram(self, content: str, image_url: str) -> dict:
-        """Publish to Instagram."""
-        try:
-            access_token = os.getenv("INSTAGRAM_ACCESS_TOKEN")
-            account_id = os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID")
+        """Publish to Instagram via Facebook Graph API."""
+        if self.dry_run:
+            return {"success": True, "dry_run": True, "platform": "instagram"}
 
-            if not access_token or not account_id:
-                return {"success": False, "error": "Instagram credentials not configured"}
+        if not self.facebook_token or not self.instagram_account_id:
+            return {"success": False, "error": "Instagram credentials not configured", "platform": "instagram"}
+
+        try:
+            # Create media container
+            container_url = f"https://graph.facebook.com/v18.0/{self.instagram_account_id}/media"
+            container_data = {
+                "image_url": image_url,
+                "caption": content,
+                "access_token": self.facebook_token
+            }
 
             async with httpx.AsyncClient() as client:
-                # Step 1: Create media container
-                container_response = await client.post(
-                    f"https://graph.instagram.com/{account_id}/media",
-                    params={
-                        "image_url": image_url,
-                        "caption": content,
-                        "access_token": access_token
-                    }
-                )
+                response = await client.post(container_url, json=container_data)
 
-                if container_response.status_code != 200:
-                    return {"success": False, "error": container_response.text, "platform": "instagram"}
+                if response.status_code in [200, 201]:
+                    data = response.json()
+                    container_id = data.get("id")
 
-                container_id = container_response.json().get("id")
-
-                # Step 2: Publish the container
-                publish_response = await client.post(
-                    f"https://graph.instagram.com/{account_id}/media_publish",
-                    params={
+                    # Publish container
+                    publish_url = f"https://graph.facebook.com/v18.0/{self.instagram_account_id}/media_publish"
+                    publish_data = {
                         "creation_id": container_id,
-                        "access_token": access_token
+                        "access_token": self.facebook_token
                     }
-                )
+                    publish_response = await client.post(publish_url, json=publish_data)
 
-                if publish_response.status_code == 200:
-                    return {"success": True, "media_id": publish_response.json().get("id"), "platform": "instagram"}
+                    if publish_response.status_code in [200, 201]:
+                        self.log_action("instagram", "post_success", {"media_id": container_id})
+                        return {"success": True, "media_id": container_id, "platform": "instagram"}
+                    else:
+                        error_msg = publish_response.text
+                        self.log_action("instagram", "publish_failed", {"error": error_msg})
+                        return {"success": False, "error": error_msg, "platform": "instagram"}
                 else:
-                    return {"success": False, "error": publish_response.text, "platform": "instagram"}
+                    error_msg = response.text
+                    self.log_action("instagram", "container_failed", {"error": error_msg})
+                    return {"success": False, "error": error_msg, "platform": "instagram"}
 
         except Exception as e:
+            self.log_action("instagram", "post_error", {"error": str(e)})
             return {"success": False, "error": str(e), "platform": "instagram"}
 
     async def send_whatsapp(self, content: str, recipient: str) -> dict:
-        """Send WhatsApp message."""
-        try:
-            # WhatsApp Business API configuration
-            phone_number_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
-            access_token = os.getenv("WHATSAPP_ACCESS_TOKEN")
+        """Send WhatsApp message - requires whatsapp-mcp server running."""
+        if self.dry_run:
+            return {"success": True, "dry_run": True, "platform": "whatsapp"}
 
-            if not phone_number_id or not access_token:
-                return {"success": False, "error": "WhatsApp credentials not configured"}
-
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    f"https://graph.facebook.com/v18.0/{phone_number_id}/messages",
-                    headers={
-                        "Authorization": f"Bearer {access_token}",
-                        "Content-Type": "application/json"
-                    },
-                    json={
-                        "messaging_product": "whatsapp",
-                        "to": recipient.replace("+", ""),
-                        "type": "text",
-                        "text": {"body": content}
-                    }
-                )
-
-                if response.status_code == 200:
-                    return {"success": True, "platform": "whatsapp"}
-                else:
-                    return {"success": False, "error": response.text, "platform": "whatsapp"}
-
-        except Exception as e:
-            return {"success": False, "error": str(e), "platform": "whatsapp"}
+        # WhatsApp requires Playwright automation via whatsapp-mcp server
+        return {
+            "success": False,
+            "error": "WhatsApp requires whatsapp-mcp server to be running. Start it with: uv run mcp/whatsapp-mcp/server.py",
+            "platform": "whatsapp"
+        }
 
     async def send_email(self, content: str, recipient: str, subject: str) -> dict:
-        """Send email via Gmail."""
-        try:
-            # This would use the Gmail API
-            # For now, return a placeholder
-            return {"success": False, "error": "Email sending requires Gmail OAuth setup", "platform": "email"}
+        """Send email via Gmail API."""
+        if self.dry_run:
+            return {"success": True, "dry_run": True, "platform": "email"}
 
+        # Check if token exists
+        token_path = Path(self.gmail_token_path)
+        if not token_path.exists():
+            return {"success": False, "error": "Gmail token not found. Run OAuth setup first.", "platform": "email"}
+
+        try:
+            # Build Gmail API service
+            from google.oauth2.credentials import Credentials
+            from google.auth.transport.requests import Request
+            from googleapiclient.discovery import build
+            import base64
+            from email.mime.text import MIMEText
+
+            creds = Credentials.from_authorized_user_file(str(token_path),
+                scopes=['https://www.googleapis.com/auth/gmail.send'])
+            service = build('gmail', 'v1', credentials=creds)
+
+            # Create message
+            message = MIMEText(content)
+            message['to'] = recipient
+            message['subject'] = subject
+
+            # Send message
+            raw = base64.urlsafe_b64encode(message.as_bytes()).decode()
+            result = service.users().messages().send(userId='me', body={'raw': raw}).execute()
+
+            self.log_action("email", "send_success", {"recipient": recipient})
+            return {"success": True, "platform": "email"}
+
+        except ImportError:
+            return {"success": False, "error": "Gmail libraries not installed", "platform": "email"}
         except Exception as e:
+            self.log_action("email", "send_error", {"error": str(e)})
             return {"success": False, "error": str(e), "platform": "email"}
 
     async def publish(self, file_path: Path) -> dict:
         """Publish content from an approved file.
 
         Args:
-            file_path: Path to the approved markdown file
+            file_path: Path to approved markdown file
 
         Returns:
             Result dictionary with success status and details
@@ -350,11 +461,11 @@ class Publisher:
 
 
 # Global publisher instance
-_publisher: Optional[Publisher] = None
+_publisher = None
 
 
 def get_publisher() -> Publisher:
-    """Get or create the global publisher instance."""
+    """Get or create global publisher instance."""
     global _publisher
     if _publisher is None:
         _publisher = Publisher()

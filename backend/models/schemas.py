@@ -72,6 +72,7 @@ class StatusResponse(BaseModel):
     pending_approvals: int
     inbox_count: int
     needs_action_count: int
+    approved_count: int = 0  # Number of files awaiting execution
     timestamp: datetime = Field(default_factory=datetime.now)
 
 

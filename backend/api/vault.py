@@ -24,7 +24,7 @@ from ..models.schemas import (
 
 router = APIRouter()
 
-VAULT_PATH = Path(os.getenv("VAULT_PATH", "./vault"))
+VAULT_PATH = Path(os.getenv("VAULT_PATH", "./AI_Employee_Vault"))
 VALID_FOLDERS = ["Inbox", "Needs_Action", "Pending_Approval", "Approved", "Done", "Plans"]
 
 

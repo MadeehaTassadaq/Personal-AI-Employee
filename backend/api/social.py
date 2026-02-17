@@ -137,7 +137,7 @@ async def get_aggregated_stats():
                 # Attempt to import MCP modules dynamically to avoid startup errors
                 if platform == "facebook":
                     try:
-                        from mcp import mcp__facebook__get_page_info
+                        from mcp_services import mcp__facebook__get_page_info
                         page_info = await mcp__facebook__get_page_info()
                         stats.append({
                             "platform": platform,
@@ -158,7 +158,7 @@ async def get_aggregated_stats():
                         })
                 elif platform == "instagram":
                     try:
-                        from mcp import mcp__instagram__get_account_info
+                        from mcp_services import mcp__instagram__get_account_info
                         account_info = await mcp__instagram__get_account_info()
                         stats.append({
                             "platform": platform,
@@ -179,7 +179,7 @@ async def get_aggregated_stats():
                         })
                 elif platform == "linkedin":
                     try:
-                        from mcp import mcp__linkedin__get_profile
+                        from mcp_services import mcp__linkedin__get_profile
                         profile_info = await mcp__linkedin__get_profile()
                         stats.append({
                             "platform": platform,
@@ -200,7 +200,7 @@ async def get_aggregated_stats():
                         })
                 elif platform == "twitter":
                     try:
-                        from mcp import mcp__twitter__get_profile
+                        from mcp_services import mcp__twitter__get_profile
                         # Placeholder - assuming MCP provides this
                         stats.append({
                             "platform": platform,
@@ -258,7 +258,7 @@ async def get_engagement_summary():
     try:
         if os.getenv("FACEBOOK_PAGE_ACCESS_TOKEN"):
             try:
-                from mcp import mcp__facebook__get_page_insights
+                from mcp_services import mcp__facebook__get_page_insights
                 facebook_insights = await mcp__facebook__get_page_insights()
                 engagement_data["platforms"]["facebook"] = {
                     "configured": True,
@@ -295,7 +295,7 @@ async def get_engagement_summary():
     try:
         if os.getenv("INSTAGRAM_BUSINESS_ACCOUNT_ID"):
             try:
-                from mcp import mcp__instagram__get_insights
+                from mcp_services import mcp__instagram__get_insights
                 instagram_insights = await mcp__instagram__get_insights()
                 engagement_data["platforms"]["instagram"] = {
                     "configured": True,
@@ -332,7 +332,7 @@ async def get_engagement_summary():
     try:
         if os.getenv("LINKEDIN_ACCESS_TOKEN"):
             try:
-                from mcp import mcp__linkedin__get_profile
+                from mcp_services import mcp__linkedin__get_profile
                 linkedin_profile = await mcp__linkedin__get_profile()
                 engagement_data["platforms"]["linkedin"] = {
                     "configured": True,
@@ -369,7 +369,7 @@ async def get_engagement_summary():
     try:
         if os.getenv("TWITTER_BEARER_TOKEN"):
             try:
-                from mcp import mcp__twitter__get_metrics
+                from mcp_services import mcp__twitter__get_metrics
                 engagement_data["platforms"]["twitter"] = {
                     "configured": True,
                     "followers": 0,  # Will be populated when MCP is called

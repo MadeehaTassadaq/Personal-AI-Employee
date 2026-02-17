@@ -100,6 +100,20 @@ def init_scheduler():
         immediate=False  # Wait before first check
     )
 
+    # Check daily tasks every minute (inbox processing at 9 AM, meeting reminders at 8 AM)
+    # Disabled: daily_checks need async event loop which doesn't work in threading scheduler
+    # TODO: Migrate to APScheduler or implement async-safe scheduler
+    # async def daily_check_wrapper():
+    #     from .daily_scheduler import run_daily_checks
+    #     await run_daily_checks()
+    #
+    # scheduler.add_periodic_task(
+    #     name="daily_checks",
+    #     func=lambda: asyncio.create_task(daily_check_wrapper()),
+    #     interval=60,  # Check every minute
+    #     immediate=False
+    # )
+
     scheduler.start()
 
 

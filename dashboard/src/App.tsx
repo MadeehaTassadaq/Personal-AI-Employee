@@ -1,280 +1,336 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useApi } from './hooks/useApi';
-import { StatusCard } from './components/StatusCard';
-import { WatcherPanel } from './components/WatcherPanel';
-import { ApprovalQueue } from './components/ApprovalQueue';
-import { TaskList } from './components/TaskList';
-import { PlatformCard } from './components/PlatformCard';
 import { UnifiedFeed } from './components/UnifiedFeed';
 import { AuditLog } from './components/AuditLog';
-import { RalphController } from './components/RalphController';
 import { SocialMediaDashboard } from './components/SocialMediaDashboard';
-import { OdooIntegration } from './components/OdooIntegration';
-import { BusinessAudit } from './components/BusinessAudit';
-import { CalendarView } from './components/CalendarView';
 import { ComposePanel } from './components/ComposePanel';
+import { CalendarView } from './components/CalendarView';
+import HealthcareView from './components/healthcare/HealthcareView';
 
-type TabView = 'overview' | 'social' | 'finance' | 'audit';
+type TabView = 'dashboard' | 'inbox' | 'approvals' | 'social' | 'calendar' | 'compose' | 'audit' | 'healthcare' | 'settings';
+
+interface NavItem {
+  id: TabView;
+  label: string;
+  icon: string;
+  badge?: number;
+}
 
 function App() {
   const {
     status,
     error,
-    startWatcher,
-    stopWatcher,
     startAllWatchers,
     stopAllWatchers,
-    fetchVaultFolder,
-    fetchApprovals,
-    approveItem,
-    rejectItem,
     fetchActivity,
     fetchAudit,
-    fetchAuditStats,
-    fetchAuditAnalytics,
-    fetchRalphStatus,
-    startRalph,
-    stopRalph,
-    pauseRalph,
-    resumeRalph,
+    fetchSocialStats,
+    fetchSocialPlatformStatus,
     fetchCalendarStatus,
     fetchTodayEvents,
     fetchCalendarEvents,
-    fetchSocialStats,
-    fetchSocialPlatformStatus,
     submitPost
   } = useApi();
 
-  const [activeTab, setActiveTab] = useState<TabView>('overview');
+  const [activeTab, setActiveTab] = useState<TabView>('dashboard');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
 
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Calculate summary stats
+  const runningWatchers = Object.values(status.watchers).filter(s => s === 'running').length;
   const totalWatchers = Object.keys(status.watchers).length;
-  const runningWatchers = Object.values(status.watchers).filter(
-    s => s === 'running'
-  ).length;
 
-  // Platform data (derived from watcher status for now)
-  const platforms = [
-    {
-      name: 'Gmail',
-      icon: '[@]',
-      status: status.watchers.gmail === 'running' ? 'healthy' : 'unknown',
-      connected: status.watchers.gmail === 'running',
-      eventsToday: 0
-    },
-    {
-      name: 'WhatsApp',
-      icon: '[#]',
-      status: status.watchers.whatsapp === 'running' ? 'healthy' : 'unknown',
-      connected: status.watchers.whatsapp === 'running',
-      eventsToday: 0
-    },
-    {
-      name: 'LinkedIn',
-      icon: '[in]',
-      status: status.watchers.linkedin === 'running' ? 'healthy' : 'unknown',
-      connected: status.watchers.linkedin === 'running',
-      eventsToday: 0
-    },
-    {
-      name: 'Twitter',
-      icon: '[tw]',
-      status: status.watchers.twitter === 'running' ? 'healthy' : 'unknown',
-      connected: status.watchers.twitter === 'running',
-      eventsToday: 0
-    },
-    {
-      name: 'Facebook',
-      icon: '[fb]',
-      status: status.watchers.facebook === 'running' ? 'healthy' : 'unknown',
-      connected: status.watchers.facebook === 'running',
-      eventsToday: 0
-    },
-    {
-      name: 'Instagram',
-      icon: '[ig]',
-      status: status.watchers.instagram === 'running' ? 'healthy' : 'unknown',
-      connected: status.watchers.instagram === 'running',
-      eventsToday: 0
-    },
-    {
-      name: 'Calendar',
-      icon: '[CAL]',
-      status: 'unknown',
-      connected: false,
-      eventsToday: 0
+  const navItems: NavItem[] = [
+    { id: 'dashboard', label: 'Dashboard', icon: '📊' },
+    { id: 'inbox', label: 'Inbox', icon: '📥', badge: status.inbox_count || 0 },
+    { id: 'approvals', label: 'Approvals', icon: '✅', badge: status.pending_approvals || 0 },
+    { id: 'social', label: 'Social Media', icon: '📱' },
+    { id: 'healthcare', label: 'Healthcare', icon: '🏥' },
+    { id: 'calendar', label: 'Calendar', icon: '📅' },
+    { id: 'compose', label: 'Compose', icon: '✏️' },
+    { id: 'audit', label: 'Audit Log', icon: '📋' },
+    { id: 'settings', label: 'Settings', icon: '⚙️' },
+  ];
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'running': return '#22c55e';
+      case 'stopped': return '#ef4444';
+      case 'error': return '#f59e0b';
+      default: return '#6b7280';
     }
-  ] as const;
+  };
 
   return (
-    <div className="app">
-      <header className="header">
-        <div className="header-left">
-          <h1>Digital FTE Dashboard</h1>
-          <span className="tier-badge">Gold</span>
+    <div className="app-container">
+      {/* Sidebar */}
+      <aside className={`sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
+        <div className="sidebar-header">
+          <div className="logo">
+            <span className="logo-icon">🤖</span>
+            {!sidebarCollapsed && <span className="logo-text">Digital FTE</span>}
+          </div>
+          <button
+            className="collapse-btn"
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            aria-label="Toggle sidebar"
+          >
+            {sidebarCollapsed ? '→' : '←'}
+          </button>
         </div>
-        <div className="header-right">
-          <nav className="header-nav">
+
+        <nav className="sidebar-nav">
+          {navItems.map(item => (
             <button
-              className={`nav-btn ${activeTab === 'overview' ? 'active' : ''}`}
-              onClick={() => setActiveTab('overview')}
+              key={item.id}
+              className={`nav-item ${activeTab === item.id ? 'active' : ''}`}
+              onClick={() => setActiveTab(item.id)}
+              title={item.label}
             >
-              Overview
+              <span className="nav-icon">{item.icon}</span>
+              {!sidebarCollapsed && (
+                <>
+                  <span className="nav-label">{item.label}</span>
+                  {item.badge !== undefined && item.badge > 0 && (
+                    <span className="nav-badge">{item.badge}</span>
+                  )}
+                </>
+              )}
             </button>
-            <button
-              className={`nav-btn ${activeTab === 'audit' ? 'active' : ''}`}
-              onClick={() => setActiveTab('audit')}
-            >
-              Audit Log
-            </button>
-          </nav>
-          <div className="status-badge">
-            <span className={`indicator ${status.system}`} />
-            {status.system.toUpperCase()}
+          ))}
+        </nav>
+
+        <div className="sidebar-footer">
+          <div className="system-status">
+            <div
+              className="status-dot"
+              style={{ backgroundColor: getStatusColor(status.system) }}
+            />
+            {!sidebarCollapsed && (
+              <span className="status-label">{status.system}</span>
+            )}
           </div>
         </div>
-      </header>
+      </aside>
 
-      <main className="main">
-        {error && (
-          <div className="error-banner">
-            Error: {error}
+      {/* Main Content */}
+      <main className="main-content">
+        {/* Top Header */}
+        <header className="top-header">
+          <div className="header-left">
+            <h1 className="page-title">{navItems.find(i => i.id === activeTab)?.label}</h1>
           </div>
-        )}
-
-        {activeTab === 'overview' && (
-          <>
-            {/* Status Cards Row */}
-            <section className="status-section">
-              <StatusCard
-                title="System Status"
-                value={status.system.toUpperCase()}
-                status={status.system === 'running' ? 'running' : 'stopped'}
-              />
-              <StatusCard
-                title="Active Watchers"
-                value={`${runningWatchers}/${totalWatchers}`}
-                status={runningWatchers > 0 ? 'running' : 'stopped'}
-              />
-              <StatusCard
-                title="Pending Approvals"
-                value={status.pending_approvals}
-                status={status.pending_approvals > 0 ? 'warning' : 'running'}
-              />
-              <StatusCard
-                title="Tasks Today"
-                value="0"
-                status="running"
-              />
-            </section>
-
-            {/* Platform Cards Row */}
-            <section className="platform-section">
-              <h2 className="section-title">Platform Status</h2>
-              <div className="platform-grid">
-                {platforms.map((p) => (
-                  <PlatformCard
-                    key={p.name}
-                    name={p.name}
-                    icon={p.icon}
-                    status={p.status as any}
-                    connected={p.connected}
-                    eventsToday={p.eventsToday}
-                  />
-                ))}
+          <div className="header-right">
+            <div className="time-display">
+              <div className="date">
+                {currentTime.toLocaleDateString('en-US', {
+                  weekday: 'long',
+                  month: 'short',
+                  day: 'numeric'
+                })}
               </div>
-            </section>
-
-            <div className="panels">
-              {/* Main Content Row */}
-              <div className="panel-row">
-                <WatcherPanel
-                  watchers={status.watchers}
-                  onStart={startWatcher}
-                  onStop={stopWatcher}
-                  onStartAll={startAllWatchers}
-                  onStopAll={stopAllWatchers}
-                />
-
-                <CalendarView
-                  fetchTodayEvents={fetchTodayEvents}
-                  fetchEvents={fetchCalendarEvents}
-                  fetchCalendarStatus={fetchCalendarStatus}
-                />
-
-                <RalphController
-                  fetchStatus={fetchRalphStatus}
-                  startRalph={startRalph}
-                  stopRalph={stopRalph}
-                  pauseRalph={pauseRalph}
-                  resumeRalph={resumeRalph}
-                />
-              </div>
-
-              {/* Approval and Tasks Row */}
-              <div className="panel-row">
-                <ApprovalQueue
-                  fetchApprovals={fetchApprovals}
-                  onApprove={approveItem}
-                  onReject={rejectItem}
-                />
-
-                <TaskList
-                  title="Needs Action"
-                  folder="Needs_Action"
-                  fetchFolder={fetchVaultFolder}
-                  emptyMessage="No tasks pending action"
-                />
-              </div>
-
-              {/* Task Lists Row */}
-              <div className="panel-row three-col">
-                <TaskList
-                  title="Inbox"
-                  folder="Inbox"
-                  fetchFolder={fetchVaultFolder}
-                  emptyMessage="No new tasks"
-                />
-
-                <TaskList
-                  title="Pending Approval"
-                  folder="Pending_Approval"
-                  fetchFolder={fetchVaultFolder}
-                  emptyMessage="No items awaiting approval"
-                />
-
-                <TaskList
-                  title="Completed"
-                  folder="Done"
-                  fetchFolder={fetchVaultFolder}
-                  emptyMessage="No completed tasks"
-                />
-              </div>
-
-              {/* Unified Activity Feed */}
-              <UnifiedFeed fetchActivity={fetchActivity} />
-
-              {/* Social Media Dashboard */}
-              <SocialMediaDashboard
-                fetchSocialStats={fetchSocialStats}
-                fetchPlatformStatus={fetchSocialPlatformStatus}
-              />
-
-              {/* Compose Panel for posting */}
-              <div className="panel-row">
-                <ComposePanel onSubmit={submitPost} />
+              <div className="time">
+                {currentTime.toLocaleTimeString('en-US', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  second: '2-digit'
+                })}
               </div>
             </div>
-          </>
+          </div>
+        </header>
+
+        {/* Error Banner */}
+        {error && (
+          <div className="error-banner">
+            <strong>⚠️ Error:</strong> {error}
+          </div>
         )}
 
-        {activeTab === 'audit' && (
-          <AuditLog fetchAudit={fetchAudit} />
-        )}
+        {/* Content Area */}
+        <div className="content-area">
+          {activeTab === 'dashboard' && (
+            <div className="dashboard-view">
+              {/* Stats Cards */}
+              <div className="stats-grid">
+                <div className="stat-card urgent">
+                  <div className="stat-icon">✅</div>
+                  <div className="stat-content">
+                    <div className="stat-value">{status.pending_approvals}</div>
+                    <div className="stat-label">Pending Approvals</div>
+                  </div>
+                </div>
+
+                <div className="stat-card success">
+                  <div className="stat-icon">🟢</div>
+                  <div className="stat-content">
+                    <div className="stat-value">{runningWatchers}/{totalWatchers}</div>
+                    <div className="stat-label">Active Services</div>
+                  </div>
+                </div>
+
+                <div className="stat-card info">
+                  <div className="stat-icon">📥</div>
+                  <div className="stat-content">
+                    <div className="stat-value">{status.inbox_count || 0}</div>
+                    <div className="stat-label">New Tasks</div>
+                  </div>
+                </div>
+
+                <div className="stat-card warning">
+                  <div className="stat-icon">🔄</div>
+                  <div className="stat-content">
+                    <div className="stat-value">{status.needs_action_count || 0}</div>
+                    <div className="stat-label">In Progress</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div className="quick-actions-card">
+                <h2 className="card-title">Quick Actions</h2>
+                <div className="quick-actions-grid">
+                  <button
+                    className="quick-action-btn primary"
+                    onClick={() => setActiveTab('compose')}
+                  >
+                    <span className="action-icon">✏️</span>
+                    <span className="action-text">Create Post</span>
+                  </button>
+                  <button
+                    className="quick-action-btn success"
+                    onClick={startAllWatchers}
+                  >
+                    <span className="action-icon">▶️</span>
+                    <span className="action-text">Start All</span>
+                  </button>
+                  <button
+                    className="quick-action-btn danger"
+                    onClick={stopAllWatchers}
+                  >
+                    <span className="action-icon">⏸</span>
+                    <span className="action-text">Stop All</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Platform Status */}
+              <div className="platforms-card">
+                <h2 className="card-title">Platform Status</h2>
+                <div className="platforms-grid">
+                  {Object.entries(status.watchers).map(([name, state]) => (
+                    <div
+                      key={name}
+                      className="platform-item"
+                      style={{ borderLeftColor: getStatusColor(state) }}
+                    >
+                      <span className="platform-name">
+                        {name.charAt(0).toUpperCase() + name.slice(1)}
+                      </span>
+                      <span className={`platform-status platform-${state}`}>
+                        {state}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Recent Activity */}
+              <div className="activity-card">
+                <h2 className="card-title">Recent Activity</h2>
+                <UnifiedFeed fetchActivity={fetchActivity} />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'inbox' && (
+            <div className="folder-view">
+              <div className="folder-header">
+                <h2>Inbox</h2>
+                <span className="count-badge">{status.inbox_count || 0} items</span>
+              </div>
+              <div className="empty-state">
+                📭 Inbox is empty. New tasks will appear here.
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'approvals' && (
+            <div className="folder-view">
+              <div className="folder-header">
+                <h2>Pending Approvals</h2>
+                <span className="count-badge">{status.pending_approvals || 0} items</span>
+              </div>
+              <div className="empty-state">
+                ✅ No pending approvals. You're all caught up!
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'social' && (
+            <SocialMediaDashboard
+              fetchSocialStats={fetchSocialStats}
+              fetchPlatformStatus={fetchSocialPlatformStatus}
+            />
+          )}
+
+          {activeTab === 'healthcare' && <HealthcareView />}
+
+          {activeTab === 'calendar' && (
+            <CalendarView
+              fetchTodayEvents={fetchTodayEvents}
+              fetchEvents={fetchCalendarEvents}
+              fetchCalendarStatus={fetchCalendarStatus}
+            />
+          )}
+
+          {activeTab === 'compose' && (
+            <ComposePanel onSubmit={submitPost} />
+          )}
+
+          {activeTab === 'audit' && (
+            <AuditLog fetchAudit={fetchAudit} />
+          )}
+
+          {activeTab === 'settings' && (
+            <div className="settings-view">
+              <h2>Settings</h2>
+              <div className="settings-section">
+                <h3>System Configuration</h3>
+                <div className="setting-item">
+                  <label>Vault Path</label>
+                  <code>./AI_Employee_Vault</code>
+                </div>
+                <div className="setting-item">
+                  <label>Dry Run Mode</label>
+                  <span className="status-badge">{'Enabled'}</span>
+                </div>
+                <div className="setting-item">
+                  <label>Auto-start Watchers</label>
+                  <span className="status-badge">Enabled</span>
+                </div>
+              </div>
+
+              <div className="settings-section">
+                <h3>Connected Platforms</h3>
+                {Object.entries(status.watchers).map(([name, state]) => (
+                  <div key={name} className="platform-setting">
+                    <span>{name.charAt(0).toUpperCase() + name.slice(1)}</span>
+                    <span className={`status-indicator status-${state}`}>
+                      {state}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </main>
-
-      <footer className="footer">
-        Digital FTE Dashboard (Gold Tier) - {new Date().getFullYear()}
-      </footer>
     </div>
   );
 }

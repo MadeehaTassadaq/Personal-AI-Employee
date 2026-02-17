@@ -7,7 +7,6 @@ from datetime import datetime
 from pathlib import Path
 from contextlib import asynccontextmanager
 from typing import Set
- 
 
 from dotenv import load_dotenv
 
@@ -17,12 +16,13 @@ load_dotenv()
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api import status, watchers, vault, approvals, audit, ralph, ceo_briefing, odoo, social, calendar, trigger, compose, business_audit
+from backend.api import status, watchers, vault, approvals, audit, ralph, ceo_briefing, odoo, social, calendar, trigger, compose, business_audit, ai_content, healthcare
 from backend.services.audit_logger import get_audit_logger, AuditAction
 from backend.services.ralph_wiggum import get_ralph
 from backend.services.scheduler import init_scheduler, shutdown_scheduler
+from backend.services.orchestrator import get_orchestrator
 
-VAULT_PATH = Path(os.getenv("VAULT_PATH", "./vault"))
+VAULT_PATH = Path(os.getenv("VAULT_PATH", "./AI_Employee_Vault"))
 
 
 # WebSocket connection manager
@@ -117,10 +117,48 @@ async def lifespan(app: FastAPI):
         manager.broadcast({"type": f"ralph_{event}", "data": data})
     ))
 
+    # Auto-start watchers
+    auto_start_watchers = os.getenv("AUTO_START_WATCHERS", "true").lower() == "true"
+    if auto_start_watchers:
+        print("[BACKEND] Auto-starting watchers...")
+        orchestrator = get_orchestrator()
+        watchers_to_start = ["file", "gmail", "whatsapp", "linkedin", "facebook", "instagram", "twitter"]
+
+        for watcher_name in watchers_to_start:
+            try:
+                success = orchestrator.start_watcher(watcher_name)
+                status = "Started" if success else "Failed"
+                print(f"[BACKEND]   {watcher_name}: {status}")
+            except Exception as e:
+                print(f"[BACKEND]   {watcher_name}: Error: {e}")
+
+        # Start approved watcher (async, runs in main process)
+        try:
+            loop = asyncio.get_running_loop()
+            success = await orchestrator.start_approved_watcher(loop)
+            status = "Started" if success else "Failed"
+            print(f"[BACKEND]   approved: {status}")
+        except Exception as e:
+            print(f"[BACKEND]   approved: Error: {e}")
+
+        print("[BACKEND] All watchers initialized")
+
     yield
 
     # Shutdown
     print("[BACKEND] Shutting down...")
+
+    # Stop all watchers
+    orchestrator = get_orchestrator()
+    print("[BACKEND] Stopping watchers...")
+
+    # Stop approved watcher first (async)
+    await orchestrator.stop_approved_watcher()
+
+    # Stop other watchers
+    orchestrator.stop_all_watchers()
+    print("[BACKEND] All watchers stopped")
+
     shutdown_scheduler()
     print("[BACKEND] Scheduler stopped")
     audit_logger.log(
@@ -158,8 +196,10 @@ app.include_router(odoo.router, prefix="/api/odoo", tags=["Odoo Accounting"])
 app.include_router(social.router, prefix="/api/social", tags=["Social Media"])
 app.include_router(calendar.router, prefix="/api/calendar", tags=["Calendar"])
 app.include_router(trigger.router, prefix="/api/trigger", tags=["Trigger"])
+app.include_router(healthcare.router, prefix="/api/healthcare", tags=["Healthcare"])
 app.include_router(compose.router, prefix="/api/compose", tags=["Compose"])
 app.include_router(business_audit.router, prefix="/api/business-audit", tags=["Business Audit"])
+app.include_router(ai_content.router, prefix="/api/ai", tags=["AI Content Generation"])
 
 
 @app.get("/")

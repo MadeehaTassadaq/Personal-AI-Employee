@@ -1,0 +1,38 @@
+# Odoo Custom Modules
+
+This directory contains custom Odoo modules for the Personal AI Employee healthcare integration.
+
+## Modules
+
+### medical_healthcare
+Patient and healthcare management for medical practices.
+
+**Features:**
+- Patient profiles with medical history
+- Appointment scheduling and reminders
+- Vitals tracking
+- Patient billing integration
+- Risk category management
+- Pregnancy status tracking
+- Allergies and chronic conditions
+- Automated WhatsApp reminders
+
+## Setup
+
+Add this directory to Odoo's `addons_path` in `/etc/odoo/odoo.conf`:
+
+```ini
+addons_path = /opt/odoo/addons,/opt/odoo_custom_addons,/home/madeeha/Documents/Personal-AI-Employee/odoo_custom_modules
+```
+
+Then restart Odoo:
+```bash
+sudo systemctl restart odoo
+```
+
+## Installing Modules
+
+1. Go to Apps menu in Odoo
+2. Remove "Apps" filter
+3. Search for "Healthcare Management"
+4. Click Install

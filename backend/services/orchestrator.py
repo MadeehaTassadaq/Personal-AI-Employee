@@ -1,5 +1,6 @@
 """Orchestrator service for managing watchers and task processing."""
 
+import asyncio
 import os
 import json
 import subprocess
@@ -23,6 +24,8 @@ class Orchestrator:
         self.vault_path = Path(vault_path)
         self.watcher_processes: dict[str, subprocess.Popen] = {}
         self.watcher_threads: dict[str, threading.Thread] = {}
+        self.approved_watcher_task: Optional[asyncio.Task] = None
+        self.approved_watcher_running = False
 
     def start_watcher(self, name: str) -> bool:
         """Start a watcher process.
@@ -187,6 +190,72 @@ class Orchestrator:
 
         logs.append(log_entry)
         log_file.write_text(json.dumps(logs, indent=2))
+
+    async def start_approved_watcher(self, loop: asyncio.AbstractEventLoop) -> bool:
+        """Start the approved folder watcher (async task).
+
+        Args:
+            loop: The asyncio event loop
+
+        Returns:
+            True if started successfully
+        """
+        if self.approved_watcher_running:
+            return True  # Already running
+
+        try:
+            from watchers.approved_watcher import get_approved_watcher
+            watcher = get_approved_watcher()
+
+            # Run the watcher in the background
+            self.approved_watcher_task = loop.create_task(watcher.run_async())
+            self.approved_watcher_running = True
+
+            # Update state
+            state = load_state()
+            if "watchers" not in state:
+                state["watchers"] = {}
+            state["watchers"]["approved"] = "running"
+            save_state(state)
+
+            print("[Orchestrator] Approved watcher started")
+            return True
+
+        except Exception as e:
+            print(f"Error starting approved watcher: {e}")
+            return False
+
+    async def stop_approved_watcher(self) -> bool:
+        """Stop the approved folder watcher.
+
+        Returns:
+            True if stopped successfully
+        """
+        if not self.approved_watcher_running:
+            return True  # Not running
+
+        try:
+            if self.approved_watcher_task:
+                self.approved_watcher_task.cancel()
+                try:
+                    await self.approved_watcher_task
+                except asyncio.CancelledError:
+                    pass
+
+            self.approved_watcher_running = False
+
+            # Update state
+            state = load_state()
+            if "watchers" in state and "approved" in state["watchers"]:
+                state["watchers"]["approved"] = "stopped"
+            save_state(state)
+
+            print("[Orchestrator] Approved watcher stopped")
+            return True
+
+        except Exception as e:
+            print(f"Error stopping approved watcher: {e}")
+            return False
 
 
 # Global orchestrator instance

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vitals List View -->
+        <record id="view_vitals_list" model="ir.ui.view">
+            <field name="name">medical.vitals.list</field>
+            <field name="model">medical.vitals</field>
+            <field name="arch" type="xml">
+                <list string="Vitals">
+                    <field name="date_taken"/>
+                    <field name="patient_id"/>
+                    <field name="appointment_id"/>
+                    <field name="temperature"/>
+                    <field name="blood_pressure_systolic"/>
+                    <field name="blood_pressure_diastolic"/>
+                    <field name="heart_rate"/>
+                    <field name="weight"/>
+                    <field name="bmi"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vitals Form View -->
+        <record id="view_vitals_form" model="ir.ui.view">
+            <field name="name">medical.vitals.form</field>
+            <field name="model">medical.vitals</field>
+            <field name="arch" type="xml">
+                <form string="Vitals">
+                    <sheet>
+                        <group>
+                            <group>
+                                    <field name="patient_id" required="1"/>
+                                    <field name="appointment_id"/>
+                                    <field name="date_taken" required="1"/>
+                            </group>
+                            <group>
+                                    <field name="temperature"/>
+                                    <field name="blood_pressure_systolic"/>
+                                    <field name="blood_pressure_diastolic"/>
+                                    <field name="heart_rate"/>
+                                    <field name="respiratory_rate"/>
+                                    <field name="oxygen_saturation"/>
+                            </group>
+                            <group>
+                                    <field name="weight"/>
+                                    <field name="height"/>
+                                    <field name="bmi" readonly="1"/>
+                            </group>
+                            <group>
+                                    <field name="notes" nolabel="1" colspan="2"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vitals Action -->
+        <record id="action_vitals_list" model="ir.actions.act_window">
+            <field name="name">Vitals</field>
+            <field name="res_model">medical.vitals</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No vitals recorded yet.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

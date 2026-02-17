@@ -1,0 +1,26 @@
+[
+  {
+    "timestamp": "2026-02-05T15:45:50.712870",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+966565811288",
+    "message_length": 595,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-05T15:47:21.756062",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+00966565811288",
+    "message_length": 595,
+    "dry_run": false
+  },
+  {
+    "timestamp": "2026-02-05T15:47:58.601657",
+    "watcher": "WhatsAppMCP",
+    "event": "whatsapp_send_requested",
+    "phone": "+966565811288",
+    "message_length": 595,
+    "dry_run": false
+  }
+]

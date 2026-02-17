@@ -1,0 +1,11 @@
+[
+  {
+    "timestamp": "2026-02-05T18:54:16.553323",
+    "tool_name": "Bash",
+    "tool_input": {
+      "command": "pip install requests"
+    },
+    "action": "BLOCKED",
+    "reason": "pip command detected"
+  }
+]

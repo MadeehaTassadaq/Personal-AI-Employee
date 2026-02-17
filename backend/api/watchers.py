@@ -17,7 +17,7 @@ VAULT_PATH = Path(os.getenv("VAULT_PATH", "./vault"))
 STATE_FILE = Path(__file__).parent.parent / "state.json"
 
 # Available watchers
-AVAILABLE_WATCHERS = ["file", "gmail", "whatsapp", "linkedin", "facebook", "instagram", "twitter"]
+AVAILABLE_WATCHERS = ["file", "gmail", "whatsapp", "linkedin", "facebook", "instagram", "twitter", "approved"]
 
 
 def load_state() -> dict:

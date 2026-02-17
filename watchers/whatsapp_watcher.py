@@ -68,6 +68,118 @@ class WhatsAppWatcher(BaseWatcher):
         recent = list(self.seen_messages)[-1000:]
         seen_file.write_text(json.dumps(recent))
 
+    def _get_queue_file(self) -> Path:
+        """Get the path to the message queue file."""
+        return self.vault_path / ".whatsapp_queue.json"
+
+    def _process_message_queue(self) -> None:
+        """Process outgoing messages from the shared queue file.
+
+        This allows the publisher service to queue messages without
+        launching a new browser instance (which would cause profile lock errors).
+        """
+        queue_file = self._get_queue_file()
+
+        if not queue_file.exists():
+            return
+
+        try:
+            queue_data = json.loads(queue_file.read_text())
+            messages = queue_data.get("messages", [])
+
+            if not messages:
+                return
+
+            self.logger.info(f"Processing {len(messages)} queued WhatsApp messages")
+
+            # Process each message in the queue
+            remaining_messages = []
+            for msg in messages:
+                msg_id = msg.get("id")
+                phone = msg.get("phone")
+                content = msg.get("content")
+
+                if not phone or not content:
+                    remaining_messages.append(msg)
+                    continue
+
+                # Attempt to send the message
+                success = self._send_message(phone, content)
+
+                if success:
+                    self.logger.info(f"Sent queued message to {phone}")
+                    self.log_event("whatsapp_sent_queued", {
+                        "phone": phone,
+                        "message_id": msg_id
+                    })
+                else:
+                    # Keep message in queue if failed
+                    remaining_messages.append(msg)
+
+            # Update queue file with remaining messages
+            if remaining_messages:
+                queue_data["messages"] = remaining_messages
+                queue_file.write_text(json.dumps(queue_data, indent=2))
+            else:
+                # Remove queue file if empty
+                queue_file.unlink()
+
+        except json.JSONDecodeError:
+            self.logger.error("Invalid queue file format")
+        except Exception as e:
+            self.logger.error(f"Error processing message queue: {e}")
+
+    def _send_message(self, phone: str, content: str) -> bool:
+        """Send a WhatsApp message using the active browser session.
+
+        Args:
+            phone: Phone number with country code (e.g., +1234567890)
+            content: Message content to send
+
+        Returns:
+            True if message was sent successfully
+        """
+        if not self.page:
+            return False
+
+        try:
+            # Clean phone number
+            phone_clean = phone.replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
+            if not phone_clean.startswith("+"):
+                phone_clean = "+" + phone_clean
+
+            # Use WhatsApp Web URL scheme to open chat
+            whatsapp_url = f"https://web.whatsapp.com/send?phone={phone_clean.replace('+', '')}&text={content}"
+
+            # Navigate to the chat
+            self.page.goto(whatsapp_url, timeout=15000)
+
+            # Wait for the chat to load and message input to appear
+            try:
+                # Wait for message input box
+                self.page.wait_for_selector('[data-testid="conversation-panel-body"]', timeout=10000)
+
+                # The message should be pre-filled in the input via URL
+                # Look for send button and click it
+                send_button = self.page.query_selector('[data-testid="send"]')
+                if send_button:
+                    send_button.click()
+                    # Wait a moment for send to complete
+                    import time
+                    time.sleep(1)
+                    return True
+                else:
+                    self.logger.warning("Could not find send button")
+                    return False
+
+            except Exception as e:
+                self.logger.error(f"Error sending message: {e}")
+                return False
+
+        except Exception as e:
+            self.logger.error(f"Error navigating to WhatsApp chat: {e}")
+            return False
+
     def _init_browser(self) -> None:
         """Initialize Playwright browser with saved session."""
         self.session_path.mkdir(parents=True, exist_ok=True)
@@ -102,6 +214,9 @@ class WhatsAppWatcher(BaseWatcher):
 
         if not self.page:
             return []
+
+        # Check for outgoing message queue before checking for new messages
+        self._process_message_queue()
 
         try:
             new_messages = []

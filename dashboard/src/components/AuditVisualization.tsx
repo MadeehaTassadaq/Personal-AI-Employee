@@ -1,18 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useApi } from '../hooks/useApi';
-
-interface AuditEntry {
-  timestamp: string;
-  correlation_id: string;
-  action: string;
-  level: string;
-  platform: string;
-  actor: string;
-  details: Record<string, any>;
-  task_id?: string;
-  file_path?: string;
-  duration_ms?: number;
-}
+import { useApi, AuditEntry } from '../hooks/useApi';
 
 interface AuditStats {
   total_entries: number;

@@ -1,6 +1,6 @@
 # Digital FTE Dashboard
 
-> Last Updated: 2026-02-04 00:03:28
+> Last Updated: 2026-02-13 16:13:17
 
 ---
 
@@ -40,10 +40,9 @@ _No pending approvals_
 
 ## Signals / Inputs
 
-> **2 new items in Inbox/**
+> **0 new items in Inbox/**
 
-- [[Inbox/prepare-report|Prepare Report]]
-- [[Inbox/test-task-from-cli|test task from cli]]
+_No new signals_
 
 ---
 
@@ -51,16 +50,16 @@ _No pending approvals_
 
 > Last 10 completed tasks
 
-- [2026-02-03] Facebook Post
-- [2026-02-03] Linkedin Post
-- [2026-02-03] Twitter Post
-- [2026-02-02] Linkedin Post
-- [2026-02-02] Twitter Post
-- [2026-01-31] facebook ai healthcare 2026 01 31
-- [2026-01-31] instagram ai healthcare 2026 01 31
-- [2026-01-30] facebook ai healthcare 2026 01 30
-- [2026-01-30] email meeting notification 2026 01 30
-- [2026-01-30] whatsapp test 2026 01 30
+- [2026-02-13] 20260213 160437 email  dr madeeha add drshoroug khalil
+- [2026-02-13] 20260213 160437 newsletter learn more faster with amia now
+- [2026-02-13] 20260213 160437 email stop reading docs and start building agents
+- [2026-02-13] 20260213 160437 email new messages from morrie j
+- [2026-02-13] 20260213 160437 email new activity in general announcements
+- [2026-02-13] 20260213 160437 newsletter you have 10 new invitations
+- [2026-02-13] 20260213 160437 newsletter madeeha these ai agents n8n and chatgpt project
+- [2026-02-13] 20260213 160437 newsletter dr madeeha follow siddiqa jabeen   senior human r
+- [2026-02-13] 20260213 160437 email supa update february 2026
+- [2026-02-13] 20260213 160431 twitter mention by iuv me 
 
 ---
 
@@ -68,7 +67,7 @@ _No pending approvals_
 
 | Metric | Today | This Week |
 |--------|-------|-----------|
-| Tasks Completed | 3 | 5 |
+| Tasks Completed | 18 | 28 |
 | Pending Approvals | 0 | — |
 | Emails Sent | 0 | 0 |
 | Social Posts | 0 | 0 |
@@ -76,10 +75,10 @@ _No pending approvals_
 ---
 
 <details>
-<summary>## Weekly Summary (Week of 2026-02-02)</summary>
+<summary>## Weekly Summary (Week of 2026-02-09)</summary>
 
-- **Total Tasks Completed**: 3
-- **Actions by Type**: Social_Post (3)
+- **Total Tasks Completed**: 28
+- **Actions by Type**: Unknown (28)
 
 </details>
 

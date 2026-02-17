@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Appointment List View -->
+        <record id="view_appointment_list" model="ir.ui.view">
+            <field name="name">medical.appointment.list</field>
+            <field name="model">medical.appointment</field>
+            <field name="arch" type="xml">
+                <list string="Appointments" decoration-success="status == 'completed'"
+                      decoration-warning="status in ['scheduled', 'confirmed']"
+                      decoration-danger="status in ['cancelled', 'no_show']"
+                      decoration-info="status == 'in_progress'">
+                    <field name="appointment_date"/>
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="appointment_type"/>
+                    <field name="status"/>
+                    <field name="reminder_sent"/>
+                    <button name="action_send_manual_reminder" string="Send Reminder"
+                            type="object" class="btn-link"
+                            icon="fa-whatsapp"
+                            invisible="[('reminder_sent', '=', True)]"/>
+                    <button name="action_confirm" string="Confirm"
+                            type="object" class="btn-link"
+                            invisible="[('status', '!=', 'scheduled')]"/>
+                    <button name="action_complete" string="Complete"
+                            type="object" class="btn-link"
+                            invisible="[('status', '=', 'completed')]"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Appointment Form View -->
+        <record id="view_appointment_form" model="ir.ui.view">
+            <field name="name">medical.appointment.form</field>
+            <field name="model">medical.appointment</field>
+            <field name="arch" type="xml">
+                <form string="Appointment">
+                    <header>
+                        <button name="action_send_manual_reminder" string="Send Reminder Now"
+                                type="object" class="btn-primary"
+                                invisible="[('reminder_sent', '=', True)]"
+                                icon="fa-whatsapp"/>
+                        <button name="action_confirm" string="Confirm"
+                                type="object" class="btn-primary"
+                                invisible="[('status', '!=', 'scheduled')]"/>
+                        <button name="action_in_progress" string="Start"
+                                type="object" class="btn-primary"
+                                invisible="[('status', '!=', 'confirmed')]"/>
+                        <button name="action_complete" string="Complete"
+                                type="object" class="btn-success"
+                                invisible="[('status', '=', 'completed')]"/>
+                        <button name="action_cancel" string="Cancel"
+                                type="object" class="btn-danger"
+                                invisible="[('status', 'in', ['completed', 'cancelled'])]"/>
+                        <field name="status" widget="statusbar"
+                               statusbar_visible="scheduled,confirmed,in_progress,completed"
+                               statusbar_colors='{"scheduled":"blue","confirmed":"green","in_progress":"orange","completed":"gray","cancelled":"red","no_show":"red"}'/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                    <field name="patient_id" required="1"/>
+                                    <field name="doctor_id" required="1"/>
+                                    <field name="appointment_date" required="1"/>
+                                    <field name="duration"/>
+                                </group>
+                            <group>
+                                    <field name="appointment_type" required="1"/>
+                                    <field name="reminder_sent" readonly="1"/>
+                                    <field name="reminder_sent_date" readonly="1" invisible="[('reminder_sent', '=', False)]"/>
+                                    <field name="reminder_count" readonly="1"/>
+                                    <field name="disable_reminders"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Visit Details">
+                                <group>
+                                        <field name="chief_complaint" placeholder="Reason for visit..."/>
+                                        <field name="diagnosis" placeholder="Diagnosis..."/>
+                                        <field name="prescription" placeholder="Prescription..."/>
+                                        <field name="vitals_recorded"/>
+                                </group>
+                            </page>
+                            <page string="Notes">
+                                <field name="notes" nolabel="1" placeholder="Additional notes..."/>
+                            </page>
+                            <page string="Reminders" name="reminders">
+                                <group>
+                                        <field name="reminder_config_ids" widget="many2many_tags" nolabel="1" colspan="2"/>
+                                </group>
+                                <group>
+                                        <field name="reminder_history_ids" nolabel="1" colspan="2">
+                                                <list>
+                                                        <field name="sent_date"/>
+                                                        <field name="config_id"/>
+                                                        <field name="channel"/>
+                                                        <field name="status"/>
+                                                        <field name="patient_response"/>
+                                                    </list>
+                                                </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Appointment Calendar View -->
+        <record id="view_appointment_calendar" model="ir.ui.view">
+            <field name="name">medical.appointment.calendar</field>
+            <field name="model">medical.appointment</field>
+            <field name="arch" type="xml">
+                <calendar string="Appointments" date_start="appointment_date"
+                         date_stop="appointment_date" color="patient_id">
+                    <field name="patient_id"/>
+                    <field name="doctor_id"/>
+                    <field name="appointment_type"/>
+                    <field name="status"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Appointment Action -->
+        <record id="action_appointment_list" model="ir.actions.act_window">
+            <field name="name">Appointments</field>
+            <field name="res_model">medical.appointment</field>
+            <field name="view_mode">list,form,calendar</field>
+            <field name="context">{'default_status': 'scheduled'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create your first appointment to get started.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

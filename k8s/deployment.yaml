@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: digital-fte-backend
+  namespace: default
+  labels:
+    app: digital-fte
+    component: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: digital-fte
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: digital-fte
+        component: backend
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: backend
+          image: YOUR_DOCKERHUB_USERNAME/personal-ai-employee:latest
+          ports:
+            - containerPort: 8000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: digital-fte-config
+            - secretRef:
+                name: digital-fte-secrets
+          volumeMounts:
+            - name: vault-storage
+              mountPath: /app/vault
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false  # Need writable filesystem for vault
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: vault-storage
+          persistentVolumeClaim:
+            claimName: vault-pvc

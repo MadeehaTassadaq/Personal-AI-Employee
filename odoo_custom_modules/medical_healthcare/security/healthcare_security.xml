@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Healthcare Manager Group -->
+        <record id="group_healthcare_manager" model="res.groups">
+            <field name="name">Healthcare Manager</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Full access to healthcare features including patient management, appointments, billing, and reminders.</field>
+        </record>
+
+        <!-- Doctor Group -->
+        <record id="group_doctor" model="res.groups">
+            <field name="name">Doctor</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Doctors can manage appointments, record visits, and manage patient records.</field>
+        </record>
+
+        <!-- Nurse Group -->
+        <record id="group_nurse" model="res.groups">
+            <field name="name">Nurse</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Nurses can record vitals and view patient information.</field>
+        </record>
+
+        <!-- Receptionist Group -->
+        <record id="group_receptionist" model="res.groups">
+            <field name="name">Receptionist</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="comment">Receptionists can schedule appointments and manage patient registration.</field>
+        </record>
+
+        <!-- Patient Data Access Rules -->
+
+        <!-- Manager can see and manage all healthcare contacts (patients, doctors, etc.) -->
+        <record id="res_partner_healthcare_manager_rule" model="ir.rule">
+            <field name="name">Healthcare Manager - All Healthcare Contacts</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">['|', ('is_patient', '=', True), ('is_doctor', '=', True)]</field>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_healthcare_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Doctor can see all patients -->
+        <record id="res_partner_doctor_rule" model="ir.rule">
+            <field name="name">Doctor - All Patients</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">[('is_patient', '=', True)]</field>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_doctor'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <!-- Nurse can view patients -->
+        <record id="res_partner_nurse_rule" model="ir.rule">
+            <field name="name">Nurse - View Patients</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">[('is_patient', '=', True)]</field>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_nurse'))]"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- Receptionist can view and create patients -->
+        <record id="res_partner_receptionist_rule" model="ir.rule">
+            <field name="name">Receptionist - Patient Registration</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">[('is_patient', '=', True)]</field>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_receptionist'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <!-- Appointment Access Rules -->
+
+        <!-- Manager full access to appointments -->
+        <record id="medical_appointment_manager_rule" model="ir.rule">
+            <field name="name">Healthcare Manager - All Appointments</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_appointment"/>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_healthcare_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Doctor can see all appointments -->
+        <record id="medical_appointment_doctor_rule" model="ir.rule">
+            <field name="name">Doctor - All Appointments</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_appointment"/>
+            <field name="domain_force">[('doctor_id', '=', user.partner_id.id)]</field>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_doctor'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <!-- Vitals Access Rules -->
+
+        <!-- Manager full access to vitals -->
+        <record id="medical_vitals_manager_rule" model="ir.rule">
+            <field name="name">Healthcare Manager - All Vitals</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_vitals"/>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_healthcare_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Nurse can record vitals -->
+        <record id="medical_vitals_nurse_rule" model="ir.rule">
+            <field name="name">Nurse - Record Vitals</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_vitals"/>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_nurse'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+        </record>
+
+        <!-- Reminder Configuration Access Rules -->
+
+        <!-- Manager full access to reminder configs -->
+        <record id="medical_reminder_config_manager_rule" model="ir.rule">
+            <field name="name">Manager - All Reminder Configs</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_reminder_config"/>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_healthcare_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Users can view active reminder configs -->
+        <record id="medical_reminder_config_user_rule" model="ir.rule">
+            <field name="name">User - View Active Reminder Configs</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_reminder_config"/>
+            <field name="domain_force">[('active', '=', True)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- Reminder History Access Rules -->
+
+        <!-- Manager full access to reminder history -->
+        <record id="medical_reminder_history_manager_rule" model="ir.rule">
+            <field name="name">Manager - All Reminder History</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_reminder_history"/>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_healthcare_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Users can view reminder history -->
+        <record id="medical_reminder_history_user_rule" model="ir.rule">
+            <field name="name">User - View Reminder History</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_reminder_history"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+        <!-- Appointment Type Access Rules -->
+
+        <!-- Manager full access to appointment types -->
+        <record id="medical_appointment_type_manager_rule" model="ir.rule">
+            <field name="name">Manager - All Appointment Types</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_appointment_type"/>
+            <field name="groups" eval="[(4, ref('medical_healthcare.group_healthcare_manager'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+
+        <!-- Users can view appointment types -->
+        <record id="medical_appointment_type_user_rule" model="ir.rule">
+            <field name="name">User - View Appointment Types</field>
+            <field name="model_id" ref="medical_healthcare.model_medical_appointment_type"/>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+            <field name="perm_read" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

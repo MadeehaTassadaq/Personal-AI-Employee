@@ -1,0 +1,3119 @@
+[
+  {
+    "timestamp": "2026-02-12T11:23:01.298762",
+    "correlation_id": "fb85f405",
+    "action": "system_start",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {
+      "vault_path": "AI_Employee_Vault"
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:23:31.940625",
+    "correlation_id": "dfc35af9",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:24:02.311316",
+    "correlation_id": "3d8ad175",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:24:35.558975",
+    "correlation_id": "22422a10",
+    "action": "system_start",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {
+      "vault_path": "AI_Employee_Vault"
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:25:06.400028",
+    "correlation_id": "7bc88f53",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:25:36.779584",
+    "correlation_id": "c90f3db0",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:26:06.792231",
+    "correlation_id": "1ca8c604",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:26:37.196101",
+    "correlation_id": "eed6a063",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:27:07.207825",
+    "correlation_id": "fe4b8339",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:27:37.633032",
+    "correlation_id": "24a8e253",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:28:07.672036",
+    "correlation_id": "115b83ed",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:28:37.971170",
+    "correlation_id": "f6def048",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:29:07.979197",
+    "correlation_id": "0865f39d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:29:38.288475",
+    "correlation_id": "c5783a26",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:30:08.343129",
+    "correlation_id": "623282df",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:30:38.729568",
+    "correlation_id": "d7f0347e",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:31:15.139785",
+    "correlation_id": "9dc5616e",
+    "action": "system_start",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {
+      "vault_path": "AI_Employee_Vault"
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:31:45.186909",
+    "correlation_id": "fa1ebf88",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:32:16.147028",
+    "correlation_id": "a464dcb7",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:32:46.168185",
+    "correlation_id": "408cf87c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:33:16.946559",
+    "correlation_id": "86da78bf",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:33:46.963413",
+    "correlation_id": "5bef8037",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:34:17.147354",
+    "correlation_id": "a9b44dc4",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:34:47.156761",
+    "correlation_id": "2b8cdbd1",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:35:17.329431",
+    "correlation_id": "b27f777c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:35:47.339212",
+    "correlation_id": "867242c3",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:36:17.504627",
+    "correlation_id": "5ec9aa7d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:36:47.514080",
+    "correlation_id": "80f294f3",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:37:17.686235",
+    "correlation_id": "4a36eca4",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:37:47.695077",
+    "correlation_id": "2599c7e9",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:38:17.859756",
+    "correlation_id": "d13a9a63",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:38:47.870741",
+    "correlation_id": "8eafec68",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:39:18.049481",
+    "correlation_id": "75f5a2d2",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:39:48.058517",
+    "correlation_id": "8c6a12c9",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:40:18.163961",
+    "correlation_id": "2381d7b9",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:40:48.178828",
+    "correlation_id": "c5db824f",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:41:18.395470",
+    "correlation_id": "94cf1387",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:41:48.408589",
+    "correlation_id": "7f0d8f5d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:42:18.645062",
+    "correlation_id": "e39b0c82",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:42:48.660021",
+    "correlation_id": "64a7902a",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:43:18.835304",
+    "correlation_id": "370718f6",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:43:48.846492",
+    "correlation_id": "c5ab3189",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:44:18.997940",
+    "correlation_id": "b6d78638",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:44:49.009129",
+    "correlation_id": "d8f51503",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:45:19.251491",
+    "correlation_id": "43dbe2c9",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:45:49.265783",
+    "correlation_id": "4a52489a",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:46:19.536490",
+    "correlation_id": "6bcf8d9a",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:46:49.554228",
+    "correlation_id": "da974f9b",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:47:19.695174",
+    "correlation_id": "5d8e8faa",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:47:49.716888",
+    "correlation_id": "e5c57a6e",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:48:19.909722",
+    "correlation_id": "d53d1158",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:48:49.921877",
+    "correlation_id": "df303f77",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:49:20.094921",
+    "correlation_id": "03f56038",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:49:50.106756",
+    "correlation_id": "c8edceb7",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:50:20.339154",
+    "correlation_id": "e0fc9de3",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:50:50.352118",
+    "correlation_id": "103a006e",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:51:20.527111",
+    "correlation_id": "0f1252fb",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:51:50.537597",
+    "correlation_id": "6703c419",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:52:20.844418",
+    "correlation_id": "29f5a61d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:52:48.859972",
+    "correlation_id": "9dc5616e",
+    "action": "system_stop",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {}
+  },
+  {
+    "timestamp": "2026-02-12T11:52:58.963224",
+    "correlation_id": "d69bef72",
+    "action": "system_start",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {
+      "vault_path": "AI_Employee_Vault"
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:53:29.512572",
+    "correlation_id": "c349ccc4",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:53:59.708351",
+    "correlation_id": "19f6968f",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:54:29.719146",
+    "correlation_id": "b7ae93c4",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:54:59.916255",
+    "correlation_id": "fda50421",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:55:29.924462",
+    "correlation_id": "4c56d70d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:56:00.077538",
+    "correlation_id": "96c617e8",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:56:30.088943",
+    "correlation_id": "8741dfae",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:57:00.294474",
+    "correlation_id": "c9af4da2",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:57:30.301889",
+    "correlation_id": "77b04c31",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:58:00.523199",
+    "correlation_id": "b7bb3745",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:58:30.532330",
+    "correlation_id": "8ff18483",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:59:00.732146",
+    "correlation_id": "8f052290",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T11:59:30.745285",
+    "correlation_id": "16648235",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:00:00.913691",
+    "correlation_id": "56c7efe2",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:00:30.922077",
+    "correlation_id": "487dc420",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:01:01.162513",
+    "correlation_id": "10a492f9",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:01:31.177271",
+    "correlation_id": "23286ea6",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:02:01.404683",
+    "correlation_id": "56c9ca63",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:02:31.419457",
+    "correlation_id": "d4873a1f",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:03:01.854043",
+    "correlation_id": "cd81b040",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:03:31.867599",
+    "correlation_id": "7d27b43a",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:04:02.116271",
+    "correlation_id": "ffe0911e",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:04:32.128231",
+    "correlation_id": "8317365d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:05:02.525471",
+    "correlation_id": "b2cd2a23",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:05:32.537078",
+    "correlation_id": "55c1633c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:06:02.754975",
+    "correlation_id": "0ff745c5",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:06:32.775972",
+    "correlation_id": "a82c4a5e",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:07:03.021019",
+    "correlation_id": "f1f38250",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:07:33.505037",
+    "correlation_id": "2eac266c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:08:03.983076",
+    "correlation_id": "b267d017",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:08:34.072295",
+    "correlation_id": "a149144d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:09:04.449140",
+    "correlation_id": "fdfccf57",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:09:34.987353",
+    "correlation_id": "866b77bc",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:10:05.204090",
+    "correlation_id": "b1a80055",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:10:35.215402",
+    "correlation_id": "9fbcbcd8",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:11:05.458486",
+    "correlation_id": "59672255",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:11:35.466471",
+    "correlation_id": "6a0fdb36",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:12:05.767951",
+    "correlation_id": "1f69a8cc",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:12:35.776226",
+    "correlation_id": "9d316259",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:13:06.038485",
+    "correlation_id": "74f85084",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:13:36.059106",
+    "correlation_id": "b84fd272",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:14:06.223822",
+    "correlation_id": "16bbf93d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:14:36.232125",
+    "correlation_id": "7fbac8dc",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:15:06.433398",
+    "correlation_id": "24b35b1f",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:15:36.440641",
+    "correlation_id": "438d2702",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:16:06.852942",
+    "correlation_id": "82741d50",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:16:36.865824",
+    "correlation_id": "02d9d96f",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:17:07.055353",
+    "correlation_id": "21a1c427",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:17:37.063754",
+    "correlation_id": "1d0f6e89",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:18:07.235873",
+    "correlation_id": "4957c074",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:18:37.243491",
+    "correlation_id": "c76ccdd1",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:19:07.633283",
+    "correlation_id": "36ed5997",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:19:37.648646",
+    "correlation_id": "dbb2ff5b",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:20:08.104929",
+    "correlation_id": "7c6d1693",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:20:38.120966",
+    "correlation_id": "ea7e1eec",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:21:08.567068",
+    "correlation_id": "c39be61f",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:21:38.586026",
+    "correlation_id": "28240727",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:22:08.851804",
+    "correlation_id": "5813d869",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:22:38.867069",
+    "correlation_id": "5e6b5372",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:23:09.112523",
+    "correlation_id": "cf5c819c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:23:39.126195",
+    "correlation_id": "bbfe7c62",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:24:09.445189",
+    "correlation_id": "d610fc0a",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:24:39.456082",
+    "correlation_id": "0c2dfb30",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:25:09.670566",
+    "correlation_id": "a70dce99",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:25:39.680820",
+    "correlation_id": "8fc321b0",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:26:10.037982",
+    "correlation_id": "50dd32e3",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:26:40.049855",
+    "correlation_id": "d1106412",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:27:10.318941",
+    "correlation_id": "c6631b30",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:27:40.329742",
+    "correlation_id": "d07a8c24",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:28:10.683128",
+    "correlation_id": "4107432e",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:28:40.696076",
+    "correlation_id": "c41f5de4",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:29:10.933412",
+    "correlation_id": "4421ac0a",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:29:40.944399",
+    "correlation_id": "21016d44",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:30:11.155354",
+    "correlation_id": "61c8ceaa",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:30:41.162770",
+    "correlation_id": "99b177fc",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:31:11.361546",
+    "correlation_id": "17756abd",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:31:41.370491",
+    "correlation_id": "e70cd585",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:32:11.594966",
+    "correlation_id": "eb6fbc58",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:32:41.602529",
+    "correlation_id": "b31f44b5",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:33:11.828427",
+    "correlation_id": "e0db8752",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:33:41.839079",
+    "correlation_id": "b8a9cec0",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:34:12.011131",
+    "correlation_id": "64d137bb",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:34:42.020220",
+    "correlation_id": "7ec1bd81",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:35:12.265014",
+    "correlation_id": "4182e03c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:35:42.276184",
+    "correlation_id": "e832d1ba",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:36:12.483334",
+    "correlation_id": "fa13d120",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:36:42.493062",
+    "correlation_id": "79fe7b65",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:37:12.696233",
+    "correlation_id": "5afaff20",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:37:42.707340",
+    "correlation_id": "14afa11f",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:38:12.916688",
+    "correlation_id": "9f32eddb",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:38:42.927673",
+    "correlation_id": "1b015d2e",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:39:13.156700",
+    "correlation_id": "f7c5fb14",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:39:43.165476",
+    "correlation_id": "3dbdc675",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:40:13.346013",
+    "correlation_id": "4ca77c48",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:40:43.355780",
+    "correlation_id": "2408bac8",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:41:13.524229",
+    "correlation_id": "63388d18",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:41:43.536185",
+    "correlation_id": "57262698",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:42:13.700410",
+    "correlation_id": "d007b00d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:42:43.710239",
+    "correlation_id": "2f0736b8",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:43:13.905451",
+    "correlation_id": "c66b0add",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:43:43.915520",
+    "correlation_id": "a7bb1603",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:44:14.167803",
+    "correlation_id": "18394dd5",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:44:44.178177",
+    "correlation_id": "f2be14fa",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:45:14.376238",
+    "correlation_id": "85caa4e7",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:45:44.385203",
+    "correlation_id": "2962f268",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:46:14.605480",
+    "correlation_id": "4a23519c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:46:44.615456",
+    "correlation_id": "35bedb6c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:47:14.764039",
+    "correlation_id": "92385a20",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:47:44.773738",
+    "correlation_id": "3ff78336",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:48:14.972587",
+    "correlation_id": "936ec9c9",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:48:44.984138",
+    "correlation_id": "cd93a706",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:49:15.135198",
+    "correlation_id": "6f74db66",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:49:45.144882",
+    "correlation_id": "434d37ef",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:50:15.282654",
+    "correlation_id": "5cee1469",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:50:45.292395",
+    "correlation_id": "3a1848f0",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:51:15.493616",
+    "correlation_id": "424f38d0",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:51:45.505083",
+    "correlation_id": "0437dc25",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:52:15.700879",
+    "correlation_id": "8acde31c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:52:45.707650",
+    "correlation_id": "a83dd1f9",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:53:15.824499",
+    "correlation_id": "c3a39632",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:53:45.836892",
+    "correlation_id": "11d89028",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:54:15.959045",
+    "correlation_id": "2294064c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:54:45.972751",
+    "correlation_id": "2fab9779",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:55:16.174484",
+    "correlation_id": "535ec957",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:55:46.185578",
+    "correlation_id": "6efedc5a",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:56:16.394262",
+    "correlation_id": "a18a3dd0",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:56:46.404178",
+    "correlation_id": "77bfb528",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:57:16.606803",
+    "correlation_id": "ab63d37d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:57:46.618393",
+    "correlation_id": "d85a04a8",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:58:16.807717",
+    "correlation_id": "fd7db0d3",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:58:46.825508",
+    "correlation_id": "2346e6ce",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:59:17.028502",
+    "correlation_id": "2786e6e5",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T12:59:47.041713",
+    "correlation_id": "56918d81",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:00:17.242012",
+    "correlation_id": "d287fe3c",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:00:47.255501",
+    "correlation_id": "bcd80593",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:01:17.396644",
+    "correlation_id": "80032822",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:01:47.405625",
+    "correlation_id": "48bacfd9",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:02:17.543710",
+    "correlation_id": "a45666fc",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:02:47.553530",
+    "correlation_id": "77dc3846",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:03:17.759695",
+    "correlation_id": "ebd23296",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:03:47.770666",
+    "correlation_id": "3bca3649",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:04:17.920775",
+    "correlation_id": "11f71321",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:04:47.933216",
+    "correlation_id": "369e625e",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:05:18.130712",
+    "correlation_id": "246bfb32",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:05:48.144697",
+    "correlation_id": "9049ba67",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:06:18.337135",
+    "correlation_id": "41a4f489",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:06:48.350519",
+    "correlation_id": "1224d569",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:07:18.696518",
+    "correlation_id": "6531bffa",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:07:48.710608",
+    "correlation_id": "6137f5c5",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:08:18.912233",
+    "correlation_id": "6900fe92",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:08:48.924772",
+    "correlation_id": "d8468917",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:09:19.044821",
+    "correlation_id": "1a467f8b",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:09:49.058580",
+    "correlation_id": "4b15c0be",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:10:19.180608",
+    "correlation_id": "528f6c41",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:10:49.193336",
+    "correlation_id": "d842c474",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:11:19.402880",
+    "correlation_id": "4bc886c0",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:11:49.415486",
+    "correlation_id": "3111a219",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:12:19.611241",
+    "correlation_id": "e4c1d9dd",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:12:49.623886",
+    "correlation_id": "47dce195",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:13:19.818210",
+    "correlation_id": "feb6c833",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:13:49.832363",
+    "correlation_id": "4bc7aaf5",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:14:19.956053",
+    "correlation_id": "28f027cc",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:14:49.969770",
+    "correlation_id": "3abc9356",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:15:20.167181",
+    "correlation_id": "6206a77a",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:15:50.180926",
+    "correlation_id": "f1fff2af",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:16:20.380135",
+    "correlation_id": "df86e9ef",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:16:50.393680",
+    "correlation_id": "352dddf7",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:17:20.514932",
+    "correlation_id": "461d2dc6",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T13:17:50.633131",
+    "correlation_id": "7ed36dbe",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:13:45.056434",
+    "correlation_id": "e18565ad",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:14:15.072088",
+    "correlation_id": "a95f94e7",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:14:45.335953",
+    "correlation_id": "0da6e3a8",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:15:15.355760",
+    "correlation_id": "cb40207d",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:15:45.481128",
+    "correlation_id": "44db195b",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:16:15.494373",
+    "correlation_id": "74a272e5",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:16:45.730044",
+    "correlation_id": "578c76e4",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:17:15.739478",
+    "correlation_id": "e153d251",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:17:46.012964",
+    "correlation_id": "97f5888a",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:18:16.023620",
+    "correlation_id": "a432f6b7",
+    "action": "info",
+    "level": "info",
+    "platform": "watchdog",
+    "actor": "watchdog",
+    "details": {
+      "is_healthy": true,
+      "alert_count": 0,
+      "actions_taken": 0
+    }
+  },
+  {
+    "timestamp": "2026-02-12T14:18:32.030503",
+    "correlation_id": "d69bef72",
+    "action": "system_stop",
+    "level": "info",
+    "platform": "system",
+    "actor": "system",
+    "details": {}
+  }
+]

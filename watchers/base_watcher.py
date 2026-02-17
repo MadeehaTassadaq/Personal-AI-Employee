@@ -56,13 +56,14 @@ class BaseWatcher(ABC):
         """
         pass
 
-    def create_task_file(self, title: str, content: str, priority: str = "medium") -> Path:
-        """Create a task file in the Inbox.
+    def create_task_file(self, title: str, content: str, priority: str = "medium", folder: str = "Inbox") -> Path:
+        """Create a task file in the specified folder.
 
         Args:
             title: Task title (will be slugified for filename)
             content: Task description and details
             priority: Task priority (high/medium/low)
+            folder: Target folder (Inbox, Needs_Action, Done, etc.)
 
         Returns:
             Path to created file
@@ -91,12 +92,13 @@ source: {self.__class__.__name__}
 <!-- AI processing notes go here -->
 """
 
-        # Write to Inbox
-        inbox_path = self.vault_path / "Inbox" / filename
-        inbox_path.write_text(file_content)
+        # Write to specified folder
+        target_path = self.vault_path / folder / filename
+        target_path.parent.mkdir(parents=True, exist_ok=True)
+        target_path.write_text(file_content)
 
-        self.logger.info(f"Created task: {filename}")
-        return inbox_path
+        self.logger.info(f"Created task in {folder}: {filename}")
+        return target_path
 
     def log_event(self, event_type: str, details: dict) -> None:
         """Log an event to the vault logs.

@@ -51,8 +51,9 @@ def process_task(file_path: Path, vault_path: Path) -> None:
     needs_action_file.write_text(content)
     print(f"[PROCESS] Moved to Needs_Action: {file_path.name}")
 
-    # Remove from Inbox
-    file_path.unlink()
+    # Remove from Inbox (if it still exists)
+    if file_path.exists():
+        file_path.unlink()
 
     # Simulate processing delay
     time.sleep(1)
@@ -75,8 +76,9 @@ def process_task(file_path: Path, vault_path: Path) -> None:
     done_file.write_text(content)
     print(f"[PROCESS] Completed and moved to Done: {file_path.name}")
 
-    # Remove from Needs_Action
-    needs_action_file.unlink()
+    # Remove from Needs_Action (if it still exists)
+    if needs_action_file.exists():
+        needs_action_file.unlink()
 
     # Log the action
     log_file = logs / f"{datetime.now().strftime('%Y-%m-%d')}.json"

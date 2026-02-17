@@ -178,11 +178,14 @@ async def health_check():
     """Check if AI content generation service is available."""
     try:
         ai_service = get_ai_reasoning_service(str(VAULT_PATH))
-        # Check if Claude API is configured
-        api_key = os.getenv("CLAUDE_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
+        # Check if either API is configured
+        openai_key = os.getenv("OPENAI_API_KEY")
+        claude_key = os.getenv("CLAUDE_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
         return {
             "status": "available",
-            "claude_configured": bool(api_key),
+            "openai_configured": bool(openai_key),
+            "claude_configured": bool(claude_key),
+            "primary_provider": "openai" if openai_key else ("claude" if claude_key else "none"),
             "fallback_available": True
         }
     except Exception as e:

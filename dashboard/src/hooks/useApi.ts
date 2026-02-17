@@ -6,6 +6,8 @@ export interface SystemStatus {
   system: 'running' | 'stopped';
   watchers: Record<string, 'running' | 'stopped' | 'error'>;
   pending_approvals: number;
+  inbox_count?: number;
+  needs_action_count?: number;
 }
 
 export interface VaultFile {
@@ -41,7 +43,7 @@ export interface AuditEntry {
   level: string;
   platform: string;
   actor: string;
-  details?: Record<string, any>;
+  details: Record<string, any>;
   task_id?: string;
   file_path?: string;
   duration_ms?: number;
@@ -67,11 +69,79 @@ export interface PlatformStatus {
   error_message?: string;
 }
 
+// Healthcare interfaces
+export interface Patient {
+  id: number;
+  name: string;
+  medical_record_number: string;
+  phone: string;
+  email: string;
+  date_of_birth: string;
+  age: number;
+  blood_type: string;
+  risk_category: 'low' | 'medium' | 'high';
+  allergies: string;
+  chronic_conditions: string;
+  pregnancy_status: string;
+  last_visit_date: string;
+  next_appointment: string;
+  total_visits: number;
+}
+
+export interface Appointment {
+  id: number;
+  name: string;
+  patient_id: number | [number, string];
+  doctor_id: number | [number, string];
+  appointment_date: string;
+  appointment_type: string;
+  status: 'scheduled' | 'confirmed' | 'in_progress' | 'completed' | 'cancelled' | 'no_show';
+  duration: number;
+  reminder_sent: boolean;
+  notes: string;
+}
+
+export interface Vitals {
+  id: number;
+  patient_id: number;
+  date_taken: string;
+  temperature: number;
+  blood_pressure_systolic: number;
+  blood_pressure_diastolic: number;
+  heart_rate: number;
+  respiratory_rate: number;
+  oxygen_saturation: number;
+  weight: number;
+  height: number;
+  bmi: number;
+  notes: string;
+}
+
+export interface Invoice {
+  id: number;
+  name: string;
+  invoice_date: string;
+  amount_total: number;
+  state: string;
+  payment_state: string;
+}
+
+export interface HealthcareStats {
+  total_patients: number;
+  high_risk_patients: number;
+  pregnant_patients: number;
+  today_appointments: number;
+  upcoming_appointments: number;
+  pending_invoices: number;
+}
+
 export function useApi() {
   const [status, setStatus] = useState<SystemStatus>({
     system: 'stopped',
     watchers: {},
-    pending_approvals: 0
+    pending_approvals: 0,
+    inbox_count: 0,
+    needs_action_count: 0
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -143,7 +213,6 @@ export function useApi() {
       const response = await fetch(`${API_BASE}/vault/folder/${folder}`);
       if (!response.ok) throw new Error(`Failed to fetch ${folder}`);
       const data = await response.json();
-      // Map the backend response to match our interface expectations
       const files = data.files || [];
       return files.map((file: any) => ({
         filename: file.filename,
@@ -153,7 +222,7 @@ export function useApi() {
         priority: file.priority,
         status: file.status,
         title: file.title,
-        modified: file.created // Map created to modified for display
+        modified: file.created
       }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -167,10 +236,8 @@ export function useApi() {
       if (!response.ok) throw new Error('Failed to fetch approvals');
       const data = await response.json();
       const files = data.files || [];
-
-      // Map the backend TaskFile objects to ApprovalItem interface
       return files.map((file: any) => ({
-        id: file.filename || file.id || '',  // Use filename as id
+        id: file.filename || file.id || '',
         title: file.title || file.filename || 'Untitled',
         type: file.type || 'unknown',
         created: file.created || new Date().toISOString(),
@@ -184,7 +251,6 @@ export function useApi() {
 
   const approveItem = async (id: string) => {
     try {
-      // The backend expects the filename in the request body, not in the URL
       const response = await fetch(`${API_BASE}/approvals/approve`, {
         method: 'POST',
         headers: {
@@ -204,7 +270,6 @@ export function useApi() {
 
   const rejectItem = async (id: string) => {
     try {
-      // The backend expects the filename in the request body, not in the URL
       const response = await fetch(`${API_BASE}/approvals/approve`, {
         method: 'POST',
         headers: {
@@ -318,6 +383,7 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to start Ralph');
       }
+      await fetchStatus();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       throw err;
@@ -333,6 +399,7 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to stop Ralph');
       }
+      await fetchStatus();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       throw err;
@@ -348,6 +415,7 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to pause Ralph');
       }
+      await fetchStatus();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       throw err;
@@ -363,17 +431,12 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to resume Ralph');
       }
+      await fetchStatus();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
       throw err;
     }
   };
-
-  useEffect(() => {
-    fetchStatus();
-    const interval = setInterval(fetchStatus, 5000);
-    return () => clearInterval(interval);
-  }, [fetchStatus]);
 
   // Social Media API methods
   const fetchSocialStats = async () => {
@@ -432,7 +495,11 @@ export function useApi() {
     }
   };
 
-  const fetchOdooInvoices = async (params: { state?: string; type?: string; limit?: number } = {}) => {
+  const fetchOdooInvoices = async (params: {
+    state?: string;
+    type?: string;
+    limit?: number;
+  } = {}) => {
     try {
       const searchParams = new URLSearchParams();
       if (params.state) searchParams.set('state', params.state);
@@ -463,7 +530,7 @@ export function useApi() {
   const fetchTodayEvents = async () => {
     try {
       const response = await fetch(`${API_BASE}/calendar/today`);
-      if (!response.ok) throw new Error('Failed to fetch today\'s events');
+      if (!response.ok) throw new Error("Failed to fetch today's events");
       return await response.json();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -498,7 +565,7 @@ export function useApi() {
           platform,
           content,
           image_url: options?.imageUrl,
-          link_url: options?.link,
+          link: options?.link,
           recipient: options?.recipient,
           subject: options?.subject
         })
@@ -507,7 +574,32 @@ export function useApi() {
         const data = await response.json();
         throw new Error(data.detail || 'Failed to submit post');
       }
-      await fetchStatus(); // Refresh to update pending_approvals count
+      await fetchStatus();
+      return { success: true };
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  // AI Content Generation
+  const generateAIContent = async (params: {
+    platform: string;
+    context: string;
+    options?: { recipient?: string; subject?: string };
+  }) => {
+    try {
+      const response = await fetch(`${API_BASE}/ai/generate-content`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(params)
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.detail || 'Failed to generate content');
+      }
       return await response.json();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
@@ -543,6 +635,229 @@ export function useApi() {
     }
   };
 
+  // === Healthcare API methods ===
+
+  // Patients
+  const fetchHealthcarePatients = async (search?: string): Promise<{ patients: Patient[]; count: number }> => {
+    try {
+      const params = search ? `?search=${encodeURIComponent(search)}` : '';
+      const response = await fetch(`${API_BASE}/healthcare/patients${params}`);
+      if (!response.ok) throw new Error('Failed to fetch patients');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return { patients: [], count: 0 };
+    }
+  };
+
+  const fetchHealthcarePatient = async (patientId: number): Promise<Patient> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/patients/${patientId}`);
+      if (!response.ok) throw new Error('Failed to fetch patient');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  const createHealthcarePatient = async (data: {
+    name: string;
+    phone: string;
+    email: string;
+    date_of_birth: string;
+    blood_type?: string;
+    allergies?: string;
+    chronic_conditions?: string;
+    pregnancy_status?: string;
+    risk_category?: string;
+  }): Promise<Patient> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/patients`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.detail || 'Failed to create patient');
+      }
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  const updateHealthcarePatient = async (patientId: number, data: Partial<Patient>): Promise<void> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/patients/${patientId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.detail || 'Failed to update patient');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  // Appointments
+  const fetchHealthcareAppointments = async (
+    fromDate: string,
+    toDate: string,
+    status?: string
+  ): Promise<{ appointments: Appointment[]; count: number }> => {
+    try {
+      const params = new URLSearchParams({ from_date: fromDate, to_date: toDate });
+      if (status) params.append('status', status);
+      const response = await fetch(`${API_BASE}/healthcare/appointments?${params}`);
+      if (!response.ok) throw new Error('Failed to fetch appointments');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return { appointments: [], count: 0 };
+    }
+  };
+
+  const fetchUpcomingAppointments = async (days: number = 7): Promise<{ appointments: Appointment[]; count: number }> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/appointments/upcoming?days=${days}`);
+      if (!response.ok) throw new Error('Failed to fetch upcoming appointments');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return { appointments: [], count: 0 };
+    }
+  };
+
+  const createHealthcareAppointment = async (data: {
+    patient_id: number;
+    doctor_id: number;
+    appointment_date: string;
+    appointment_type?: string;
+    duration?: number;
+    notes?: string;
+  }): Promise<Appointment> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/appointments`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.detail || 'Failed to create appointment');
+      }
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  const updateAppointmentStatus = async (appointmentId: number, status: string): Promise<void> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/appointments/${appointmentId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.detail || 'Failed to update appointment');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  // Vitals
+  const fetchPatientVitals = async (patientId: number): Promise<{ vitals: Vitals[]; count: number }> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/patients/${patientId}/vitals`);
+      if (!response.ok) throw new Error('Failed to fetch patient vitals');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return { vitals: [], count: 0 };
+    }
+  };
+
+  const recordVitals = async (patientId: number, data: Partial<Vitals>): Promise<void> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/patients/${patientId}/vitals`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.detail || 'Failed to record vitals');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  // Billing
+  const createPatientInvoice = async (
+    patientId: number,
+    items: Array<{ description: string; amount: number; quantity?: number }>,
+    date?: string
+  ): Promise<Invoice> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/patients/${patientId}/invoice`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items, date })
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.detail || 'Failed to create invoice');
+      }
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  const fetchPatientInvoices = async (patientId: number): Promise<{ invoices: Invoice[]; count: number }> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/patients/${patientId}/invoices`);
+      if (!response.ok) throw new Error('Failed to fetch patient invoices');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      return { invoices: [], count: 0 };
+    }
+  };
+
+  // Healthcare stats
+  const fetchHealthcareStats = async (): Promise<HealthcareStats> => {
+    try {
+      const response = await fetch(`${API_BASE}/healthcare/stats`);
+      if (!response.ok) throw new Error('Failed to fetch healthcare stats');
+      return await response.json();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
+      throw err;
+    }
+  };
+
+  useEffect(() => {
+    fetchStatus();
+    const interval = setInterval(fetchStatus, 5000);
+    return () => clearInterval(interval);
+  }, [fetchStatus]);
+
   return {
     status,
     error,
@@ -558,31 +873,39 @@ export function useApi() {
     rejectItem,
     fetchActivity,
     triggerProcessing,
-    // Gold tier - Audit
     fetchAudit,
     fetchAuditStats,
     fetchAuditAnalytics,
-    // Gold tier - Ralph Wiggum
     fetchRalphStatus,
     startRalph,
     stopRalph,
     pauseRalph,
     resumeRalph,
-    // Gold tier - Social Media
     fetchSocialStats,
     fetchSocialPlatformStatus,
     fetchSocialHealth,
-    // Gold tier - Odoo
     fetchOdooStatus,
     fetchFinancialSummary,
     fetchOdooInvoices,
-    // Gold tier - Business Audit
-    fetchTaskStats,
-    // Calendar
     fetchCalendarStatus,
     fetchTodayEvents,
     fetchCalendarEvents,
-    // Compose
-    submitPost
+    submitPost,
+    fetchTaskStats,
+    generateAIContent,
+    // Healthcare
+    fetchHealthcarePatients,
+    fetchHealthcarePatient,
+    createHealthcarePatient,
+    updateHealthcarePatient,
+    fetchHealthcareAppointments,
+    fetchUpcomingAppointments,
+    createHealthcareAppointment,
+    updateAppointmentStatus,
+    fetchPatientVitals,
+    recordVitals,
+    createPatientInvoice,
+    fetchPatientInvoices,
+    fetchHealthcareStats
   };
 }
