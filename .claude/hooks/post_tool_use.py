@@ -29,6 +29,15 @@ def get_project_dir() -> Path:
     return Path(os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd()))
 
 
+def get_hook_input() -> dict:
+    """Get hook input from Claude Code's $ARGUMENTS environment variable."""
+    args_json = os.environ.get("ARGUMENTS", "{}")
+    try:
+        return json.loads(args_json)
+    except json.JSONDecodeError:
+        return {}
+
+
 def update_lock_file():
     """Update the uv lock file after dependency changes."""
     try:
@@ -125,16 +134,13 @@ def handle_package_management(tool_name: str, tool_input: dict):
 
 def main():
     """Main hook entry point."""
-    try:
-        # Read input from stdin
-        input_data = json.load(sys.stdin)
-    except json.JSONDecodeError:
-        # No valid input, exit gracefully
-        sys.exit(0)
+    # Get hook input from $ARGUMENTS environment variable
+    input_data = get_hook_input()
 
-    tool_name = input_data.get("tool_name", "")
-    tool_input = input_data.get("tool_input", {})
-    tool_result = input_data.get("tool_result", {})
+    # Extract tool information
+    tool_name = input_data.get("tool", "")
+    tool_input = input_data.get("input", {})
+    tool_result = input_data.get("result", {})
 
     # Handle package management operations
     handle_package_management(tool_name, tool_input)

@@ -29,6 +29,15 @@ def get_project_dir() -> Path:
     return Path(os.environ.get("CLAUDE_PROJECT_DIR", os.getcwd()))
 
 
+def get_hook_input() -> dict:
+    """Get hook input from Claude Code's $ARGUMENTS environment variable."""
+    args_json = os.environ.get("ARGUMENTS", "{}")
+    try:
+        return json.loads(args_json)
+    except json.JSONDecodeError:
+        return {}
+
+
 def log_tool_use(tool_name: str, tool_input: dict, action: str, reason: str = "") -> None:
     """Log tool usage to JSON file for audit trail."""
     log_dir = get_project_dir() / ".claude" / "logs"
@@ -108,8 +117,9 @@ def is_pip_command(command: str) -> tuple[bool, str]:
             suggested = re.sub(pattern, replacement, cmd, flags=re.IGNORECASE)
             return True, suggested
 
-    # Check for pip anywhere in a piped command
-    if re.search(r'\bpip3?\s+(install|uninstall|freeze|list|show)\b', cmd, re.IGNORECASE):
+    # Check for pip anywhere in a piped command, but NOT after 'uv'
+    # Negative lookbehind (?<!uv\s) ensures we don't match "uv pip install"
+    if re.search(r'(?<!uv\s)\bpip3?\s+(install|uninstall|freeze|list|show)\b', cmd, re.IGNORECASE):
         return True, "Use 'uv pip' instead of 'pip' for package management"
 
     return False, ""
@@ -179,15 +189,13 @@ def is_env_file_access(tool_name: str, tool_input: dict) -> tuple[bool, str]:
 
 def main():
     """Main hook entry point."""
-    try:
-        # Read input from stdin
-        input_data = json.load(sys.stdin)
-    except json.JSONDecodeError:
-        # No valid input, allow execution
-        sys.exit(0)
+    # Get hook input from $ARGUMENTS environment variable
+    input_data = get_hook_input()
 
-    tool_name = input_data.get("tool_name", "")
-    tool_input = input_data.get("tool_input", {})
+    # Extract tool information
+    # Claude Code passes: {tool: string, input: object}
+    tool_name = input_data.get("tool", "")
+    tool_input = input_data.get("input", {})
 
     # Only check Bash commands for pip/dangerous patterns
     if tool_name == "Bash":
