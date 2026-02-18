@@ -324,16 +324,60 @@ class Publisher:
             return {"success": False, "error": str(e), "platform": "instagram"}
 
     async def send_whatsapp(self, content: str, recipient: str) -> dict:
-        """Send WhatsApp message - requires whatsapp-mcp server running."""
+        """Send WhatsApp message via Meta Business API."""
         if self.dry_run:
+            self.log_action("whatsapp", "dry_run", {"recipient": recipient})
             return {"success": True, "dry_run": True, "platform": "whatsapp"}
 
-        # WhatsApp requires Playwright automation via whatsapp-mcp server
-        return {
-            "success": False,
-            "error": "WhatsApp requires whatsapp-mcp server to be running. Start it with: uv run mcp/whatsapp-mcp/server.py",
-            "platform": "whatsapp"
-        }
+        # Get WhatsApp credentials from environment
+        phone_number_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
+        access_token = os.getenv("WHATSAPP_ACCESS_TOKEN")
+
+        if not phone_number_id or not access_token:
+            self.log_action("whatsapp", "credentials_missing", {})
+            return {
+                "success": False,
+                "error": "WhatsApp credentials not configured (WHATSAPP_PHONE_NUMBER_ID, WHATSAPP_ACCESS_TOKEN)",
+                "platform": "whatsapp"
+            }
+
+        try:
+            # Clean phone number
+            recipient_clean = recipient.replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
+            if not recipient_clean.startswith("+"):
+                recipient_clean = "+" + recipient_clean
+
+            # Send via Meta Graph API
+            url = f"https://graph.facebook.com/v18.0/{phone_number_id}/messages"
+
+            headers = {
+                "Authorization": f"Bearer {access_token}",
+                "Content-Type": "application/json"
+            }
+
+            payload = {
+                "messaging_product": "whatsapp",
+                "to": recipient_clean,
+                "type": "text",
+                "text": {"body": content}
+            }
+
+            async with httpx.AsyncClient(timeout=30.0) as client:
+                response = await client.post(url, json=payload, headers=headers)
+
+                if response.status_code == 200:
+                    result = response.json()
+                    msg_id = result.get("messages", [{}])[0].get("id", "")
+                    self.log_action("whatsapp", "send_success", {"recipient": recipient_clean, "message_id": msg_id})
+                    return {"success": True, "message_id": msg_id, "platform": "whatsapp"}
+                else:
+                    error_detail = response.text
+                    self.log_action("whatsapp", "send_failed", {"recipient": recipient_clean, "error": error_detail})
+                    return {"success": False, "error": error_detail, "platform": "whatsapp"}
+
+        except Exception as e:
+            self.log_action("whatsapp", "send_error", {"recipient": recipient, "error": str(e)})
+            return {"success": False, "error": str(e), "platform": "whatsapp"}
 
     async def send_email(self, content: str, recipient: str, subject: str) -> dict:
         """Send email via Gmail API."""
@@ -435,6 +479,52 @@ class Publisher:
 
         else:
             return {"success": False, "error": f"Unknown platform: {platform}"}
+
+    def log_auto_action(
+        self,
+        action_type: str,
+        channel: str,
+        recipient: str,
+        success: bool,
+        details: dict = None
+    ) -> None:
+        """Log auto-approved action to audit trail.
+
+        Used for tracking messages sent without manual approval.
+
+        Args:
+            action_type: Type of auto-action (e.g., "appointment_confirmation", "appointment_reminder")
+            channel: Communication channel (whatsapp, email)
+            recipient: Recipient contact info
+            success: Whether the action succeeded
+            details: Optional additional details (appointment_id, hours_before, etc.)
+        """
+        log_file = self.vault_path / "Logs" / f"{datetime.now().strftime('%Y-%m-%d')}.json"
+
+        log_entry = {
+            "timestamp": datetime.now().isoformat(),
+            "watcher": f"Publisher_{channel}",
+            "event": "auto_action",
+            "action_type": action_type,
+            "channel": channel,
+            "recipient": recipient,
+            "success": success,
+            "auto_approved": True,
+        }
+
+        if details:
+            log_entry.update(details)
+
+        logs = []
+        if log_file.exists():
+            try:
+                logs = json.loads(log_file.read_text())
+            except json.JSONDecodeError:
+                logs = []
+
+        logs.append(log_entry)
+        log_file.parent.mkdir(parents=True, exist_ok=True)
+        log_file.write_text(json.dumps(logs, indent=2))
 
     def log_publish_result(self, filename: str, result: dict) -> None:
         """Log publishing result."""
