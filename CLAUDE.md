@@ -21,11 +21,11 @@ You are a **Digital FTE** - an AI-native autonomous agent functioning as a full-
 
 | Category | Key Items |
 |----------|-----------|
-| **Paths** | Vault: `./AI_Employee_Vault/`, Backend: `./backend/`, Watchers: `./watchers/`, MCP: `./mcp_services/` |
+| **Paths** | Vault: `./AI_Employee_Vault/`, Backend: `./backend/`, Watchers: `./watchers/`, MCP: `./mcp_services/`, Docs: `./docs/` |
 | **Skills** | task-writer, task-mover, vault-reader, email-sender, whatsapp-sender, odoo-accounting, business-audit, weekly-briefing |
 | **MCP Servers** | gmail, whatsapp, linkedin, facebook, instagram, twitter, calendar, odoo, browser |
-| **Env Vars** | `VAULT_PATH`, `API_PORT=8000`, `DRY_RUN=true`, `CLAUDE_API_KEY` |
-| **Commands** | `./scripts/run_all.sh`, `pm2 start watchers/*.py --interpreter python3` |
+| **Env File** | `backend/.env` (single source of truth for all config) |
+| **Commands** | `./scripts/start_all.sh`, `./scripts/stop_all.sh`, `./scripts/status.sh` |
 
 ---
 
@@ -104,7 +104,14 @@ AI_Employee_Vault/
 
 **Medical Ethics:** Never auto-approve clinical decisions, emergencies, sensitive communications, legal matters, irreversible actions. Maintain audit trails, allow opt-out, regular reviews.
 
-**DRY_RUN Mode:** Set `DRY_RUN=true` in `.env` for simulated actions; `false` for real execution
+**DRY_RUN Mode:** Set `DRY_RUN=true` in `backend/.env` for simulated actions; `false` for real execution
+
+**Environment Configuration:** All settings in `backend/.env` including:
+- `VAULT_PATH=../AI_Employee_Vault` (relative to backend/)
+- Odoo credentials (`ODOO_URL`, `ODOO_DB`, `ODOO_USERNAME`, `ODOO_PASSWORD`)
+- WhatsApp API (`WHATSAPP_PHONE_NUMBER_ID`, `WHATSAPP_ACCESS_TOKEN`)
+- OpenAI API (`OPENAI_API_KEY`)
+- Automation flags (`AUTO_CONFIRM_APPOINTMENTS`, `AUTO_ONBOARD_PATIENTS`, etc.)
 
 ---
 
@@ -137,6 +144,18 @@ Autonomous execution engine for `Needs_Action/` tasks. Guardrails: max 50 steps/
 ---
 
 ## Process Management
+
+**Startup Scripts:**
+```bash
+# Start entire system (backend + watchers)
+./scripts/start_all.sh
+
+# Stop entire system
+./scripts/stop_all.sh
+
+# Check system status
+./scripts/status.sh
+```
 
 **Use PM2** for daemon watchers (Gmail, WhatsApp, Odoo listeners):
 
@@ -186,4 +205,31 @@ pm2 monit | logs | restart <name>
 
 ---
 
+## Documentation
+
+**Project Structure:**
+```
+docs/
+├── hackathon/           # Hackathon documentation
+├── healthcare/          # Healthcare guides and workflows
+└── setup/              # Setup scripts and instructions
+```
+
+**Key Docs:**
+- `docs/hackathon/Personal AI Employee Hackathon 0_ Building Autonomous FTEs in 2026.md` - Hackathon background
+- `docs/healthcare/HEALTHCARE_AUTOMATION_TEST_GUIDE.md` - Testing guide
+- `docs/healthcare/ODOO_PATIENT_VIEW_CONFIG.md` - Odoo patient configuration
+- `docs/healthcare/ODOO_UPDATE_GUIDE.md` - Odoo update instructions
+- `docs/setup/grant_healthcare_permissions.py` - Odoo permissions script
+- `docs/setup/setup_odoo_modules.sh` - Odoo module setup
+
+---
+
 *Authoritative source: `constitution.md`, `Company_Handbook.md`, `Business_Goals.md`*
+
+## Active Technologies
+- Python 3.11+ (backend), JavaScript/Node.js (watchers via PM2) + FastAPI 0.104+, Odoo 19+, OpenAI Python SDK 1.52+, MCP SDK, Pydantic v2, SQLAlchemy (002-odoo-healthcare-ai)
+- PostgreSQL (via Odoo), Odoo ORM for models, SQLite for conversation context (in Odoo database) (002-odoo-healthcare-ai)
+
+## Recent Changes
+- 002-odoo-healthcare-ai: Added Python 3.11+ (backend), JavaScript/Node.js (watchers via PM2) + FastAPI 0.104+, Odoo 19+, OpenAI Python SDK 1.52+, MCP SDK, Pydantic v2, SQLAlchemy
